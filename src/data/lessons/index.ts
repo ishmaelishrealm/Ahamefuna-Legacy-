@@ -1,5 +1,8 @@
 import { swahiliStages } from './swahili-structured';
 import { igboLessons } from './igbo';
+import { hausaLessons } from './hausa';
+import { yorubaLessons } from './yoruba';
+import { zuluLessons } from './zulu';
 import { Stage, Lesson, AfricanLanguage, Exercise } from '../types';
 
 // Language-specific greetings data

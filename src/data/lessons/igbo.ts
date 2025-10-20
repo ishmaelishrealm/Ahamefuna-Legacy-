@@ -16,7 +16,9 @@ export const igboLessons: Lesson[] = [
         question: 'How do you say "Hello" in Igbo?',
         questionFr: 'Comment dit-on "Bonjour" en Igbo?',
         correctAnswer: 'Ndewo',
-        options: ['Ndewo', 'Ka ọ dị', 'Daalụ', 'Biko']
+        correctAnswerFr: 'Ndewo',
+        options: ['Ndewo', 'Ka ọ dị', 'Daalụ', 'Biko'],
+        optionsFr: ['Ndewo', 'Ka ọ dị', 'Daalụ', 'Biko']
       },
       {
         id: 'ig-v2',
@@ -24,7 +26,9 @@ export const igboLessons: Lesson[] = [
         question: 'What does "Ndewo" mean?',
         questionFr: 'Que signifie "Ndewo"?',
         correctAnswer: 'Hello',
-        options: ['Hello', 'Goodbye', 'Thank you', 'Please']
+        correctAnswerFr: 'Bonjour',
+        options: ['Hello', 'Goodbye', 'Thank you', 'Please'],
+        optionsFr: ['Bonjour', 'Au revoir', 'Merci', 'S\'il vous plaît']
       },
       {
         id: 'ig-v3',
