@@ -1,13 +1,14 @@
-import { Lesson } from '../types';
+import { Lesson } from '../../types';
 
 export const igboLessons: Lesson[] = [
   // STAGE 1 - MISSION 1: GREETINGS (20 questions, 10 will be randomly selected)
   {
-    id: 'ig-vocab-1',
+    id: 'ig-vocab-1-1',
+    stageId: 'igbo-stage-1',
+    lessonNumber: 1,
     type: 'vocabulary',
     title: 'Basic Greetings',
     titleFr: 'Salutations de base',
-    level: 1,
     xpReward: 10,
     exercises: [
       {
@@ -180,7 +181,6 @@ export const igboLessons: Lesson[] = [
     type: 'vocabulary',
     title: 'Common Phrases',
     titleFr: 'Phrases courantes',
-    level: 1,
     xpReward: 10,
     exercises: [
       {
@@ -346,7 +346,6 @@ export const igboLessons: Lesson[] = [
     type: 'vocabulary',
     title: 'Basic Words',
     titleFr: 'Mots de base',
-    level: 1,
     xpReward: 10,
     exercises: [
       {
@@ -512,7 +511,6 @@ export const igboLessons: Lesson[] = [
     type: 'vocabulary',
     title: 'Essential Vocabulary',
     titleFr: 'Vocabulaire essentiel',
-    level: 1,
     xpReward: 10,
     exercises: [
       {
@@ -678,7 +676,6 @@ export const igboLessons: Lesson[] = [
     type: 'vocabulary',
     title: 'Practice & Review',
     titleFr: 'Pratique et révision',
-    level: 1,
     xpReward: 15,
     exercises: [
       {

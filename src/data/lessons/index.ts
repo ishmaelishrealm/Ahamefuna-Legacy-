@@ -5,6 +5,14 @@ import { yorubaLessons } from './yoruba';
 import { zuluLessons } from './zulu';
 import { mooreLessons } from './moore';
 import { lingalaLessons } from './lingala';
+import { somaliLessons } from './somali';
+import { arabicLessons } from './arabic';
+import { berberLessons } from './berber';
+import { shonaLessons } from './shona';
+import { chichewaLessons } from './chichewa';
+import { wolofLessons } from './wolof';
+import { twiLessons } from './twi';
+import { amharicLessons } from './amharic';
 import { Stage, Lesson, AfricanLanguage, Exercise } from '../types';
 
 // Language-specific greetings data
@@ -342,23 +350,239 @@ const createLingalaStages = (): Stage[] => {
   ];
 };
 
+// Convert Somali lessons to stages
+const createSomaliStages = (): Stage[] => {
+  const stage1Lessons = somaliLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = somaliLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'somali-stage-1',
+      languageId: 'somali',
+      stageNumber: 1,
+      title: 'Somali Beginner',
+      titleFr: 'Somali Débutant',
+      color: 'from-[#228B22] to-[#32CD32]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'somali-stage-2',
+      languageId: 'somali',
+      stageNumber: 2,
+      title: 'Somali Intermediate',
+      titleFr: 'Somali Intermédiaire',
+      color: 'from-[#8B4513] to-[#D2691E]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Arabic lessons to stages
+const createArabicStages = (): Stage[] => {
+  const stage1Lessons = arabicLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = arabicLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'arabic-stage-1',
+      languageId: 'arabic',
+      stageNumber: 1,
+      title: 'Arabic Beginner',
+      titleFr: 'Arabe Débutant',
+      color: 'from-[#006400] to-[#228B22]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'arabic-stage-2',
+      languageId: 'arabic',
+      stageNumber: 2,
+      title: 'Arabic Intermediate',
+      titleFr: 'Arabe Intermédiaire',
+      color: 'from-[#8B0000] to-[#DC143C]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Berber lessons to stages
+const createBerberStages = (): Stage[] => {
+  const stage1Lessons = berberLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = berberLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'berber-stage-1',
+      languageId: 'berber',
+      stageNumber: 1,
+      title: 'Berber Beginner',
+      titleFr: 'Berbère Débutant',
+      color: 'from-[#2F4F4F] to-[#708090]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'berber-stage-2',
+      languageId: 'berber',
+      stageNumber: 2,
+      title: 'Berber Intermediate',
+      titleFr: 'Berbère Intermédiaire',
+      color: 'from-[#8B4513] to-[#D2691E]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Shona lessons to stages
+const createShonaStages = (): Stage[] => {
+  const stage1Lessons = shonaLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = shonaLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'shona-stage-1',
+      languageId: 'shona',
+      stageNumber: 1,
+      title: 'Shona Beginner',
+      titleFr: 'Shona Débutant',
+      color: 'from-[#FF4500] to-[#FF6347]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'shona-stage-2',
+      languageId: 'shona',
+      stageNumber: 2,
+      title: 'Shona Intermediate',
+      titleFr: 'Shona Intermédiaire',
+      color: 'from-[#32CD32] to-[#00FF7F]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Chichewa lessons to stages
+const createChichewaStages = (): Stage[] => {
+  const stage1Lessons = chichewaLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = chichewaLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'chichewa-stage-1',
+      languageId: 'chichewa',
+      stageNumber: 1,
+      title: 'Chichewa Beginner',
+      titleFr: 'Chichewa Débutant',
+      color: 'from-[#FFD700] to-[#FFA500]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'chichewa-stage-2',
+      languageId: 'chichewa',
+      stageNumber: 2,
+      title: 'Chichewa Intermediate',
+      titleFr: 'Chichewa Intermédiaire',
+      color: 'from-[#4B0082] to-[#8A2BE2]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Wolof lessons to stages
+const createWolofStages = (): Stage[] => {
+  const stage1Lessons = wolofLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = wolofLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'wolof-stage-1',
+      languageId: 'wolof',
+      stageNumber: 1,
+      title: 'Wolof Beginner',
+      titleFr: 'Wolof Débutant',
+      color: 'from-[#DC143C] to-[#FF6347]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'wolof-stage-2',
+      languageId: 'wolof',
+      stageNumber: 2,
+      title: 'Wolof Intermediate',
+      titleFr: 'Wolof Intermédiaire',
+      color: 'from-[#228B22] to-[#32CD32]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Twi lessons to stages
+const createTwiStages = (): Stage[] => {
+  const stage1Lessons = twiLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = twiLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'twi-stage-1',
+      languageId: 'twi',
+      stageNumber: 1,
+      title: 'Twi Beginner',
+      titleFr: 'Twi Débutant',
+      color: 'from-[#FF8C00] to-[#FFA500]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'twi-stage-2',
+      languageId: 'twi',
+      stageNumber: 2,
+      title: 'Twi Intermediate',
+      titleFr: 'Twi Intermédiaire',
+      color: 'from-[#8B4513] to-[#D2691E]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Amharic lessons to stages
+const createAmharicStages = (): Stage[] => {
+  const stage1Lessons = amharicLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = amharicLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'amharic-stage-1',
+      languageId: 'amharic',
+      stageNumber: 1,
+      title: 'Amharic Beginner',
+      titleFr: 'Amharique Débutant',
+      color: 'from-[#006400] to-[#228B22]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'amharic-stage-2',
+      languageId: 'amharic',
+      stageNumber: 2,
+      title: 'Amharic Intermediate',
+      titleFr: 'Amharique Intermédiaire',
+      color: 'from-[#8B0000] to-[#DC143C]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
 // Export all stages
 export const allStages: Record<AfricanLanguage, Stage[]> = {
   swahili: swahiliStages,
   hausa: createPlaceholderStages('hausa', 'Hausa', 'Hausa'),
   yoruba: createPlaceholderStages('yoruba', 'Yoruba', 'Yoruba'),
   zulu: createPlaceholderStages('zulu', 'Zulu', 'Zoulou'),
-  amharic: createPlaceholderStages('amharic', 'Amharic', 'Amharique'),
+  amharic: createAmharicStages(),
   igbo: createIgboStages(),
-  arabic: createPlaceholderStages('arabic', 'Arabic', 'Arabe'),
-  shona: createPlaceholderStages('shona', 'Shona', 'Shona'),
-  somali: createPlaceholderStages('somali', 'Somali', 'Somali'),
-  berber: createPlaceholderStages('berber', 'Berber', 'Berbère'),
+  arabic: createArabicStages(),
+  shona: createShonaStages(),
+  somali: createSomaliStages(),
+  berber: createBerberStages(),
   moore: createMooreStages(),
   lingala: createLingalaStages(),
-  twi: createPlaceholderStages('twi', 'Twi', 'Twi'),
-  chichewa: createPlaceholderStages('chichewa', 'Chichewa', 'Chichewa'),
-  wolof: createPlaceholderStages('wolof', 'Wolof', 'Wolof')
+  twi: createTwiStages(),
+  chichewa: createChichewaStages(),
+  wolof: createWolofStages()
 };
 
 export function getStagesForLanguage(languageId: AfricanLanguage): Stage[] {
