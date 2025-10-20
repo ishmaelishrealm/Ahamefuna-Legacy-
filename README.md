@@ -149,3 +149,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Ahamefuna** - "Let's learn together" in Igbo 🇳🇬
+
+*Updated for Node.js 22.x compatibility*
