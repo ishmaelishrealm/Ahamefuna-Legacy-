@@ -35,7 +35,8 @@ export const igboLessons: Lesson[] = [
         type: 'type-answer',
         question: 'Type the Igbo word for "Goodbye"',
         questionFr: 'Tapez le mot Igbo pour "Au revoir"',
-        correctAnswer: 'Ka ọ dị'
+        correctAnswer: 'Ka ọ dị',
+        correctAnswerFr: 'Ka ọ dị'
       },
       {
         id: 'ig-v4',
@@ -43,7 +44,9 @@ export const igboLessons: Lesson[] = [
         question: 'What is "Good morning" in Igbo?',
         questionFr: 'Comment dit-on "Bonjour" (matin) en Igbo?',
         correctAnswer: 'Ụtụtụ ọma',
-        options: ['Ụtụtụ ọma', 'Ehihie ọma', 'Ka ọ dị', 'Ndewo']
+        correctAnswerFr: 'Ụtụtụ ọma',
+        options: ['Ụtụtụ ọma', 'Ehihie ọma', 'Ka ọ dị', 'Ndewo'],
+        optionsFr: ['Ụtụtụ ọma', 'Ehihie ọma', 'Ka ọ dị', 'Ndewo']
       },
       {
         id: 'ig-v5',

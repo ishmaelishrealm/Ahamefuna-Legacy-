@@ -3,6 +3,8 @@ import { igboLessons } from './igbo';
 import { hausaLessons } from './hausa';
 import { yorubaLessons } from './yoruba';
 import { zuluLessons } from './zulu';
+import { mooreLessons } from './moore';
+import { lingalaLessons } from './lingala';
 import { Stage, Lesson, AfricanLanguage, Exercise } from '../types';
 
 // Language-specific greetings data
@@ -286,6 +288,60 @@ const createIgboStages = (): Stage[] => {
   ];
 };
 
+// Convert Moore lessons to stages
+const createMooreStages = (): Stage[] => {
+  const stage1Lessons = mooreLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = mooreLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'moore-stage-1',
+      languageId: 'moore',
+      stageNumber: 1,
+      title: 'Moore Beginner',
+      titleFr: 'Moore Débutant',
+      color: 'from-[#8B4513] to-[#D2691E]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'moore-stage-2',
+      languageId: 'moore',
+      stageNumber: 2,
+      title: 'Moore Intermediate',
+      titleFr: 'Moore Intermédiaire',
+      color: 'from-[#228B22] to-[#32CD32]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
+// Convert Lingala lessons to stages
+const createLingalaStages = (): Stage[] => {
+  const stage1Lessons = lingalaLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = lingalaLessons.slice(5, 10); // Next 5 lessons
+
+  return [
+    {
+      id: 'lingala-stage-1',
+      languageId: 'lingala',
+      stageNumber: 1,
+      title: 'Lingala Beginner',
+      titleFr: 'Lingala Débutant',
+      color: 'from-[#4169E1] to-[#6495ED]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'lingala-stage-2',
+      languageId: 'lingala',
+      stageNumber: 2,
+      title: 'Lingala Intermediate',
+      titleFr: 'Lingala Intermédiaire',
+      color: 'from-[#DC143C] to-[#FF6347]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
 // Export all stages
 export const allStages: Record<AfricanLanguage, Stage[]> = {
   swahili: swahiliStages,
@@ -298,8 +354,8 @@ export const allStages: Record<AfricanLanguage, Stage[]> = {
   shona: createPlaceholderStages('shona', 'Shona', 'Shona'),
   somali: createPlaceholderStages('somali', 'Somali', 'Somali'),
   berber: createPlaceholderStages('berber', 'Berber', 'Berbère'),
-  moore: createPlaceholderStages('moore', 'Mòoré', 'Mòoré'),
-  lingala: createPlaceholderStages('lingala', 'Lingala', 'Lingala'),
+  moore: createMooreStages(),
+  lingala: createLingalaStages(),
   twi: createPlaceholderStages('twi', 'Twi', 'Twi'),
   chichewa: createPlaceholderStages('chichewa', 'Chichewa', 'Chichewa'),
   wolof: createPlaceholderStages('wolof', 'Wolof', 'Wolof')
