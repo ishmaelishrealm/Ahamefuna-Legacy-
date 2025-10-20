@@ -23,9 +23,10 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./project/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["project/**/*", "vite.config.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
