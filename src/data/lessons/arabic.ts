@@ -371,5 +371,563 @@ export const arabicLessons: Lesson[] = [
         options: ['Sahih', 'Khati\'', 'Shukran', 'Min fadlak']
       }
     ]
+  },
+  // Stage 1, Mission 3: Basic Words
+  {
+    id: 'ar-vocab-1-3',
+    stageId: 'arabic-stage-1',
+    lessonNumber: 3,
+    type: 'vocabulary',
+    title: 'Basic Words',
+    titleFr: 'Mots de base',
+    xpReward: 10,
+    exercises: [
+      {
+        id: 'ar-v1-3-1',
+        type: 'multiple-choice',
+        question: 'What is "water" in Arabic?',
+        questionFr: 'Comment dit-on "eau" en Arabe?',
+        correctAnswer: 'Maa',
+        correctAnswerFr: 'Maa',
+        options: ['Maa', 'Ta\'aam', 'Bayt', 'Kitab']
+      },
+      {
+        id: 'ar-v1-3-2',
+        type: 'multiple-choice',
+        question: 'What is "food" in Arabic?',
+        questionFr: 'Comment dit-on "nourriture" en Arabe?',
+        correctAnswer: 'Ta\'aam',
+        correctAnswerFr: 'Ta\'aam',
+        options: ['Ta\'aam', 'Maa', 'Bayt', 'Kitab']
+      },
+      {
+        id: 'ar-v1-3-3',
+        type: 'type-answer',
+        question: 'Type "house" in Arabic',
+        questionFr: 'Tapez "maison" en Arabe',
+        correctAnswer: 'Bayt',
+        correctAnswerFr: 'Bayt'
+      },
+      {
+        id: 'ar-v1-3-4',
+        type: 'multiple-choice',
+        question: 'What is "book" in Arabic?',
+        questionFr: 'Comment dit-on "livre" en Arabe?',
+        correctAnswer: 'Kitab',
+        correctAnswerFr: 'Kitab',
+        options: ['Kitab', 'Qalam', 'Bayt', 'Maa']
+      },
+      {
+        id: 'ar-v1-3-5',
+        type: 'multiple-choice',
+        question: 'What is "pen" in Arabic?',
+        questionFr: 'Comment dit-on "stylo" en Arabe?',
+        correctAnswer: 'Qalam',
+        correctAnswerFr: 'Qalam',
+        options: ['Qalam', 'Kitab', 'Bayt', 'Maa']
+      },
+      {
+        id: 'ar-v1-3-6',
+        type: 'type-answer',
+        question: 'Type "car" in Arabic',
+        questionFr: 'Tapez "voiture" en Arabe',
+        correctAnswer: 'Sayyara',
+        correctAnswerFr: 'Sayyara'
+      },
+      {
+        id: 'ar-v1-3-7',
+        type: 'multiple-choice',
+        question: 'What is "money" in Arabic?',
+        questionFr: 'Comment dit-on "argent" en Arabe?',
+        correctAnswer: 'Mal',
+        correctAnswerFr: 'Mal',
+        options: ['Mal', 'Sayyara', 'Bayt', 'Maa']
+      },
+      {
+        id: 'ar-v1-3-8',
+        type: 'multiple-choice',
+        question: 'What is "time" in Arabic?',
+        questionFr: 'Comment dit-on "temps" en Arabe?',
+        correctAnswer: 'Waqt',
+        correctAnswerFr: 'Waqt',
+        options: ['Waqt', 'Mal', 'Sayyara', 'Bayt']
+      },
+      {
+        id: 'ar-v1-3-9',
+        type: 'type-answer',
+        question: 'Type "day" in Arabic',
+        questionFr: 'Tapez "jour" en Arabe',
+        correctAnswer: 'Yawm',
+        correctAnswerFr: 'Yawm'
+      },
+      {
+        id: 'ar-v1-3-10',
+        type: 'multiple-choice',
+        question: 'What is "night" in Arabic?',
+        questionFr: 'Comment dit-on "nuit" en Arabe?',
+        correctAnswer: 'Layl',
+        correctAnswerFr: 'Layl',
+        options: ['Layl', 'Yawm', 'Waqt', 'Mal']
+      },
+      {
+        id: 'ar-v1-3-11',
+        type: 'multiple-choice',
+        question: 'What is "family" in Arabic?',
+        questionFr: 'Comment dit-on "famille" en Arabe?',
+        correctAnswer: 'Aila',
+        correctAnswerFr: 'Aila',
+        options: ['Aila', 'Layl', 'Yawm', 'Waqt']
+      },
+      {
+        id: 'ar-v1-3-12',
+        type: 'type-answer',
+        question: 'Type "mother" in Arabic',
+        questionFr: 'Tapez "mère" en Arabe',
+        correctAnswer: 'Umm',
+        correctAnswerFr: 'Umm'
+      },
+      {
+        id: 'ar-v1-3-13',
+        type: 'multiple-choice',
+        question: 'What is "father" in Arabic?',
+        questionFr: 'Comment dit-on "père" en Arabe?',
+        correctAnswer: 'Ab',
+        correctAnswerFr: 'Ab',
+        options: ['Ab', 'Umm', 'Aila', 'Layl']
+      },
+      {
+        id: 'ar-v1-3-14',
+        type: 'multiple-choice',
+        question: 'What is "brother" in Arabic?',
+        questionFr: 'Comment dit-on "frère" en Arabe?',
+        correctAnswer: 'Akh',
+        correctAnswerFr: 'Akh',
+        options: ['Akh', 'Ab', 'Umm', 'Aila']
+      },
+      {
+        id: 'ar-v1-3-15',
+        type: 'type-answer',
+        question: 'Type "sister" in Arabic',
+        questionFr: 'Tapez "sœur" en Arabe',
+        correctAnswer: 'Ukht',
+        correctAnswerFr: 'Ukht'
+      },
+      {
+        id: 'ar-v1-3-16',
+        type: 'multiple-choice',
+        question: 'What is "friend" in Arabic?',
+        questionFr: 'Comment dit-on "ami" en Arabe?',
+        correctAnswer: 'Sadiq',
+        correctAnswerFr: 'Sadiq',
+        options: ['Sadiq', 'Ukht', 'Akh', 'Ab']
+      },
+      {
+        id: 'ar-v1-3-17',
+        type: 'multiple-choice',
+        question: 'What is "school" in Arabic?',
+        questionFr: 'Comment dit-on "école" en Arabe?',
+        correctAnswer: 'Madrasa',
+        correctAnswerFr: 'Madrasa',
+        options: ['Madrasa', 'Sadiq', 'Ukht', 'Akh']
+      },
+      {
+        id: 'ar-v1-3-18',
+        type: 'type-answer',
+        question: 'Type "teacher" in Arabic',
+        questionFr: 'Tapez "enseignant" en Arabe',
+        correctAnswer: 'Mu\'allim',
+        correctAnswerFr: 'Mu\'allim'
+      },
+      {
+        id: 'ar-v1-3-19',
+        type: 'multiple-choice',
+        question: 'What is "student" in Arabic?',
+        questionFr: 'Comment dit-on "étudiant" en Arabe?',
+        correctAnswer: 'Talib',
+        correctAnswerFr: 'Talib',
+        options: ['Talib', 'Mu\'allim', 'Madrasa', 'Sadiq']
+      },
+      {
+        id: 'ar-v1-3-20',
+        type: 'multiple-choice',
+        question: 'What is "work" in Arabic?',
+        questionFr: 'Comment dit-on "travail" en Arabe?',
+        correctAnswer: 'Amal',
+        correctAnswerFr: 'Amal',
+        options: ['Amal', 'Talib', 'Mu\'allim', 'Madrasa']
+      }
+    ]
+  },
+  // Stage 1, Mission 4: Essential Vocabulary
+  {
+    id: 'ar-vocab-1-4',
+    stageId: 'arabic-stage-1',
+    lessonNumber: 4,
+    type: 'vocabulary',
+    title: 'Essential Vocabulary',
+    titleFr: 'Vocabulaire essentiel',
+    xpReward: 10,
+    exercises: [
+      {
+        id: 'ar-v1-4-1',
+        type: 'multiple-choice',
+        question: 'What is "big" in Arabic?',
+        questionFr: 'Comment dit-on "grand" en Arabe?',
+        correctAnswer: 'Kabir',
+        correctAnswerFr: 'Kabir',
+        options: ['Kabir', 'Saghir', 'Jadid', 'Qadim']
+      },
+      {
+        id: 'ar-v1-4-2',
+        type: 'multiple-choice',
+        question: 'What is "small" in Arabic?',
+        questionFr: 'Comment dit-on "petit" en Arabe?',
+        correctAnswer: 'Saghir',
+        correctAnswerFr: 'Saghir',
+        options: ['Saghir', 'Kabir', 'Jadid', 'Qadim']
+      },
+      {
+        id: 'ar-v1-4-3',
+        type: 'type-answer',
+        question: 'Type "good" in Arabic',
+        questionFr: 'Tapez "bon" en Arabe',
+        correctAnswer: 'Jayyid',
+        correctAnswerFr: 'Jayyid'
+      },
+      {
+        id: 'ar-v1-4-4',
+        type: 'multiple-choice',
+        question: 'What is "bad" in Arabic?',
+        questionFr: 'Comment dit-on "mauvais" en Arabe?',
+        correctAnswer: 'Sayyi',
+        correctAnswerFr: 'Sayyi',
+        options: ['Sayyi', 'Jayyid', 'Saghir', 'Kabir']
+      },
+      {
+        id: 'ar-v1-4-5',
+        type: 'multiple-choice',
+        question: 'What is "new" in Arabic?',
+        questionFr: 'Comment dit-on "nouveau" en Arabe?',
+        correctAnswer: 'Jadid',
+        correctAnswerFr: 'Jadid',
+        options: ['Jadid', 'Qadim', 'Sayyi', 'Jayyid']
+      },
+      {
+        id: 'ar-v1-4-6',
+        type: 'type-answer',
+        question: 'Type "old" in Arabic',
+        questionFr: 'Tapez "vieux" en Arabe',
+        correctAnswer: 'Qadim',
+        correctAnswerFr: 'Qadim'
+      },
+      {
+        id: 'ar-v1-4-7',
+        type: 'multiple-choice',
+        question: 'What is "hot" in Arabic?',
+        questionFr: 'Comment dit-on "chaud" en Arabe?',
+        correctAnswer: 'Harr',
+        correctAnswerFr: 'Harr',
+        options: ['Harr', 'Barid', 'Jadid', 'Qadim']
+      },
+      {
+        id: 'ar-v1-4-8',
+        type: 'multiple-choice',
+        question: 'What is "cold" in Arabic?',
+        questionFr: 'Comment dit-on "froid" en Arabe?',
+        correctAnswer: 'Barid',
+        correctAnswerFr: 'Barid',
+        options: ['Barid', 'Harr', 'Jadid', 'Qadim']
+      },
+      {
+        id: 'ar-v1-4-9',
+        type: 'type-answer',
+        question: 'Type "fast" in Arabic',
+        questionFr: 'Tapez "rapide" en Arabe',
+        correctAnswer: 'Sari\'',
+        correctAnswerFr: 'Sari\''
+      },
+      {
+        id: 'ar-v1-4-10',
+        type: 'multiple-choice',
+        question: 'What is "slow" in Arabic?',
+        questionFr: 'Comment dit-on "lent" en Arabe?',
+        correctAnswer: 'Bati\'',
+        correctAnswerFr: 'Bati\'',
+        options: ['Bati\'', 'Sari\'', 'Barid', 'Harr']
+      },
+      {
+        id: 'ar-v1-4-11',
+        type: 'multiple-choice',
+        question: 'What is "beautiful" in Arabic?',
+        questionFr: 'Comment dit-on "beau" en Arabe?',
+        correctAnswer: 'Jamil',
+        correctAnswerFr: 'Jamil',
+        options: ['Jamil', 'Bati\'', 'Sari\'', 'Barid']
+      },
+      {
+        id: 'ar-v1-4-12',
+        type: 'type-answer',
+        question: 'Type "ugly" in Arabic',
+        questionFr: 'Tapez "laid" en Arabe',
+        correctAnswer: 'Qabih',
+        correctAnswerFr: 'Qabih'
+      },
+      {
+        id: 'ar-v1-4-13',
+        type: 'multiple-choice',
+        question: 'What is "easy" in Arabic?',
+        questionFr: 'Comment dit-on "facile" en Arabe?',
+        correctAnswer: 'Sahl',
+        correctAnswerFr: 'Sahl',
+        options: ['Sahl', 'Sa\'b', 'Qabih', 'Jamil']
+      },
+      {
+        id: 'ar-v1-4-14',
+        type: 'multiple-choice',
+        question: 'What is "difficult" in Arabic?',
+        questionFr: 'Comment dit-on "difficile" en Arabe?',
+        correctAnswer: 'Sa\'b',
+        correctAnswerFr: 'Sa\'b',
+        options: ['Sa\'b', 'Sahl', 'Qabih', 'Jamil']
+      },
+      {
+        id: 'ar-v1-4-15',
+        type: 'type-answer',
+        question: 'Type "expensive" in Arabic',
+        questionFr: 'Tapez "cher" en Arabe',
+        correctAnswer: 'Ghalin',
+        correctAnswerFr: 'Ghalin'
+      },
+      {
+        id: 'ar-v1-4-16',
+        type: 'multiple-choice',
+        question: 'What is "cheap" in Arabic?',
+        questionFr: 'Comment dit-on "bon marché" en Arabe?',
+        correctAnswer: 'Rakhis',
+        correctAnswerFr: 'Rakhis',
+        options: ['Rakhis', 'Ghalin', 'Sa\'b', 'Sahl']
+      },
+      {
+        id: 'ar-v1-4-17',
+        type: 'multiple-choice',
+        question: 'What is "clean" in Arabic?',
+        questionFr: 'Comment dit-on "propre" en Arabe?',
+        correctAnswer: 'Nadif',
+        correctAnswerFr: 'Nadif',
+        options: ['Nadif', 'Wasikh', 'Rakhis', 'Ghalin']
+      },
+      {
+        id: 'ar-v1-4-18',
+        type: 'type-answer',
+        question: 'Type "dirty" in Arabic',
+        questionFr: 'Tapez "sale" en Arabe',
+        correctAnswer: 'Wasikh',
+        correctAnswerFr: 'Wasikh'
+      },
+      {
+        id: 'ar-v1-4-19',
+        type: 'multiple-choice',
+        question: 'What is "full" in Arabic?',
+        questionFr: 'Comment dit-on "plein" en Arabe?',
+        correctAnswer: 'Mal\'un',
+        correctAnswerFr: 'Mal\'un',
+        options: ['Mal\'un', 'Fari', 'Wasikh', 'Nadif']
+      },
+      {
+        id: 'ar-v1-4-20',
+        type: 'multiple-choice',
+        question: 'What is "empty" in Arabic?',
+        questionFr: 'Comment dit-on "vide" en Arabe?',
+        correctAnswer: 'Fari',
+        correctAnswerFr: 'Fari',
+        options: ['Fari', 'Mal\'un', 'Wasikh', 'Nadif']
+      }
+    ]
+  },
+  // Stage 1, Mission 5: Practice & Review
+  {
+    id: 'ar-vocab-1-5',
+    stageId: 'arabic-stage-1',
+    lessonNumber: 5,
+    type: 'vocabulary',
+    title: 'Practice & Review',
+    titleFr: 'Pratique et révision',
+    xpReward: 15,
+    exercises: [
+      {
+        id: 'ar-v1-5-1',
+        type: 'multiple-choice',
+        question: 'What is "one" in Arabic?',
+        questionFr: 'Comment dit-on "un" en Arabe?',
+        correctAnswer: 'Wahid',
+        correctAnswerFr: 'Wahid',
+        options: ['Wahid', 'Ithnan', 'Thalatha', 'Arba\'a']
+      },
+      {
+        id: 'ar-v1-5-2',
+        type: 'multiple-choice',
+        question: 'What is "two" in Arabic?',
+        questionFr: 'Comment dit-on "deux" en Arabe?',
+        correctAnswer: 'Ithnan',
+        correctAnswerFr: 'Ithnan',
+        options: ['Ithnan', 'Wahid', 'Thalatha', 'Arba\'a']
+      },
+      {
+        id: 'ar-v1-5-3',
+        type: 'type-answer',
+        question: 'Type "three" in Arabic',
+        questionFr: 'Tapez "trois" en Arabe',
+        correctAnswer: 'Thalatha',
+        correctAnswerFr: 'Thalatha'
+      },
+      {
+        id: 'ar-v1-5-4',
+        type: 'multiple-choice',
+        question: 'What is "four" in Arabic?',
+        questionFr: 'Comment dit-on "quatre" en Arabe?',
+        correctAnswer: 'Arba\'a',
+        correctAnswerFr: 'Arba\'a',
+        options: ['Arba\'a', 'Thalatha', 'Ithnan', 'Wahid']
+      },
+      {
+        id: 'ar-v1-5-5',
+        type: 'multiple-choice',
+        question: 'What is "five" in Arabic?',
+        questionFr: 'Comment dit-on "cinq" en Arabe?',
+        correctAnswer: 'Khamsa',
+        correctAnswerFr: 'Khamsa',
+        options: ['Khamsa', 'Arba\'a', 'Thalatha', 'Ithnan']
+      },
+      {
+        id: 'ar-v1-5-6',
+        type: 'type-answer',
+        question: 'Type "six" in Arabic',
+        questionFr: 'Tapez "six" en Arabe',
+        correctAnswer: 'Sitta',
+        correctAnswerFr: 'Sitta'
+      },
+      {
+        id: 'ar-v1-5-7',
+        type: 'multiple-choice',
+        question: 'What is "seven" in Arabic?',
+        questionFr: 'Comment dit-on "sept" en Arabe?',
+        correctAnswer: 'Sab\'a',
+        correctAnswerFr: 'Sab\'a',
+        options: ['Sab\'a', 'Sitta', 'Khamsa', 'Arba\'a']
+      },
+      {
+        id: 'ar-v1-5-8',
+        type: 'multiple-choice',
+        question: 'What is "eight" in Arabic?',
+        questionFr: 'Comment dit-on "huit" en Arabe?',
+        correctAnswer: 'Thamaniya',
+        correctAnswerFr: 'Thamaniya',
+        options: ['Thamaniya', 'Sab\'a', 'Sitta', 'Khamsa']
+      },
+      {
+        id: 'ar-v1-5-9',
+        type: 'type-answer',
+        question: 'Type "nine" in Arabic',
+        questionFr: 'Tapez "neuf" en Arabe',
+        correctAnswer: 'Tis\'a',
+        correctAnswerFr: 'Tis\'a'
+      },
+      {
+        id: 'ar-v1-5-10',
+        type: 'multiple-choice',
+        question: 'What is "ten" in Arabic?',
+        questionFr: 'Comment dit-on "dix" en Arabe?',
+        correctAnswer: 'Ashara',
+        correctAnswerFr: 'Ashara',
+        options: ['Ashara', 'Tis\'a', 'Thamaniya', 'Sab\'a']
+      },
+      {
+        id: 'ar-v1-5-11',
+        type: 'multiple-choice',
+        question: 'What is "red" in Arabic?',
+        questionFr: 'Comment dit-on "rouge" en Arabe?',
+        correctAnswer: 'Ahmar',
+        correctAnswerFr: 'Ahmar',
+        options: ['Ahmar', 'Akhdar', 'Azraq', 'Abyad']
+      },
+      {
+        id: 'ar-v1-5-12',
+        type: 'type-answer',
+        question: 'Type "blue" in Arabic',
+        questionFr: 'Tapez "bleu" en Arabe',
+        correctAnswer: 'Azraq',
+        correctAnswerFr: 'Azraq'
+      },
+      {
+        id: 'ar-v1-5-13',
+        type: 'multiple-choice',
+        question: 'What is "green" in Arabic?',
+        questionFr: 'Comment dit-on "vert" en Arabe?',
+        correctAnswer: 'Akhdar',
+        correctAnswerFr: 'Akhdar',
+        options: ['Akhdar', 'Azraq', 'Ahmar', 'Abyad']
+      },
+      {
+        id: 'ar-v1-5-14',
+        type: 'multiple-choice',
+        question: 'What is "white" in Arabic?',
+        questionFr: 'Comment dit-on "blanc" en Arabe?',
+        correctAnswer: 'Abyad',
+        correctAnswerFr: 'Abyad',
+        options: ['Abyad', 'Akhdar', 'Azraq', 'Ahmar']
+      },
+      {
+        id: 'ar-v1-5-15',
+        type: 'type-answer',
+        question: 'Type "black" in Arabic',
+        questionFr: 'Tapez "noir" en Arabe',
+        correctAnswer: 'Aswad',
+        correctAnswerFr: 'Aswad'
+      },
+      {
+        id: 'ar-v1-5-16',
+        type: 'multiple-choice',
+        question: 'What is "yellow" in Arabic?',
+        questionFr: 'Comment dit-on "jaune" en Arabe?',
+        correctAnswer: 'Asfar',
+        correctAnswerFr: 'Asfar',
+        options: ['Asfar', 'Aswad', 'Abyad', 'Akhdar']
+      },
+      {
+        id: 'ar-v1-5-17',
+        type: 'multiple-choice',
+        question: 'What is "orange" in Arabic?',
+        questionFr: 'Comment dit-on "orange" en Arabe?',
+        correctAnswer: 'Burtuqali',
+        correctAnswerFr: 'Burtuqali',
+        options: ['Burtuqali', 'Asfar', 'Aswad', 'Abyad']
+      },
+      {
+        id: 'ar-v1-5-18',
+        type: 'type-answer',
+        question: 'Type "purple" in Arabic',
+        questionFr: 'Tapez "violet" en Arabe',
+        correctAnswer: 'Banafsaji',
+        correctAnswerFr: 'Banafsaji'
+      },
+      {
+        id: 'ar-v1-5-19',
+        type: 'multiple-choice',
+        question: 'What is "brown" in Arabic?',
+        questionFr: 'Comment dit-on "marron" en Arabe?',
+        correctAnswer: 'Bunni',
+        correctAnswerFr: 'Bunni',
+        options: ['Bunni', 'Banafsaji', 'Burtuqali', 'Asfar']
+      },
+      {
+        id: 'ar-v1-5-20',
+        type: 'multiple-choice',
+        question: 'What is "gray" in Arabic?',
+        questionFr: 'Comment dit-on "gris" en Arabe?',
+        correctAnswer: 'Rasasi',
+        correctAnswerFr: 'Rasasi',
+        options: ['Rasasi', 'Bunni', 'Banafsaji', 'Burtuqali']
+      }
+    ]
   }
 ];
