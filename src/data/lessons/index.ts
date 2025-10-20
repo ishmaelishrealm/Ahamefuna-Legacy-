@@ -1,4 +1,5 @@
 import { swahiliStages } from './swahili-structured';
+import { igboLessons } from './igbo';
 import { Stage, Lesson, AfricanLanguage, Exercise } from '../types';
 
 // Language-specific greetings data
@@ -255,6 +256,33 @@ const createPlaceholderStages = (languageCode: string, languageName: string, lan
   ];
 };
 
+// Convert Igbo lessons to stages
+const createIgboStages = (): Stage[] => {
+  const stage1Lessons = igboLessons.slice(0, 5); // First 5 lessons
+  const stage2Lessons = igboLessons.slice(5, 10); // Next 5 lessons
+  
+  return [
+    {
+      id: 'igbo-stage-1',
+      languageId: 'igbo',
+      stageNumber: 1,
+      title: 'Igbo Beginner',
+      titleFr: 'Igbo Débutant',
+      color: 'from-[#FF1493] to-[#FF69B4]',
+      lessons: stage1Lessons
+    },
+    {
+      id: 'igbo-stage-2',
+      languageId: 'igbo',
+      stageNumber: 2,
+      title: 'Igbo Intermediate',
+      titleFr: 'Igbo Intermédiaire',
+      color: 'from-[#006D48] to-[#00A86B]',
+      lessons: stage2Lessons
+    }
+  ];
+};
+
 // Export all stages
 export const allStages: Record<AfricanLanguage, Stage[]> = {
   swahili: swahiliStages,
@@ -262,7 +290,7 @@ export const allStages: Record<AfricanLanguage, Stage[]> = {
   yoruba: createPlaceholderStages('yoruba', 'Yoruba', 'Yoruba'),
   zulu: createPlaceholderStages('zulu', 'Zulu', 'Zoulou'),
   amharic: createPlaceholderStages('amharic', 'Amharic', 'Amharique'),
-  igbo: createPlaceholderStages('igbo', 'Igbo', 'Igbo'),
+  igbo: createIgboStages(),
   arabic: createPlaceholderStages('arabic', 'Arabic', 'Arabe'),
   shona: createPlaceholderStages('shona', 'Shona', 'Shona'),
   somali: createPlaceholderStages('somali', 'Somali', 'Somali'),
