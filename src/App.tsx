@@ -350,17 +350,18 @@ function App() {
         />
       )}
 
-      {currentScreen === 'lesson' && currentLanguage && activeLesson && (
-        <LessonScreen
-          interfaceLanguage={interfaceLanguage}
-          lesson={activeLesson}
-          languageName={getLanguageById(currentLanguage)?.name || ''}
-          hearts={getCurrentProgress().hearts}
-          onComplete={handleLessonComplete}
-          onExit={handleExitLesson}
-          onBackToLanguageSelect={() => setCurrentScreen('language-select')}
-        />
-      )}
+        {currentScreen === 'lesson' && currentLanguage && activeLesson && (
+          <LessonScreen
+            interfaceLanguage={interfaceLanguage}
+            lesson={activeLesson}
+            languageName={getLanguageById(currentLanguage)?.name || ''}
+            hearts={getCurrentProgress().hearts}
+            isSubscribed={userData?.subscription?.active || false}
+            onComplete={handleLessonComplete}
+            onExit={handleExitLesson}
+            onBackToLanguageSelect={() => setCurrentScreen('language-select')}
+          />
+        )}
 
       {currentScreen === 'complete' && (
         <LessonComplete

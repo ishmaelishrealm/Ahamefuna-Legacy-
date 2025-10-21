@@ -22,33 +22,36 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
     setLoading(planType);
 
     try {
-      const stripe = await getStripe();
-      if (!stripe) {
-        throw new Error('Stripe failed to load');
-      }
+      // Add timeout to prevent infinite processing
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Subscription timeout')), 10000)
+      );
 
-      // For now, simulate a successful subscription since we don't have Stripe fully set up
-      console.log('Simulating subscription for:', planType);
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Activate demo subscription
-      const success = await activateDemoSubscription(user.uid, planType);
-      
-      if (success) {
-        alert(`Demo: Subscription to ${planType} plan activated! This is a demo - no actual payment is processed.`);
-        // Refresh user data to show updated subscription status
-        window.location.reload();
-      } else {
-        throw new Error('Failed to activate demo subscription');
-      }
-      
-      // In a real implementation, you would:
-      // 1. Create checkout session with your backend
-      // 2. Redirect to Stripe Checkout
-      // 3. Handle success/cancel callbacks
-      // 4. Update user subscription status via webhooks
+      const subscriptionPromise = (async () => {
+        const stripe = await getStripe();
+        if (!stripe) {
+          throw new Error('Stripe failed to load');
+        }
+
+        // For now, simulate a successful subscription since we don't have Stripe fully set up
+        console.log('Simulating subscription for:', planType);
+        
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Activate demo subscription
+        const success = await activateDemoSubscription(user.uid, planType);
+        
+        if (success) {
+          alert(`Demo: Subscription to ${planType} plan activated! This is a demo - no actual payment is processed.`);
+          // Refresh user data to show updated subscription status
+          window.location.reload();
+        } else {
+          throw new Error('Failed to activate demo subscription');
+        }
+      })();
+
+      await Promise.race([subscriptionPromise, timeoutPromise]);
       
     } catch (error) {
       console.error('Subscription error:', error);

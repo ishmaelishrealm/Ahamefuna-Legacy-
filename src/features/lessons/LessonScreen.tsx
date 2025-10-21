@@ -8,6 +8,7 @@ interface LessonScreenProps {
   lesson: Lesson;
   languageName: string;
   hearts: number;
+  isSubscribed?: boolean;
   onComplete: (xpEarned: number, heartsLost: number, heartsGained: number) => void;
   onExit: () => void;
   onBackToLanguageSelect: () => void;
@@ -23,6 +24,7 @@ export function LessonScreen({
   lesson,
   languageName,
   hearts,
+  isSubscribed = false,
   onComplete,
   onExit,
   onBackToLanguageSelect
@@ -96,6 +98,13 @@ export function LessonScreen({
   };
 
   const handleSubmit = () => {
+    // Check if user has hearts (for non-subscribers)
+    if (!isSubscribed && currentHearts <= 0) {
+      // Show hearts out message
+      alert('💔 Ouch! No hearts left! Let\'s reset in 7 hours or subscribe for unlimited hearts!');
+      return;
+    }
+
     const correctAnswer = getCorrectAnswer();
     // Use Igbo text utility for better accent handling
     const correct = checkIgboAnswer(userAnswer, correctAnswer);
@@ -111,39 +120,41 @@ export function LessonScreen({
         setCurrentHearts(prev => Math.min(5, prev + 0.5));
       }
     } else {
-      // Wrong answer
-      if (currentExercise.wasWrong && !currentExercise.hasRetried) {
-        // Failed redemption - lose another heart
-        setTotalHeartsLost(prev => prev + 1);
-        if (currentHearts > 0) {
-          setCurrentHearts(prev => Math.max(0, prev - 1));
-        }
-      } else if (!currentExercise.wasWrong) {
-        // First time wrong - lose heart and add back to queue randomly
-        setTotalHeartsLost(prev => prev + 1);
-        if (currentHearts > 0) {
-          setCurrentHearts(prev => Math.max(0, prev - 1));
-        }
-        
-        // Add this question back to the queue at a random position (not immediately next)
-        const wrongExercise: ExerciseWithState = { 
-          ...currentExercise, 
-          wasWrong: true,
-          hasRetried: false
-        };
-        
-        // Insert at a random position in the remaining queue (at least 2 positions ahead)
-        setExerciseQueue(prevQueue => {
-          const newQueue = [...prevQueue];
-          if (newQueue.length > 2) {
-            const randomPos = Math.floor(Math.random() * (newQueue.length - 2)) + 2;
-            newQueue.splice(randomPos, 0, wrongExercise);
-          } else {
-            newQueue.push(wrongExercise);
+      // Wrong answer - only lose hearts if not subscribed
+      if (!isSubscribed) {
+        if (currentExercise.wasWrong && !currentExercise.hasRetried) {
+          // Failed redemption - lose another heart
+          setTotalHeartsLost(prev => prev + 1);
+          if (currentHearts > 0) {
+            setCurrentHearts(prev => Math.max(0, prev - 1));
           }
-          return newQueue;
-        });
+        } else if (!currentExercise.wasWrong) {
+          // First time wrong - lose heart and add back to queue randomly
+          setTotalHeartsLost(prev => prev + 1);
+          if (currentHearts > 0) {
+            setCurrentHearts(prev => Math.max(0, prev - 1));
+          }
+        }
       }
+        
+      // Add this question back to the queue at a random position (not immediately next)
+      const wrongExercise: ExerciseWithState = { 
+        ...currentExercise, 
+        wasWrong: true,
+        hasRetried: false
+      };
+      
+      // Insert at a random position in the remaining queue (at least 2 positions ahead)
+      setExerciseQueue(prevQueue => {
+        const newQueue = [...prevQueue];
+        if (newQueue.length > 2) {
+          const randomPos = Math.floor(Math.random() * (newQueue.length - 2)) + 2;
+          newQueue.splice(randomPos, 0, wrongExercise);
+        } else {
+          newQueue.push(wrongExercise);
+        }
+        return newQueue;
+      });
     }
   };
 
@@ -178,9 +189,23 @@ export function LessonScreen({
 
   const answerColors = ['#FF1493', '#9D4EDD', '#FFD700', '#00FF94'];
 
-  // Render hearts with half heart support
+  // Render hearts with half heart support and infinity for subscribers
   const renderHearts = () => {
     const hearts = [];
+    
+    // If subscribed, show infinity symbol
+    if (isSubscribed) {
+      return (
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FF1493] to-[#FF69B4] scale-110 retro-shadow-sm game-border">
+            <Heart className="w-6 h-6 fill-white text-white" />
+          </div>
+          <span className="text-2xl text-white font-bold">∞</span>
+        </div>
+      );
+    }
+    
+    // For non-subscribers, show regular hearts
     const fullHearts = Math.floor(currentHearts);
     const hasHalfHeart = currentHearts % 1 !== 0;
     
