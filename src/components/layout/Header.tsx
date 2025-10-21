@@ -2,19 +2,26 @@ import React, { useState } from 'react';
 import { ProfileDropdown } from '../ui/ProfileDropdown';
 import { LeaderboardButton } from '../ui/LeaderboardButton';
 import { AuthModal } from '../auth/AuthModal';
+import { Crown, BarChart3 } from 'lucide-react';
 
 interface HeaderProps {
   title?: string;
   showBackButton?: boolean;
   onBack?: () => void;
   onLeaderboard?: () => void;
+  onSubscription?: () => void;
+  onFeedback?: () => void;
+  isSubscribed?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   title = "Afroslang", 
   showBackButton = false, 
   onBack,
-  onLeaderboard
+  onLeaderboard,
+  onSubscription,
+  onFeedback,
+  isSubscribed = false
 }) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
@@ -51,11 +58,32 @@ export const Header: React.FC<HeaderProps> = ({
             <h1 className="text-xl font-bold text-white drop-shadow-lg">{title}</h1>
           </div>
 
-          {/* Right side - Leaderboard and Profile */}
+          {/* Right side - Premium buttons, Leaderboard and Profile */}
           <div className="flex items-center gap-3">
+            {onFeedback && isSubscribed && (
+              <button
+                onClick={onFeedback}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/30"
+                aria-label="View Feedback"
+              >
+                <BarChart3 className="w-5 h-5 text-white" />
+              </button>
+            )}
+            
+            {onSubscription && !isSubscribed && (
+              <button
+                onClick={onSubscription}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                aria-label="Subscribe to Premium"
+              >
+                <Crown className="w-5 h-5 text-black" />
+              </button>
+            )}
+            
             {onLeaderboard && (
               <LeaderboardButton onClick={onLeaderboard} />
             )}
+            
             <ProfileDropdown 
               onSignIn={handleSignIn}
               onSignUp={handleSignUp}

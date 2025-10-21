@@ -1,0 +1,260 @@
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { getStripe, SUBSCRIPTION_PLANS, PREMIUM_FEATURES } from '../../utils/stripeConfig';
+import { Crown, Check, Star, Zap, Heart, BarChart3, Trophy, ChevronLeft } from 'lucide-react';
+
+interface SubscriptionPageProps {
+  onBack: () => void;
+}
+
+export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) => {
+  const { user, userData } = useAuth();
+  const [loading, setLoading] = useState<string | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
+
+  const handleSubscribe = async (planType: 'monthly' | 'yearly') => {
+    if (!user) {
+      alert('Please sign in to subscribe');
+      return;
+    }
+
+    setLoading(planType);
+
+    try {
+      const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error('Stripe failed to load');
+      }
+
+      // Create checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: SUBSCRIPTION_PLANS[planType].priceId,
+          userId: user.uid,
+          userEmail: user.email,
+        }),
+      });
+
+      const { sessionId } = await response.json();
+
+      // Redirect to Stripe Checkout
+      const { error } = await stripe.redirectToCheckout({
+        sessionId,
+      });
+
+      if (error) {
+        console.error('Stripe checkout error:', error);
+        alert('Payment failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Subscription error:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const isSubscribed = userData?.subscription?.active;
+
+  if (isSubscribed) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94] p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center gap-4 mb-8">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl px-6 py-3 transition-all"
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+              <span className="text-white font-medium">Back</span>
+            </button>
+          </div>
+
+          {/* Premium Status */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Crown className="w-12 h-12 text-yellow-400" />
+              <h1 className="text-4xl font-bold text-white">Premium Active!</h1>
+            </div>
+            
+            <p className="text-white/80 text-xl mb-8">
+              You're enjoying all premium features
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {PREMIUM_FEATURES.map((feature, index) => (
+                <div key={index} className="bg-white/10 rounded-2xl p-6 text-left">
+                  <div className="flex items-center gap-4 mb-3">
+                    <span className="text-3xl">{feature.icon}</span>
+                    <h3 className="text-xl font-bold text-white">{feature.title}</h3>
+                  </div>
+                  <p className="text-white/80">{feature.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94] p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl px-6 py-3 transition-all"
+          >
+            <ChevronLeft className="w-5 h-5 text-white" />
+            <span className="text-white font-medium">Back</span>
+          </button>
+        </div>
+
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <Crown className="w-16 h-16 text-yellow-400" />
+            <h1 className="text-6xl font-bold text-white">Afroslang Premium</h1>
+          </div>
+          <p className="text-2xl text-white/80 mb-8">
+            Unlock unlimited learning potential with premium features
+          </p>
+        </div>
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {PREMIUM_FEATURES.map((feature, index) => (
+            <div key={index} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div className="flex items-center gap-4 mb-4">
+                <span className="text-4xl">{feature.icon}</span>
+                <h3 className="text-xl font-bold text-white">{feature.title}</h3>
+              </div>
+              <p className="text-white/80">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Pricing Plans */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
+          <h2 className="text-3xl font-bold text-white text-center mb-8">
+            Choose Your Plan
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Monthly Plan */}
+            <div className={`bg-white/10 rounded-2xl p-8 transition-all ${
+              selectedPlan === 'monthly' ? 'ring-2 ring-white/50' : ''
+            }`}>
+              <div className="text-center">
+                <h3 className="text-2xl font-bold text-white mb-2">Monthly</h3>
+                <div className="text-4xl font-bold text-white mb-2">$5.99</div>
+                <div className="text-white/60 mb-6">per month</div>
+                
+                <button
+                  onClick={() => setSelectedPlan('monthly')}
+                  className={`w-full py-3 px-6 rounded-xl font-medium transition-all ${
+                    selectedPlan === 'monthly'
+                      ? 'bg-white text-purple-600'
+                      : 'bg-white/20 text-white hover:bg-white/30'
+                  }`}
+                >
+                  {selectedPlan === 'monthly' ? 'Selected' : 'Select Monthly'}
+                </button>
+              </div>
+            </div>
+
+            {/* Yearly Plan */}
+            <div className={`bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 rounded-2xl p-8 transition-all relative ${
+              selectedPlan === 'yearly' ? 'ring-2 ring-yellow-400/50' : ''
+            }`}>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-yellow-400 text-black px-4 py-2 rounded-full text-sm font-bold">
+                  BEST VALUE
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <h3 className="text-2xl font-bold text-white mb-2">Yearly</h3>
+                <div className="text-4xl font-bold text-white mb-2">$39.99</div>
+                <div className="text-white/60 mb-2">per year</div>
+                <div className="text-green-400 font-bold mb-6">Save $32.89/year!</div>
+                
+                <button
+                  onClick={() => setSelectedPlan('yearly')}
+                  className={`w-full py-3 px-6 rounded-xl font-medium transition-all ${
+                    selectedPlan === 'yearly'
+                      ? 'bg-yellow-400 text-black'
+                      : 'bg-yellow-400/20 text-white hover:bg-yellow-400/30'
+                  }`}
+                >
+                  {selectedPlan === 'yearly' ? 'Selected' : 'Select Yearly'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Subscribe Button */}
+          <div className="text-center mt-8">
+            <button
+              onClick={() => handleSubscribe(selectedPlan)}
+              disabled={loading !== null}
+              className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold text-xl px-12 py-4 rounded-2xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <div className="flex items-center gap-3">
+                  <div className="animate-spin w-6 h-6 border-2 border-black/30 border-t-black rounded-full"></div>
+                  Processing...
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Crown className="w-6 h-6" />
+                  Subscribe to Premium
+                </div>
+              )}
+            </button>
+            
+            <p className="text-white/60 text-sm mt-4">
+              Cancel anytime. Secure payment powered by Stripe.
+            </p>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="mt-12 bg-white/10 backdrop-blur-sm rounded-3xl p-8">
+          <h3 className="text-2xl font-bold text-white text-center mb-6">
+            Frequently Asked Questions
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-bold text-white mb-2">What happens to my progress?</h4>
+              <p className="text-white/80 text-sm">All your learning progress is saved and will continue to be available.</p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-2">Can I cancel anytime?</h4>
+              <p className="text-white/80 text-sm">Yes! You can cancel your subscription at any time from your account settings.</p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-2">What payment methods do you accept?</h4>
+              <p className="text-white/80 text-sm">We accept all major credit cards, debit cards, and digital wallets through Stripe.</p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-2">Is there a free trial?</h4>
+              <p className="text-white/80 text-sm">New users get 3 free hearts to try the app. Premium features require a subscription.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

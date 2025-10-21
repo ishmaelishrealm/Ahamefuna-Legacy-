@@ -8,13 +8,15 @@ import { LessonComplete } from './features/lessons/LessonComplete';
 import { AuthScreen } from './components/auth/AuthScreen';
 import { Header } from './components/layout/Header';
 import { LeaderboardScreen } from './components/leaderboard/LeaderboardScreen';
+import { SubscriptionPage } from './components/subscription/SubscriptionPage';
+import { FeedbackPage } from './components/feedback/FeedbackPage';
 import { useAuth } from './contexts/AuthContext';
 import { getLanguageById } from './data/languages';
 import { getStagesForLanguage, getLessonById } from './data/lessons';
 import { saveUserProgress } from './utils/userData';
 import { addWeeklyXP, getCurrentWeekIdFromDB, getUserLeague } from './utils/leaderboardUtils';
 
-type Screen = 'auth' | 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete' | 'leaderboard';
+type Screen = 'auth' | 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete' | 'leaderboard' | 'subscription' | 'feedback';
 
 function App() {
   const { user, userData, isGuest, loading } = useAuth();
@@ -231,12 +233,14 @@ function App() {
   };
 
   const getCurrentProgress = (): UserProgress => {
+    const unlimitedHearts = userData?.subscription?.active ? 999 : 5;
+    
     if (!currentLanguage) {
       return {
         languageId: 'swahili',
         xp: 0,
         level: 1,
-        hearts: 5,
+        hearts: unlimitedHearts,
         heartsResetTime: null,
         streak: 0,
         lastPracticeDate: null,
@@ -248,19 +252,28 @@ function App() {
       };
     }
 
-    return userProgressMap[currentLanguage] || {
-      languageId: currentLanguage,
-      xp: 0,
-      level: 1,
-      hearts: 5,
-      heartsResetTime: null,
-      streak: 0,
-      lastPracticeDate: null,
-      lessonsCompleted: 0,
-      wordsLearned: 0,
-      mistakeCount: 0,
-      completedLessons: [],
-      currentStage: 1
+    const progress = userProgressMap[currentLanguage];
+    if (!progress) {
+      return {
+        languageId: currentLanguage,
+        xp: 0,
+        level: 1,
+        hearts: unlimitedHearts,
+        heartsResetTime: null,
+        streak: 0,
+        lastPracticeDate: null,
+        lessonsCompleted: 0,
+        wordsLearned: 0,
+        mistakeCount: 0,
+        completedLessons: [],
+        currentStage: 1
+      };
+    }
+
+    // Override hearts for subscribers
+    return {
+      ...progress,
+      hearts: unlimitedHearts
     };
   };
 
@@ -301,9 +314,16 @@ function App() {
               setCurrentScreen('path');
             } else if (currentScreen === 'leaderboard') {
               setCurrentScreen('interface-select');
+            } else if (currentScreen === 'subscription') {
+              setCurrentScreen('interface-select');
+            } else if (currentScreen === 'feedback') {
+              setCurrentScreen('interface-select');
             }
           }}
           onLeaderboard={() => setCurrentScreen('leaderboard')}
+          onSubscription={() => setCurrentScreen('subscription')}
+          onFeedback={() => setCurrentScreen('feedback')}
+          isSubscribed={userData?.subscription?.active || false}
         />
       )}
 
@@ -352,6 +372,18 @@ function App() {
 
       {currentScreen === 'leaderboard' && (
         <LeaderboardScreen
+          onBack={() => setCurrentScreen('interface-select')}
+        />
+      )}
+
+      {currentScreen === 'subscription' && (
+        <SubscriptionPage
+          onBack={() => setCurrentScreen('interface-select')}
+        />
+      )}
+
+      {currentScreen === 'feedback' && (
+        <FeedbackPage
           onBack={() => setCurrentScreen('interface-select')}
         />
       )}
