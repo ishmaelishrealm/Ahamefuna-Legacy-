@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getStripe, SUBSCRIPTION_PLANS, PREMIUM_FEATURES } from '../../utils/stripeConfig';
+import { activateDemoSubscription } from '../../utils/demoSubscription';
 import { Crown, Check, Star, Zap, Heart, BarChart3, Trophy, ChevronLeft } from 'lucide-react';
 
 interface SubscriptionPageProps {
@@ -26,33 +27,32 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
         throw new Error('Stripe failed to load');
       }
 
-      // Create checkout session
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: SUBSCRIPTION_PLANS[planType].priceId,
-          userId: user.uid,
-          userEmail: user.email,
-        }),
-      });
-
-      const { sessionId } = await response.json();
-
-      // Redirect to Stripe Checkout
-      const { error } = await stripe.redirectToCheckout({
-        sessionId,
-      });
-
-      if (error) {
-        console.error('Stripe checkout error:', error);
-        alert('Payment failed. Please try again.');
+      // For now, simulate a successful subscription since we don't have Stripe fully set up
+      console.log('Simulating subscription for:', planType);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Activate demo subscription
+      const success = await activateDemoSubscription(user.uid, planType);
+      
+      if (success) {
+        alert(`Demo: Subscription to ${planType} plan activated! This is a demo - no actual payment is processed.`);
+        // Refresh user data to show updated subscription status
+        window.location.reload();
+      } else {
+        throw new Error('Failed to activate demo subscription');
       }
+      
+      // In a real implementation, you would:
+      // 1. Create checkout session with your backend
+      // 2. Redirect to Stripe Checkout
+      // 3. Handle success/cancel callbacks
+      // 4. Update user subscription status via webhooks
+      
     } catch (error) {
       console.error('Subscription error:', error);
-      alert('Something went wrong. Please try again.');
+      alert(`Error: ${error.message || 'Something went wrong. Please try again.'}`);
     } finally {
       setLoading(null);
     }

@@ -1,19 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { User, LogOut, UserPlus, LogIn } from 'lucide-react';
+import { deactivateDemoSubscription } from '../../utils/demoSubscription';
+import { User, LogOut, UserPlus, LogIn, Crown } from 'lucide-react';
 
 interface ProfileDropdownProps {
   onSignIn: () => void;
   onSignUp: () => void;
 }
 
-export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ 
-  onSignIn, 
-  onSignUp 
+export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
+  onSignIn,
+  onSignUp
 }) => {
   const { user, userData, isGuest, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Debug userData
+  console.log('ProfileDropdown - user:', user);
+  console.log('ProfileDropdown - userData:', userData);
+  console.log('ProfileDropdown - isGuest:', isGuest);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -29,6 +35,14 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
 
   const handleSignOut = async () => {
     await logout();
+    setIsOpen(false);
+  };
+
+  const handleDeactivateDemo = async () => {
+    if (user && userData?.subscription?.demo) {
+      await deactivateDemoSubscription(user.uid);
+      window.location.reload();
+    }
     setIsOpen(false);
   };
 
@@ -51,7 +65,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
       >
         {user || isGuest ? (
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-purple-600 font-bold text-sm shadow-md">
-            {userData?.username?.charAt(0).toUpperCase() || 'G'}
+            {userData?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'G'}
           </div>
         ) : (
           <User className="w-5 h-5 text-white" />
@@ -66,7 +80,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
             <div className="px-4 py-3 border-b border-gray-100">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">
-                  {userData?.username?.charAt(0).toUpperCase() || 'G'}
+                  {userData?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'G'}
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-900">
@@ -140,6 +154,24 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
                     <span className="font-medium">{userData?.hearts || 5}</span>
                   </div>
                 </div>
+                
+                {userData?.subscription?.active && (
+                  <div className="px-4 py-2 flex items-center gap-2 text-sm text-green-600">
+                    <Crown className="w-4 h-4" />
+                    <span>Premium Active</span>
+                  </div>
+                )}
+                
+                {userData?.subscription?.demo && (
+                  <button
+                    onClick={handleDeactivateDemo}
+                    className="flex items-center w-full px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 transition-colors"
+                  >
+                    <Crown className="w-4 h-4 mr-3" />
+                    End Demo Subscription
+                  </button>
+                )}
+                
                 <div className="border-t border-gray-100 my-1"></div>
                 <button
                   onClick={handleSignOut}
