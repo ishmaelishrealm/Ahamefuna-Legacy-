@@ -22,36 +22,16 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
     setLoading(planType);
 
     try {
-      // Add timeout to prevent infinite processing
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Subscription timeout')), 10000)
-      );
-
-      const subscriptionPromise = (async () => {
-        const stripe = await getStripe();
-        if (!stripe) {
-          throw new Error('Stripe failed to load');
-        }
-
-        // For now, simulate a successful subscription since we don't have Stripe fully set up
-        console.log('Simulating subscription for:', planType);
-        
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Activate demo subscription
-        const success = await activateDemoSubscription(user.uid, planType);
-        
-        if (success) {
-          alert(`Demo: Subscription to ${planType} plan activated! This is a demo - no actual payment is processed.`);
-          // Refresh user data to show updated subscription status
-          window.location.reload();
-        } else {
-          throw new Error('Failed to activate demo subscription');
-        }
-      })();
-
-      await Promise.race([subscriptionPromise, timeoutPromise]);
+      const plan = SUBSCRIPTION_PLANS[planType];
+      
+      // Redirect to Stripe payment link with user info
+      const paymentUrl = `${plan.paymentLink}?client_reference_id=${user.uid}&prefilled_email=${user.email}`;
+      
+      // Open Stripe payment in new tab
+      window.open(paymentUrl, '_blank');
+      
+      // Show success message
+      alert(`Redirecting to Stripe payment for ${plan.name} with 7-day free trial!`);
       
     } catch (error) {
       console.error('Subscription error:', error);
@@ -158,7 +138,10 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
               <div className="text-center">
                 <h3 className="text-2xl font-bold text-white mb-2">Monthly</h3>
                 <div className="text-4xl font-bold text-white mb-2">$5.99</div>
-                <div className="text-white/60 mb-6">per month</div>
+                <div className="text-white/60 mb-2">per month</div>
+                <div className="bg-green-500 text-white text-sm px-3 py-1 rounded-full mb-4 font-semibold">
+                  7-day FREE trial
+                </div>
                 
                 <button
                   onClick={() => setSelectedPlan('monthly')}
@@ -187,6 +170,9 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
                 <h3 className="text-2xl font-bold text-white mb-2">Yearly</h3>
                 <div className="text-4xl font-bold text-white mb-2">$39.99</div>
                 <div className="text-white/60 mb-2">per year</div>
+                <div className="bg-green-500 text-white text-sm px-3 py-1 rounded-full mb-2 font-semibold">
+                  7-day FREE trial
+                </div>
                 <div className="text-green-400 font-bold mb-6">Save $32.89/year!</div>
                 
                 <button

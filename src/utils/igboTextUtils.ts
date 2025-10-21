@@ -59,10 +59,34 @@ export const igboTextVariations: Record<string, string[]> = {
   'Kpịrị': ['Kpiri', 'kpịrị', 'kpiri', 'Kpiri']
 };
 
+// Function to normalize text by removing accent marks for comparison
+const normalizeForComparison = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/ọ/g, 'o')
+    .replace(/ị/g, 'i')
+    .replace(/ụ/g, 'u')
+    .replace(/ọ/g, 'o')
+    .replace(/ị/g, 'i')
+    .replace(/ụ/g, 'u')
+    .replace(/ọ/g, 'o')
+    .replace(/ị/g, 'i')
+    .replace(/ụ/g, 'u');
+};
+
 // Function to check if a user's answer matches any variation of the correct answer
 export const checkIgboAnswer = (userAnswer: string, correctAnswer: string): boolean => {
   // First check exact match
   if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+    return true;
+  }
+  
+  // Check normalized comparison (removes accent marks)
+  const normalizedUser = normalizeForComparison(userAnswer);
+  const normalizedCorrect = normalizeForComparison(correctAnswer);
+  
+  if (normalizedUser === normalizedCorrect) {
     return true;
   }
   
