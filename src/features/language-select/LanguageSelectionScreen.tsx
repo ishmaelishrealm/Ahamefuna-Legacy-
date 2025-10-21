@@ -51,7 +51,6 @@ export function LanguageSelectionScreen({
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94]">
       {/* Floating Elements */}
-      <div className="absolute top-20 right-20 text-6xl animate-float">🌍</div>
       <div className="absolute bottom-20 left-20 text-6xl animate-float" style={{ animationDelay: '1s' }}>⭐</div>
       
       <div className="relative z-10 p-8">

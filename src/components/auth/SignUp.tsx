@@ -44,8 +44,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-600">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-2xl">
+    <div className="w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Join Afroslang
@@ -132,7 +131,6 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
             </button>
           </div>
         </form>
-      </div>
     </div>
   );
 };

@@ -36,20 +36,6 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
       <div className="max-w-3xl w-full text-center space-y-12 relative z-10">
         {/* Logo & Branding */}
         <div className="space-y-8 animate-fadeIn">
-          <div className="inline-block relative">
-            <div className="bg-white rounded-3xl p-10 game-border retro-shadow-lg">
-              <div className="w-40 h-40 bg-gradient-to-br from-[#FF1493] via-[#FFD700] to-[#00FF94] rounded-3xl flex items-center justify-center retro-shadow game-border transform hover:scale-110 hover:rotate-6 transition-all duration-500">
-                <span className="text-8xl animate-bounce">🌍</span>
-              </div>
-            </div>
-            {/* Decorative elements */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-full game-border retro-shadow animate-pulse flex items-center justify-center text-4xl">
-              ⚡
-            </div>
-            <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-gradient-to-br from-[#00FF94] to-[#7FFF00] rounded-full game-border retro-shadow animate-pulse flex items-center justify-center text-3xl" style={{ animationDelay: '0.5s' }}>
-              🎯
-            </div>
-          </div>
           
           <div className="space-y-6">
             <h1 className="text-7xl uppercase tracking-wider text-white drop-shadow-lg">
