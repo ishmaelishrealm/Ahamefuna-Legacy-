@@ -6,6 +6,7 @@ import { LearningPath } from './features/lessons/LearningPath';
 import { LessonScreen } from './features/lessons/LessonScreen';
 import { LessonComplete } from './features/lessons/LessonComplete';
 import { AuthScreen } from './components/auth/AuthScreen';
+import { Header } from './components/layout/Header';
 import { useAuth } from './contexts/AuthContext';
 import { getLanguageById } from './data/languages';
 import { getStagesForLanguage, getLessonById } from './data/lessons';
@@ -262,6 +263,25 @@ function App() {
 
   return (
     <>
+      {/* Header for all screens except auth */}
+      {currentScreen !== 'auth' && (
+        <Header 
+          title="Afroslang"
+          showBackButton={currentScreen !== 'interface-select'}
+          onBack={() => {
+            if (currentScreen === 'language-select') {
+              setCurrentScreen('interface-select');
+            } else if (currentScreen === 'path') {
+              setCurrentScreen('language-select');
+            } else if (currentScreen === 'lesson') {
+              setCurrentScreen('path');
+            } else if (currentScreen === 'complete') {
+              setCurrentScreen('path');
+            }
+          }}
+        />
+      )}
+
       {currentScreen === 'interface-select' && (
         <InterfaceLanguageSelector onSelect={handleInterfaceLanguageSelect} />
       )}
