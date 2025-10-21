@@ -3,6 +3,8 @@ import { InterfaceLanguage, Lesson, Exercise } from '../../types';
 import { X, Heart, CheckCircle2, XCircle, Lightbulb, Sparkles, Zap, RotateCcw, Home } from 'lucide-react';
 import { checkIgboAnswer } from '../../utils/igboTextUtils';
 import { HeartsTimer } from '../../components/ui/HeartsTimer';
+import { HeartsOutModal } from '../../components/ui/HeartsOutModal';
+import { GuestLimitModal } from '../../components/ui/GuestLimitModal';
 import { HeartsData, updateHearts, updateGuestHearts } from '../../utils/heartsTimer';
 
 interface LessonScreenProps {
@@ -54,9 +56,26 @@ export function LessonScreen({
   const [totalHeartsLost, setTotalHeartsLost] = useState(0);
   const [totalHeartsGained, setTotalHeartsGained] = useState(0);
   const [currentHearts, setCurrentHearts] = useState(hearts);
+  const [showHeartsOutModal, setShowHeartsOutModal] = useState(false);
+  const [showGuestLimitModal, setShowGuestLimitModal] = useState(false);
 
   const totalQuestions = lesson.exercises.length;
   const progress = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+
+  // Check guest lesson limit
+  useEffect(() => {
+    if (isGuest) {
+      // Get completed lessons count from localStorage
+      const guestProgress = JSON.parse(localStorage.getItem('afroslang_guest_progress') || '{}');
+      const completedLessons = Object.values(guestProgress.languages || {}).reduce((total: number, lang: any) => {
+        return total + (lang.completedLessons?.length || 0);
+      }, 0);
+      
+      if (completedLessons >= 3) {
+        setShowGuestLimitModal(true);
+      }
+    }
+  }, [isGuest]);
 
   useEffect(() => {
     // Reset answer when exercise changes
@@ -107,8 +126,7 @@ export function LessonScreen({
   const handleSubmit = () => {
     // Check if user has hearts (for non-subscribers)
     if (!isSubscribed && currentHearts <= 0) {
-      // Show hearts out message
-      alert('💔 Ouch! No hearts left! Let\'s reset in 7 hours or subscribe for unlimited hearts!');
+      setShowHeartsOutModal(true);
       return;
     }
 
@@ -563,6 +581,31 @@ export function LessonScreen({
           </button>
         )}
       </div>
+
+      {/* Hearts Out Modal */}
+      <HeartsOutModal
+        isOpen={showHeartsOutModal}
+        onClose={() => setShowHeartsOutModal(false)}
+        onSubscribe={() => {
+          setShowHeartsOutModal(false);
+          // Navigate to subscription page - this would need to be passed as a prop
+          // For now, just close the modal
+        }}
+        heartsData={heartsData || { currentHearts: 0, lastResetTime: Date.now(), maxHearts: 5 }}
+        isGuest={isGuest}
+      />
+
+      {/* Guest Limit Modal */}
+      <GuestLimitModal
+        isOpen={showGuestLimitModal}
+        onClose={() => setShowGuestLimitModal(false)}
+        onSignUp={() => {
+          setShowGuestLimitModal(false);
+          // Navigate to sign up - this would need to be passed as a prop
+          // For now, just close the modal
+        }}
+        lessonsCompleted={3}
+      />
     </div>
   );
 }

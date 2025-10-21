@@ -84,7 +84,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-900">
-                    {userData?.username || 'Guest User'}
+                    {userData?.username || user?.email || 'Guest User'}
                   </p>
                   <p className="text-xs text-gray-500">
                     {isGuest ? 'Guest Mode' : userData?.email}
