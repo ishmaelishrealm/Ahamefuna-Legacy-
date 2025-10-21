@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { testFirebaseConfig, testFirebaseAuth } from '../../utils/firebaseTest';
+import { FirebaseSetupChecker } from '../debug/FirebaseSetupChecker';
 
 interface SignUpProps {
   onSuccess: () => void;
@@ -16,6 +17,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [firebaseStatus, setFirebaseStatus] = useState<string>('');
+  const [showDebugger, setShowDebugger] = useState(false);
 
   // Test Firebase configuration on component mount
   useEffect(() => {
@@ -159,6 +161,24 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
                 : 'bg-red-100 text-red-700'
             }`}>
               {firebaseStatus}
+            </div>
+          )}
+
+          {/* Debug Toggle */}
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => setShowDebugger(!showDebugger)}
+              className="text-xs text-blue-600 hover:text-blue-800 underline"
+            >
+              {showDebugger ? 'Hide' : 'Show'} Firebase Debug Info
+            </button>
+          </div>
+
+          {/* Firebase Setup Checker */}
+          {showDebugger && (
+            <div className="mt-4">
+              <FirebaseSetupChecker />
             </div>
           )}
 

@@ -10,6 +10,7 @@ import { Header } from './components/layout/Header';
 import { LeaderboardScreen } from './components/leaderboard/LeaderboardScreen';
 import { SubscriptionPage } from './components/subscription/SubscriptionPage';
 import { FeedbackPage } from './components/feedback/FeedbackPage';
+import { FirebaseQuickSetup } from './components/debug/FirebaseQuickSetup';
 import { useAuth } from './contexts/AuthContext';
 import { getLanguageById } from './data/languages';
 import { getStagesForLanguage, getLessonById } from './data/lessons';

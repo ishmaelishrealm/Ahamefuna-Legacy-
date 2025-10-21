@@ -4,6 +4,17 @@
 
 This error occurs when Firebase Authentication is not properly configured in your Firebase project. Follow these steps to fix it:
 
+## 🚨 **QUICK FIX - Do This First:**
+
+1. **Go to [Firebase Console](https://console.firebase.google.com/)**
+2. **Select project: `ahamefuna-legacy`**
+3. **Go to Authentication → Sign-in method**
+4. **Enable "Email/Password"**
+5. **Click Save**
+6. **Refresh your app and try signing up again**
+
+That's it! The error should be fixed immediately.
+
 ## 📋 Step-by-Step Setup
 
 ### 1. **Firebase Console Setup**
