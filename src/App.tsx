@@ -356,7 +356,10 @@ function App() {
             lesson={activeLesson}
             languageName={getLanguageById(currentLanguage)?.name || ''}
             hearts={getCurrentProgress().hearts}
+            heartsData={userData?.heartsData}
             isSubscribed={userData?.subscription?.active || false}
+            userId={user?.uid}
+            isGuest={isGuest}
             onComplete={handleLessonComplete}
             onExit={handleExitLesson}
             onBackToLanguageSelect={() => setCurrentScreen('language-select')}

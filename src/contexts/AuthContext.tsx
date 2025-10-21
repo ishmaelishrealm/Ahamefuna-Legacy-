@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { UserData, loadUserData, createGuestUser, loadGuestProgress, saveGuestProgress } from '../utils/userData';
+import { getCurrentHeartsStatus, getGuestHeartsStatus } from '../utils/heartsTimer';
 
 interface AuthContextType {
   user: User | null;
@@ -41,7 +42,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         // Load user data from Firestore
         const data = await loadUserData(user.uid);
-        setUserData(data);
+        
+        // Update hearts based on timer
+        if (data && !data.subscription?.active) {
+          const heartsStatus = await getCurrentHeartsStatus(user.uid);
+          const updatedData = {
+            ...data,
+            hearts: heartsStatus.currentHearts,
+            heartsData: heartsStatus
+          };
+          setUserData(updatedData);
+        } else {
+          setUserData(data);
+        }
       } else {
         setUser(null);
         setUserData(null);
@@ -50,7 +63,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Check for guest progress
         const guestProgress = loadGuestProgress();
         if (guestProgress) {
-          setUserData(guestProgress);
+          // Update guest hearts based on timer
+          const heartsStatus = getGuestHeartsStatus();
+          const updatedGuestProgress = {
+            ...guestProgress,
+            hearts: heartsStatus.currentHearts,
+            heartsData: heartsStatus
+          };
+          setUserData(updatedGuestProgress);
           setIsGuest(true);
         }
       }

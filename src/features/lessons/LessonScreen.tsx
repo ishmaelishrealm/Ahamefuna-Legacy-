@@ -2,13 +2,18 @@ import { useState, useEffect } from 'react';
 import { InterfaceLanguage, Lesson, Exercise } from '../../types';
 import { X, Heart, CheckCircle2, XCircle, Lightbulb, Sparkles, Zap, RotateCcw, Home } from 'lucide-react';
 import { checkIgboAnswer } from '../../utils/igboTextUtils';
+import { HeartsTimer } from '../../components/ui/HeartsTimer';
+import { HeartsData, updateHearts, updateGuestHearts } from '../../utils/heartsTimer';
 
 interface LessonScreenProps {
   interfaceLanguage: InterfaceLanguage;
   lesson: Lesson;
   languageName: string;
   hearts: number;
+  heartsData?: HeartsData;
   isSubscribed?: boolean;
+  userId?: string;
+  isGuest?: boolean;
   onComplete: (xpEarned: number, heartsLost: number, heartsGained: number) => void;
   onExit: () => void;
   onBackToLanguageSelect: () => void;
@@ -24,7 +29,10 @@ export function LessonScreen({
   lesson,
   languageName,
   hearts,
+  heartsData,
   isSubscribed = false,
+  userId,
+  isGuest = false,
   onComplete,
   onExit,
   onBackToLanguageSelect
@@ -127,12 +135,26 @@ export function LessonScreen({
           setTotalHeartsLost(prev => prev + 1);
           if (currentHearts > 0) {
             setCurrentHearts(prev => Math.max(0, prev - 1));
+            
+            // Update hearts in database/localStorage
+            if (userId && !isGuest) {
+              updateHearts(userId, 1);
+            } else if (isGuest) {
+              updateGuestHearts(1);
+            }
           }
         } else if (!currentExercise.wasWrong) {
           // First time wrong - lose heart and add back to queue randomly
           setTotalHeartsLost(prev => prev + 1);
           if (currentHearts > 0) {
             setCurrentHearts(prev => Math.max(0, prev - 1));
+            
+            // Update hearts in database/localStorage
+            if (userId && !isGuest) {
+              updateHearts(userId, 1);
+            } else if (isGuest) {
+              updateGuestHearts(1);
+            }
           }
         }
       }
@@ -279,7 +301,11 @@ export function LessonScreen({
 
           {/* Hearts */}
           <div className="flex gap-2">
-            {renderHearts()}
+            {heartsData ? (
+              <HeartsTimer heartsData={heartsData} isSubscribed={isSubscribed} />
+            ) : (
+              renderHearts()
+            )}
           </div>
           
           {/* Home Button */}

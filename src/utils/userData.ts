@@ -1,10 +1,12 @@
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { HeartsData } from "./heartsTimer";
 
 export interface UserData {
   username: string;
   email: string;
   hearts: number;
+  heartsData?: HeartsData;
   xp: number;
   subscription: {
     active: boolean;
