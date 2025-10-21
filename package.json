@@ -1,7 +1,7 @@
 {
-  "name": "ahamefuna-language-learning",
+  "name": "afroslang",
   "version": "1.0.0",
-  "description": "African Language Learning App - Learn African languages with gamified lessons",
+  "description": "Afroslang - Learn African languages with gamified lessons",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,7 @@
   "dependencies": {
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "firebase": "^12.4.0",
     "lucide-react": "^0.263.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -5,13 +5,17 @@ import { LanguageSelectionScreen } from './features/language-select/LanguageSele
 import { LearningPath } from './features/lessons/LearningPath';
 import { LessonScreen } from './features/lessons/LessonScreen';
 import { LessonComplete } from './features/lessons/LessonComplete';
+import { AuthScreen } from './components/auth/AuthScreen';
+import { useAuth } from './contexts/AuthContext';
 import { getLanguageById } from './data/languages';
 import { getStagesForLanguage, getLessonById } from './data/lessons';
+import { saveUserProgress } from './utils/userData';
 
-type Screen = 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete';
+type Screen = 'auth' | 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('interface-select');
+  const { user, userData, isGuest, loading } = useAuth();
+  const [currentScreen, setCurrentScreen] = useState<Screen>('auth');
   const [interfaceLanguage, setInterfaceLanguage] = useState<InterfaceLanguage>('en');
   const [currentLanguage, setCurrentLanguage] = useState<AfricanLanguage | null>(null);
   const [userProgressMap, setUserProgressMap] = useState<Record<string, UserProgress>>({});
@@ -20,9 +24,9 @@ function App() {
 
   // Load progress from localStorage on mount
   useEffect(() => {
-    const savedInterface = localStorage.getItem('lingoafrica_interface');
-    const savedProgress = localStorage.getItem('lingoafrica_progress');
-    const savedCurrentLang = localStorage.getItem('lingoafrica_current_language');
+    const savedInterface = localStorage.getItem('afroslang_interface');
+    const savedProgress = localStorage.getItem('afroslang_progress');
+    const savedCurrentLang = localStorage.getItem('afroslang_current_language');
 
     if (savedInterface) {
       setInterfaceLanguage(savedInterface as InterfaceLanguage);
@@ -58,18 +62,18 @@ function App() {
   // Save progress to localStorage whenever it changes
   useEffect(() => {
     if (Object.keys(userProgressMap).length > 0) {
-      localStorage.setItem('lingoafrica_progress', JSON.stringify(userProgressMap));
+      localStorage.setItem('afroslang_progress', JSON.stringify(userProgressMap));
     }
   }, [userProgressMap]);
 
   useEffect(() => {
     if (currentLanguage) {
-      localStorage.setItem('lingoafrica_current_language', currentLanguage);
+      localStorage.setItem('afroslang_current_language', currentLanguage);
     }
   }, [currentLanguage]);
 
   useEffect(() => {
-    localStorage.setItem('lingoafrica_interface', interfaceLanguage);
+    localStorage.setItem('afroslang_interface', interfaceLanguage);
   }, [interfaceLanguage]);
 
   const handleInterfaceLanguageSelect = (lang: InterfaceLanguage) => {
@@ -108,10 +112,15 @@ function App() {
     setCurrentScreen('lesson');
   };
 
-  const handleLessonComplete = (xpEarned: number, heartsLost: number, heartsGained: number) => {
+  const handleLessonComplete = async (xpEarned: number, heartsLost: number, heartsGained: number) => {
     if (!currentLanguage || !activeLesson) return;
 
     setLastCompletedXP(xpEarned);
+
+    // Save to Firebase if user is authenticated
+    if (user && !isGuest) {
+      await saveUserProgress(user.uid, currentLanguage, activeLesson.id, xpEarned, heartsLost);
+    }
 
     setUserProgressMap(prev => {
       const current = prev[currentLanguage] || {
@@ -231,6 +240,25 @@ function App() {
       currentStage: 1
     };
   };
+
+  // Show loading screen while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-600">
+        <div className="text-white text-xl">Loading Afroslang...</div>
+      </div>
+    );
+  }
+
+  // Show authentication screen if not logged in and not in guest mode
+  if (!user && !isGuest && currentScreen === 'auth') {
+    return <AuthScreen />;
+  }
+
+  // Redirect to interface select if authenticated
+  if ((user || isGuest) && currentScreen === 'auth') {
+    setCurrentScreen('interface-select');
+  }
 
   return (
     <>
