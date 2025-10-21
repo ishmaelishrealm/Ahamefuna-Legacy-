@@ -1,146 +1,178 @@
-# Firebase Setup for Afroslang
+# Firebase Setup Guide for Afroslang
 
-## 🔥 Firebase Configuration
+## 🔥 Firebase Configuration Issue: `auth/configuration-not-found`
 
-To complete the authentication setup, you need to configure Firebase with your project credentials.
+This error occurs when Firebase Authentication is not properly configured in your Firebase project. Follow these steps to fix it:
 
-### Step 1: Create Firebase Project
+## 📋 Step-by-Step Setup
+
+### 1. **Firebase Console Setup**
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Click "Create a project"
-3. Name your project: **"Ahamefuna Legacy"** (or "Afroslang")
-4. Enable Google Analytics (optional)
-5. Create the project
+2. Select your project: `ahamefuna-legacy`
+3. Navigate to **Authentication** → **Sign-in method**
+4. Enable **Email/Password** authentication:
+   - Click on "Email/Password"
+   - Toggle "Enable" to ON
+   - Click "Save"
 
-### Step 2: Enable Authentication
+### 2. **Firebase Project Configuration**
 
-1. In your Firebase project, go to **Authentication** → **Sign-in method**
-2. Enable **Email/Password** authentication
-3. Save the changes
+1. Go to **Project Settings** (gear icon)
+2. Scroll down to **Your apps** section
+3. If you don't have a web app, click **Add app** → **Web** (</> icon)
+4. Register your app with nickname: `Afroslang Web`
+5. Copy the configuration object
 
-### Step 3: Enable Firestore Database
+### 3. **Environment Variables Setup**
 
-1. Go to **Firestore Database**
+Create a `.env.local` file in your project root:
+
+```env
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=ahamefuna-legacy.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=ahamefuna-legacy
+VITE_FIREBASE_STORAGE_BUCKET=ahamefuna-legacy.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=941773844005
+VITE_FIREBASE_APP_ID=1:941773844005:web:ef68b2356d03ba425d19cc
+VITE_FIREBASE_MEASUREMENT_ID=G-GZ64C1GG74
+
+# Stripe Configuration
+VITE_STRIPE_PUBLIC_KEY=pk_test_your_stripe_public_key
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# App Configuration
+NEXT_PUBLIC_BASE_URL=http://localhost:5173
+```
+
+### 4. **Firestore Database Setup**
+
+1. Go to **Firestore Database** in Firebase Console
 2. Click **Create database**
 3. Choose **Start in test mode** (for development)
 4. Select a location (choose closest to your users)
-5. Create the database
+5. Click **Done**
 
-### Step 4: Get Firebase Configuration
+### 5. **Firestore Security Rules**
 
-1. Go to **Project Settings** (gear icon)
-2. Scroll down to **Your apps**
-3. Click **Add app** → **Web app** (</> icon)
-4. Register your app with a nickname: **"Afroslang Web"**
-5. Copy the Firebase configuration object
-
-### Step 5: Update Firebase Config
-
-Replace the placeholder values in `src/firebase.js` with your actual Firebase configuration:
-
-```javascript
-const firebaseConfig = {
-  apiKey: "your-actual-api-key",
-  authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "your-app-id"
-};
-```
-
-### Step 6: Set Up Firestore Security Rules
-
-In the Firestore Database → Rules tab, update the rules to:
+Update your Firestore rules to allow user data access:
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read and write their own data
+    // Users can read/write their own data
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-  }
-}
-```
-
-## 🚀 Features Implemented
-
-### ✅ Authentication System
-- **Sign Up**: Create account with email, password, and username
-- **Sign In**: Login with email and password
-- **Guest Mode**: Continue without account (local storage)
-- **Auto-login**: Persistent sessions
-
-### ✅ User Data Management
-- **Firestore Integration**: Secure cloud storage
-- **Progress Tracking**: XP, hearts, completed lessons
-- **Language Progress**: Per-language statistics
-- **Guest Mode**: Local storage for temporary users
-
-### ✅ Data Structure
-
-**User Document in Firestore:**
-```json
-{
-  "username": "string",
-  "email": "string", 
-  "hearts": 5,
-  "xp": 0,
-  "subscription": {
-    "active": false,
-    "plan": null
-  },
-  "createdAt": "ISO string",
-  "languages": {
-    "swahili": {
-      "completedLessons": ["lesson-id-1", "lesson-id-2"],
-      "xp": 150,
-      "hearts": 3
+    
+    // Leaderboard data (read-only for users)
+    match /leaderboards/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only server can write
     }
   }
 }
 ```
 
-## 🔧 Development Commands
+### 6. **Firebase Hosting Setup (Optional)**
 
-```bash
-# Install dependencies
-npm install
+1. Install Firebase CLI: `npm install -g firebase-tools`
+2. Login: `firebase login`
+3. Initialize: `firebase init`
+4. Deploy: `firebase deploy`
 
-# Start development server
-npm run dev
+## 🔧 Troubleshooting
 
-# Build for production
-npm run build
+### Common Issues:
 
-# Type checking
-npm run typecheck
+1. **`auth/configuration-not-found`**
+   - ✅ Enable Email/Password authentication in Firebase Console
+   - ✅ Check that your Firebase config is correct
+   - ✅ Verify environment variables are loaded
+
+2. **`auth/domain-not-authorized`**
+   - ✅ Add your domain to authorized domains in Firebase Console
+   - ✅ Go to Authentication → Settings → Authorized domains
+
+3. **`auth/operation-not-allowed`**
+   - ✅ Enable the specific sign-in method in Firebase Console
+
+4. **Firestore permission denied**
+   - ✅ Update Firestore security rules
+   - ✅ Check that user is authenticated
+
+### Debug Steps:
+
+1. **Check Browser Console**
+   - Open Developer Tools (F12)
+   - Look for Firebase-related errors
+   - Check network tab for failed requests
+
+2. **Verify Firebase Config**
+   - The app will show Firebase status in the signup form
+   - Look for "✅ Firebase is properly configured" message
+
+3. **Test Firebase Connection**
+   ```javascript
+   // Add this to your browser console
+   import { auth } from './src/firebase';
+   console.log('Auth instance:', auth);
+   console.log('Auth app:', auth.app);
+   ```
+
+## 🚀 Production Deployment
+
+### Vercel Environment Variables:
+
+Add these to your Vercel project settings:
+
+```
+VITE_FIREBASE_API_KEY=your_production_api_key
+VITE_FIREBASE_AUTH_DOMAIN=ahamefuna-legacy.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=ahamefuna-legacy
+VITE_FIREBASE_STORAGE_BUCKET=ahamefuna-legacy.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=941773844005
+VITE_FIREBASE_APP_ID=1:941773844005:web:ef68b2356d03ba425d19cc
+VITE_FIREBASE_MEASUREMENT_ID=G-GZ64C1GG74
 ```
 
-## 🎯 Next Steps (Future Features)
+### Production Firestore Rules:
 
-1. **Subscription System**: Integrate Stripe for premium features
-2. **Social Features**: Friends, leaderboards, achievements
-3. **Offline Support**: PWA capabilities
-4. **Mobile App**: React Native version
-5. **Analytics**: User behavior tracking
-6. **Admin Panel**: Content management system
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    match /leaderboards/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+  }
+}
+```
 
-## 🔒 Security Notes
+## 📞 Support
 
-- All user data is protected by Firestore security rules
-- Authentication is handled by Firebase Auth
-- Guest mode data is stored locally (not synced)
-- No sensitive data is stored in localStorage
+If you're still experiencing issues:
 
-## 📱 User Experience
+1. Check the Firebase Console for any error messages
+2. Verify your Firebase project is active and not suspended
+3. Ensure you have the correct permissions for the Firebase project
+4. Try creating a new Firebase project if the current one has issues
 
-1. **First Visit**: Users see authentication screen
-2. **Sign Up**: Create account → Interface language selection
-3. **Sign In**: Login → Continue where they left off
-4. **Guest Mode**: Temporary progress (not saved to cloud)
-5. **Progress Sync**: All progress automatically saved to Firebase
+## ✅ Verification Checklist
 
-Your Afroslang app is now ready with full authentication and user management! 🎉
+- [ ] Firebase project created and active
+- [ ] Email/Password authentication enabled
+- [ ] Firestore database created
+- [ ] Security rules configured
+- [ ] Environment variables set
+- [ ] App deployed and accessible
+- [ ] User registration working
+- [ ] User data saving to Firestore

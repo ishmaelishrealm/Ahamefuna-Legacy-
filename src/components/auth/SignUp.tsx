@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { testFirebaseConfig, testFirebaseAuth } from '../../utils/firebaseTest';
 
 interface SignUpProps {
   onSuccess: () => void;
@@ -14,6 +15,24 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [firebaseStatus, setFirebaseStatus] = useState<string>('');
+
+  // Test Firebase configuration on component mount
+  useEffect(() => {
+    const testFirebase = async () => {
+      console.log('Testing Firebase configuration...');
+      const configTest = await testFirebaseConfig();
+      const authTest = await testFirebaseAuth();
+      
+      if (configTest && authTest) {
+        setFirebaseStatus('✅ Firebase is properly configured');
+      } else {
+        setFirebaseStatus('❌ Firebase configuration issue detected');
+      }
+    };
+    
+    testFirebase();
+  }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +40,13 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
     setError('');
 
     try {
+      console.log('Attempting to create user with email:', email);
+      console.log('Firebase auth instance:', auth);
+      console.log('Firebase auth app:', auth.app);
+      
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      console.log('User created successfully:', user.uid);
 
       // Create user document in Firestore
       await setDoc(doc(db, "users", user.uid), {
@@ -34,10 +58,26 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
         createdAt: new Date().toISOString(),
         languages: {}
       });
+      console.log('User data saved to Firestore');
 
       onSuccess();
     } catch (error: any) {
-      setError(error.message);
+      console.error('Signup error:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      
+      // Provide more specific error messages
+      if (error.code === 'auth/configuration-not-found') {
+        setError('Firebase configuration not found. Please check your Firebase project settings.');
+      } else if (error.code === 'auth/email-already-in-use') {
+        setError('This email is already registered. Please try logging in instead.');
+      } else if (error.code === 'auth/weak-password') {
+        setError('Password should be at least 6 characters long.');
+      } else if (error.code === 'auth/invalid-email') {
+        setError('Please enter a valid email address.');
+      } else {
+        setError(error.message || 'An error occurred during signup. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -108,6 +148,17 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
           {error && (
             <div className="text-red-600 text-sm text-center">
               {error}
+            </div>
+          )}
+          
+          {/* Firebase Status Display */}
+          {firebaseStatus && (
+            <div className={`text-xs text-center p-2 rounded ${
+              firebaseStatus.includes('✅') 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-red-100 text-red-700'
+            }`}>
+              {firebaseStatus}
             </div>
           )}
 
