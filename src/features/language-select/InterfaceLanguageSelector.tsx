@@ -32,11 +32,6 @@ function FrenchFlag() {
 export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelectorProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-8 py-16 relative overflow-hidden bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94]">
-      {/* Floating Game Elements */}
-      <div className="absolute top-10 left-10 text-7xl animate-float">🎮</div>
-      <div className="absolute top-20 right-20 text-7xl animate-float" style={{ animationDelay: '1s' }}>⭐</div>
-      <div className="absolute bottom-20 left-20 text-7xl animate-float" style={{ animationDelay: '2s' }}>🔥</div>
-      <div className="absolute bottom-10 right-10 text-7xl animate-float" style={{ animationDelay: '1.5s' }}>⚡</div>
       
       <div className="max-w-3xl w-full text-center space-y-12 relative z-10">
         {/* Logo & Branding */}
@@ -58,7 +53,7 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
           
           <div className="space-y-6">
             <h1 className="text-7xl uppercase tracking-wider text-white drop-shadow-lg">
-              LingoAfrica
+              Afroslang
             </h1>
             <div className="bg-white rounded-3xl p-8 game-border retro-shadow">
               <p className="text-3xl text-[#1A1A1A] max-w-xl mx-auto leading-tight">

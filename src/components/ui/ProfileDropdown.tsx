@@ -47,10 +47,10 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
       {/* Profile Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+        className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/30"
       >
         {user || isGuest ? (
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-purple-600 font-bold text-sm">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-purple-600 font-bold text-sm shadow-md">
             {userData?.username?.charAt(0).toUpperCase() || 'G'}
           </div>
         ) : (
