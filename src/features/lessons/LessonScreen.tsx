@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { InterfaceLanguage, Lesson, Exercise } from '../../types';
 import { X, Heart, CheckCircle2, XCircle, Lightbulb, Sparkles, Zap, RotateCcw, Home } from 'lucide-react';
+import { checkIgboAnswer } from '../../utils/igboTextUtils';
 
 interface LessonScreenProps {
   interfaceLanguage: InterfaceLanguage;
@@ -96,7 +97,8 @@ export function LessonScreen({
 
   const handleSubmit = () => {
     const correctAnswer = getCorrectAnswer();
-    const correct = userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim();
+    // Use Igbo text utility for better accent handling
+    const correct = checkIgboAnswer(userAnswer, correctAnswer);
     setIsCorrect(correct);
     setShowFeedback(true);
 
