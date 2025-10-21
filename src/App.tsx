@@ -52,11 +52,13 @@ function App() {
       setUserProgressMap(updatedProgress);
     }
 
-    if (savedCurrentLang && savedProgress) {
-      setCurrentLanguage(savedCurrentLang as AfricanLanguage);
-      setCurrentScreen('path');
-    } else if (savedInterface) {
-      setCurrentScreen('language-select');
+    // Always start from interface selection for a fresh experience
+    // Users can manually navigate to their previous language if needed
+    // Don't auto-load saved language - let users choose fresh each time
+    
+    // Clear any saved current language to ensure fresh start
+    if (savedCurrentLang) {
+      localStorage.removeItem('afroslang_current_language');
     }
   }, []);
 
