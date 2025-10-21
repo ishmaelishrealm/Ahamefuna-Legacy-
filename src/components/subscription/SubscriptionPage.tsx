@@ -122,34 +122,34 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {PREMIUM_FEATURES.map((feature, index) => (
-            <div key={index} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <span className="text-4xl">{feature.icon}</span>
-                <h3 className="text-xl font-bold text-white">{feature.title}</h3>
+            <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6">
+              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                <span className="text-3xl sm:text-4xl">{feature.icon}</span>
+                <h3 className="text-lg sm:text-xl font-bold text-white">{feature.title}</h3>
               </div>
-              <p className="text-white/80">{feature.description}</p>
+              <p className="text-sm sm:text-base text-white/80">{feature.description}</p>
             </div>
           ))}
         </div>
 
         {/* Pricing Plans */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
-          <h2 className="text-3xl font-bold text-white text-center mb-8">
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-6 sm:mb-8">
             Choose Your Plan
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             {/* Monthly Plan */}
-            <div className={`bg-white/10 rounded-2xl p-8 transition-all ${
+            <div className={`bg-white/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 transition-all ${
               selectedPlan === 'monthly' ? 'ring-2 ring-white/50' : ''
             }`}>
               <div className="text-center">
-                <h3 className="text-2xl font-bold text-white mb-2">Monthly</h3>
-                <div className="text-4xl font-bold text-white mb-2">$5.99</div>
-                <div className="text-white/60 mb-2">per month</div>
-                <div className="bg-green-500 text-white text-sm px-3 py-1 rounded-full mb-4 font-semibold">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Monthly</h3>
+                <div className="text-3xl sm:text-4xl font-bold text-white mb-2">$5.99</div>
+                <div className="text-white/60 mb-2 text-sm sm:text-base">per month</div>
+                <div className="bg-green-500 text-white text-xs sm:text-sm px-3 py-1 rounded-full mb-4 font-semibold">
                   7-day FREE trial
                 </div>
                 
@@ -167,23 +167,23 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
             </div>
 
             {/* Yearly Plan */}
-            <div className={`bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 rounded-2xl p-8 transition-all relative ${
+            <div className={`bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 rounded-xl sm:rounded-2xl p-6 sm:p-8 transition-all relative ${
               selectedPlan === 'yearly' ? 'ring-2 ring-yellow-400/50' : ''
             }`}>
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="bg-yellow-400 text-black px-4 py-2 rounded-full text-sm font-bold">
+              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-yellow-400 text-black px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold">
                   BEST VALUE
                 </div>
               </div>
               
               <div className="text-center">
-                <h3 className="text-2xl font-bold text-white mb-2">Yearly</h3>
-                <div className="text-4xl font-bold text-white mb-2">$39.99</div>
-                <div className="text-white/60 mb-2">per year</div>
-                <div className="bg-green-500 text-white text-sm px-3 py-1 rounded-full mb-2 font-semibold">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Yearly</h3>
+                <div className="text-3xl sm:text-4xl font-bold text-white mb-2">$39.99</div>
+                <div className="text-white/60 mb-2 text-sm sm:text-base">per year</div>
+                <div className="bg-green-500 text-white text-xs sm:text-sm px-3 py-1 rounded-full mb-2 font-semibold">
                   7-day FREE trial
                 </div>
-                <div className="text-green-400 font-bold mb-6">Save $32.89/year!</div>
+                <div className="text-green-400 font-bold mb-4 sm:mb-6 text-sm sm:text-base">Save $32.89/year!</div>
                 
                 <button
                   onClick={() => setSelectedPlan('yearly')}
@@ -200,26 +200,26 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
           </div>
 
           {/* Subscribe Button */}
-          <div className="text-center mt-8">
+          <div className="text-center mt-6 sm:mt-8">
             <button
               onClick={() => handleSubscribe(selectedPlan)}
               disabled={loading !== null}
-              className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold text-xl px-12 py-4 rounded-2xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold text-lg sm:text-xl px-8 sm:px-12 py-3 sm:py-4 rounded-xl sm:rounded-2xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               {loading ? (
-                <div className="flex items-center gap-3">
-                  <div className="animate-spin w-6 h-6 border-2 border-black/30 border-t-black rounded-full"></div>
-                  Processing...
+                <div className="flex items-center justify-center gap-2 sm:gap-3">
+                  <div className="animate-spin w-5 h-5 sm:w-6 sm:h-6 border-2 border-black/30 border-t-black rounded-full"></div>
+                  <span className="text-sm sm:text-base">Processing...</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-3">
-                  <Crown className="w-6 h-6" />
-                  Subscribe to Premium
+                <div className="flex items-center justify-center gap-2 sm:gap-3">
+                  <Crown className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span className="text-sm sm:text-base">Subscribe to Premium</span>
                 </div>
               )}
             </button>
             
-            <p className="text-white/60 text-sm mt-4">
+            <p className="text-white/60 text-xs sm:text-sm mt-3 sm:mt-4">
               Cancel anytime. Secure payment powered by Stripe.
             </p>
           </div>
