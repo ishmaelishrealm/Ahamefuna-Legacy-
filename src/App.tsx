@@ -7,12 +7,14 @@ import { LessonScreen } from './features/lessons/LessonScreen';
 import { LessonComplete } from './features/lessons/LessonComplete';
 import { AuthScreen } from './components/auth/AuthScreen';
 import { Header } from './components/layout/Header';
+import { LeaderboardScreen } from './components/leaderboard/LeaderboardScreen';
 import { useAuth } from './contexts/AuthContext';
 import { getLanguageById } from './data/languages';
 import { getStagesForLanguage, getLessonById } from './data/lessons';
 import { saveUserProgress } from './utils/userData';
+import { addWeeklyXP, getCurrentWeekIdFromDB, getUserLeague } from './utils/leaderboardUtils';
 
-type Screen = 'auth' | 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete';
+type Screen = 'auth' | 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete' | 'leaderboard';
 
 function App() {
   const { user, userData, isGuest, loading } = useAuth();
@@ -123,6 +125,24 @@ function App() {
     // Save to Firebase if user is authenticated
     if (user && !isGuest) {
       await saveUserProgress(user.uid, currentLanguage, activeLesson.id, xpEarned, heartsLost);
+      
+      // Add XP to leaderboard
+      try {
+        const weekId = await getCurrentWeekIdFromDB();
+        const userLeague = await getUserLeague(user.uid, weekId);
+        const league = userLeague || 'Copper'; // Default to Copper if no league found
+        
+        await addWeeklyXP(
+          user.uid,
+          league,
+          userData?.username || 'User',
+          xpEarned,
+          userData?.subscription?.active || false,
+          weekId
+        );
+      } catch (error) {
+        console.error('Error adding XP to leaderboard:', error);
+      }
     }
 
     setUserProgressMap(prev => {
@@ -279,8 +299,11 @@ function App() {
               setCurrentScreen('path');
             } else if (currentScreen === 'complete') {
               setCurrentScreen('path');
+            } else if (currentScreen === 'leaderboard') {
+              setCurrentScreen('interface-select');
             }
           }}
+          onLeaderboard={() => setCurrentScreen('leaderboard')}
         />
       )}
 
@@ -324,6 +347,12 @@ function App() {
           xpEarned={lastCompletedXP}
           onContinue={handleContinueAfterComplete}
           onBackToLanguageSelect={() => setCurrentScreen('language-select')}
+        />
+      )}
+
+      {currentScreen === 'leaderboard' && (
+        <LeaderboardScreen
+          onBack={() => setCurrentScreen('interface-select')}
         />
       )}
     </>

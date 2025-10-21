@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { ProfileDropdown } from '../ui/ProfileDropdown';
+import { LeaderboardButton } from '../ui/LeaderboardButton';
 import { AuthModal } from '../auth/AuthModal';
 
 interface HeaderProps {
   title?: string;
   showBackButton?: boolean;
   onBack?: () => void;
+  onLeaderboard?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   title = "Afroslang", 
   showBackButton = false, 
-  onBack 
+  onBack,
+  onLeaderboard
 }) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
@@ -48,8 +51,11 @@ export const Header: React.FC<HeaderProps> = ({
             <h1 className="text-xl font-bold text-white drop-shadow-lg">{title}</h1>
           </div>
 
-          {/* Right side - Profile dropdown */}
-          <div className="flex items-center">
+          {/* Right side - Leaderboard and Profile */}
+          <div className="flex items-center gap-3">
+            {onLeaderboard && (
+              <LeaderboardButton onClick={onLeaderboard} />
+            )}
             <ProfileDropdown 
               onSignIn={handleSignIn}
               onSignUp={handleSignUp}
