@@ -46,7 +46,6 @@ export function LessonScreen({
   const [currentExercise, setCurrentExercise] = useState<ExerciseWithState | null>(
     exerciseQueue[0] || null
   );
-  const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   
   const [userAnswer, setUserAnswer] = useState('');
@@ -57,7 +56,7 @@ export function LessonScreen({
   const [currentHearts, setCurrentHearts] = useState(hearts);
 
   const totalQuestions = lesson.exercises.length;
-  const progress = totalQuestions > 0 ? (questionsAnswered / totalQuestions) * 100 : 0;
+  const progress = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
 
   useEffect(() => {
     // Reset answer when exercise changes
@@ -181,8 +180,6 @@ export function LessonScreen({
   };
 
   const handleNext = () => {
-    setQuestionsAnswered(prev => prev + 1);
-    
     // Remove current exercise from queue
     const newQueue = exerciseQueue.slice(1);
     setExerciseQueue(newQueue);
@@ -288,7 +285,7 @@ export function LessonScreen({
               
               <div className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] px-3 py-1 rounded-lg game-border retro-shadow-sm">
                 <span className="text-white text-sm font-bold">
-                  {questionsAnswered}/{totalQuestions}
+                  {correctAnswers}/{totalQuestions}
                 </span>
               </div>
             </div>
@@ -346,7 +343,7 @@ export function LessonScreen({
             {/* Question Counter */}
             <div className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] px-6 py-2 rounded-xl game-border retro-shadow-sm">
               <span className="text-white text-xl uppercase tracking-wider">
-                {questionsAnswered}/{totalQuestions}
+                {correctAnswers}/{totalQuestions}
               </span>
             </div>
 
