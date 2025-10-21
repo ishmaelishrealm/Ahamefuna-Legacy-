@@ -14,14 +14,16 @@ export const getStripe = () => {
   return stripePromise;
 };
 
-// Subscription plans
+// Subscription plans with real Stripe payment links
 export const SUBSCRIPTION_PLANS = {
   monthly: {
     priceId: 'price_monthly_5_99', // Replace with your actual Stripe price ID
     amount: 599, // $5.99 in cents
     interval: 'month',
     name: 'Monthly Premium',
-    description: 'Unlimited hearts, XP boost, feedback page, and more!'
+    description: 'Unlimited hearts, XP boost, feedback page, and more!',
+    paymentLink: 'https://buy.stripe.com/bJefZafrV09L96Vezj24001',
+    trialDays: 7
   },
   yearly: {
     priceId: 'price_yearly_39_99', // Replace with your actual Stripe price ID
@@ -29,7 +31,9 @@ export const SUBSCRIPTION_PLANS = {
     interval: 'year',
     name: 'Yearly Premium',
     description: 'Save 44%! All premium features for a full year',
-    savings: 'Save $32.89/year'
+    savings: 'Save $32.89/year',
+    paymentLink: 'https://buy.stripe.com/aFabIUfrV6y9cj7gHr24000',
+    trialDays: 7
   }
 } as const;
 
