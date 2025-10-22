@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { testFirebaseConfig, testFirebaseAuth } from '../../utils/firebaseTest';
-import { FirebaseSetupChecker } from '../debug/FirebaseSetupChecker';
 
 interface SignUpProps {
   onSuccess: () => void;
@@ -16,25 +14,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [firebaseStatus, setFirebaseStatus] = useState<string>('');
-  const [showDebugger, setShowDebugger] = useState(false);
 
-  // Test Firebase configuration on component mount
-  useEffect(() => {
-    const testFirebase = async () => {
-      console.log('Testing Firebase configuration...');
-      const configTest = await testFirebaseConfig();
-      const authTest = await testFirebaseAuth();
-      
-      if (configTest && authTest) {
-        setFirebaseStatus('✅ Firebase is properly configured');
-      } else {
-        setFirebaseStatus('❌ Firebase configuration issue detected');
-      }
-    };
-    
-    testFirebase();
-  }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,34 +133,6 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
             </div>
           )}
           
-          {/* Firebase Status Display */}
-          {firebaseStatus && (
-            <div className={`text-xs text-center p-2 rounded ${
-              firebaseStatus.includes('✅') 
-                ? 'bg-green-100 text-green-700' 
-                : 'bg-red-100 text-red-700'
-            }`}>
-              {firebaseStatus}
-            </div>
-          )}
-
-          {/* Debug Toggle */}
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={() => setShowDebugger(!showDebugger)}
-              className="text-xs text-blue-600 hover:text-blue-800 underline"
-            >
-              {showDebugger ? 'Hide' : 'Show'} Firebase Debug Info
-            </button>
-          </div>
-
-          {/* Firebase Setup Checker */}
-          {showDebugger && (
-            <div className="mt-4">
-              <FirebaseSetupChecker />
-            </div>
-          )}
 
           <div>
             <button
