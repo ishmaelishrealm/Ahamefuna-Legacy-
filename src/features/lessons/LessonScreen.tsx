@@ -287,21 +287,21 @@ export function LessonScreen({
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94]">
         {/* Header */}
-        <div className="bg-white/95 backdrop-blur-md game-border border-b-0 px-1 sm:px-6 py-1 sm:py-4">
+        <div className="bg-white/95 backdrop-blur-md game-border border-b-0 px-0.5 sm:px-6 py-0.5 sm:py-4">
         <div className="max-w-6xl mx-auto">
           {/* Mobile Layout */}
-          <div className="flex flex-col sm:hidden space-y-2">
+          <div className="flex flex-col sm:hidden space-y-1">
             {/* Top Row - Exit and Progress */}
             <div className="flex items-center justify-between">
               <button
                 onClick={onExit}
-                className="p-1.5 bg-[#FF1493] hover:bg-[#FF69B4] rounded-lg transition-all retro-shadow-sm"
+                className="p-1 bg-[#FF1493] hover:bg-[#FF69B4] rounded-lg transition-all retro-shadow-sm touch-manipulation"
                 aria-label="Exit lesson"
               >
-                <X className="w-4 h-4 text-white" strokeWidth={3} />
+                <X className="w-3 h-3 text-white" strokeWidth={3} />
               </button>
               
-              <div className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] px-2 py-1 rounded-lg game-border retro-shadow-sm">
+              <div className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] px-1 py-0.5 rounded-lg game-border retro-shadow-sm">
                 <span className="text-white text-xs font-bold">
                   {correctAnswers}/{totalQuestions}
                 </span>
@@ -309,7 +309,7 @@ export function LessonScreen({
             </div>
 
             {/* Progress Bar */}
-            <div className="h-4 bg-[#2D2D2D] rounded-full overflow-hidden game-border p-0.5">
+            <div className="h-2 bg-[#2D2D2D] rounded-full overflow-hidden game-border p-0.5">
               <div 
                 className="h-full bg-gradient-to-r from-[#00FF94] via-[#7FFF00] to-[#FFD700] rounded-full transition-all duration-500 relative overflow-hidden"
                 style={{ width: `${progress}%` }}
@@ -320,7 +320,7 @@ export function LessonScreen({
 
             {/* Hearts and Home */}
             <div className="flex items-center justify-between">
-              <div className="flex gap-0.5">
+              <div className="flex gap-0">
                 {heartsData ? (
                   <HeartsTimer heartsData={heartsData} isSubscribed={isSubscribed} />
                 ) : (
@@ -330,10 +330,10 @@ export function LessonScreen({
               
               <button
                 onClick={onBackToLanguageSelect}
-                className="p-1.5 bg-gradient-to-r from-[#9D4EDD] to-[#FFB6D9] hover:scale-110 rounded-lg transition-all retro-shadow-sm"
+                className="p-1 bg-gradient-to-r from-[#9D4EDD] to-[#FFB6D9] hover:scale-110 rounded-lg transition-all retro-shadow-sm touch-manipulation"
                 aria-label="Back to language selection"
               >
-                <Home className="w-4 h-4 text-white" strokeWidth={3} />
+                <Home className="w-3 h-3 text-white" strokeWidth={3} />
               </button>
             </div>
           </div>
@@ -387,14 +387,14 @@ export function LessonScreen({
       </div>
 
         {/* Exercise Content */}
-        <div className="flex-1 flex flex-col items-center justify-center p-2 sm:p-8 max-w-5xl mx-auto w-full">
+        <div className="flex-1 flex flex-col items-center justify-center p-1 sm:p-8 max-w-5xl mx-auto w-full">
         {/* XP & Type indicator */}
-        <div className="mb-2 sm:mb-8 flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
-          <div className="bg-white px-2 sm:px-8 py-1 sm:py-3 rounded-lg sm:rounded-2xl game-border retro-shadow-sm flex items-center gap-1 sm:gap-3">
-            <span className="text-lg sm:text-4xl">{getLessonIcon()}</span>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Zap className="w-3 h-3 sm:w-6 sm:h-6 text-[#FFD700]" />
-              <span className="text-sm sm:text-2xl text-[#1A1A1A]">
+        <div className="mb-1 sm:mb-8 flex flex-col sm:flex-row items-center gap-0.5 sm:gap-4">
+          <div className="bg-white px-1 sm:px-8 py-0.5 sm:py-3 rounded-lg sm:rounded-2xl game-border retro-shadow-sm flex items-center gap-0.5 sm:gap-3">
+            <span className="text-sm sm:text-4xl">{getLessonIcon()}</span>
+            <div className="flex items-center gap-0.5 sm:gap-2">
+              <Zap className="w-2 h-2 sm:w-6 sm:h-6 text-[#FFD700]" />
+              <span className="text-xs sm:text-2xl text-[#1A1A1A]">
                 {correctAnswers}/{totalQuestions} ✓
               </span>
             </div>
@@ -402,9 +402,9 @@ export function LessonScreen({
           
           {/* Redemption Badge */}
           {isRedemption && !showFeedback && (
-            <div className="bg-gradient-to-r from-[#9D4EDD] to-[#FFB6D9] px-2 sm:px-8 py-1 sm:py-3 rounded-lg sm:rounded-2xl game-border retro-shadow-sm animate-pulse">
-              <div className="flex items-center gap-1 sm:gap-3 text-white">
-                <RotateCcw className="w-3 h-3 sm:w-6 sm:h-6" />
+            <div className="bg-gradient-to-r from-[#9D4EDD] to-[#FFB6D9] px-1 sm:px-8 py-0.5 sm:py-3 rounded-lg sm:rounded-2xl game-border retro-shadow-sm animate-pulse">
+              <div className="flex items-center gap-0.5 sm:gap-3 text-white">
+                <RotateCcw className="w-2 h-2 sm:w-6 sm:h-6" />
                 <span className="text-xs sm:text-xl uppercase tracking-wider">
                   {isEnglish ? 'REDEMPTION!' : 'RÉDEMPTION!'}
                 </span>
@@ -414,12 +414,12 @@ export function LessonScreen({
         </div>
 
         {/* Question Box */}
-        <div className="w-full bg-white rounded-xl sm:rounded-3xl p-3 sm:p-10 game-border retro-shadow-lg mb-3 sm:mb-10">
-          <h2 className="text-lg sm:text-4xl text-center text-[#1A1A1A] leading-tight">
+        <div className="w-full bg-white rounded-lg sm:rounded-3xl p-1 sm:p-10 game-border retro-shadow-lg mb-1 sm:mb-10">
+          <h2 className="text-sm sm:text-4xl text-center text-[#1A1A1A] leading-tight">
             {isEnglish ? currentExercise.question : currentExercise.questionFr}
           </h2>
           {isRedemption && !showFeedback && (
-            <p className="text-center text-sm sm:text-2xl text-[#9D4EDD] mt-2 sm:mt-6">
+            <p className="text-center text-xs sm:text-2xl text-[#9D4EDD] mt-1 sm:mt-6">
               💜 {isEnglish ? 'Get half a heart back!' : 'Récupérez un demi-cœur!'}
             </p>
           )}
@@ -427,7 +427,7 @@ export function LessonScreen({
 
         {/* Multiple Choice */}
         {currentExercise.type === 'multiple-choice' && currentExercise.options && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-6 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-6 w-full">
             {getOptions().map((option, index) => {
               const isSelected = userAnswer === option;
               const isCorrectAnswer = option === getCorrectAnswer();
@@ -440,7 +440,7 @@ export function LessonScreen({
                     onClick={() => setUserAnswer(option)}
                     disabled={showFeedback}
                     className={`
-                      p-2 sm:p-8 rounded-lg sm:rounded-2xl game-border transition-all text-left flex items-center justify-between min-h-[60px] sm:min-h-[120px]
+                      p-1 sm:p-8 rounded-lg sm:rounded-2xl game-border transition-all text-left flex items-center justify-between min-h-[40px] sm:min-h-[120px] touch-manipulation
                       ${showCorrect
                         ? 'bg-gradient-to-br from-[#00FF94] to-[#7FFF00] retro-shadow-lg scale-105 animate-pop'
                         : showIncorrect
@@ -455,17 +455,17 @@ export function LessonScreen({
                     backgroundColor: !isSelected && !showCorrect && !showIncorrect ? answerColors[index % 4] + '20' : undefined
                   }}
                 >
-                  <span className={`text-sm sm:text-2xl ${showCorrect || showIncorrect || isSelected ? 'text-white' : 'text-[#1A1A1A]'}`}>
+                  <span className={`text-xs sm:text-2xl ${showCorrect || showIncorrect || isSelected ? 'text-white' : 'text-[#1A1A1A]'}`}>
                     {option}
                   </span>
                   {showCorrect && (
-                    <div className="bg-white rounded-full p-1 sm:p-2">
-                      <CheckCircle2 className="w-4 h-4 sm:w-8 sm:h-8 text-[#00FF94]" />
+                    <div className="bg-white rounded-full p-0.5 sm:p-2">
+                      <CheckCircle2 className="w-3 h-3 sm:w-8 sm:h-8 text-[#00FF94]" />
                     </div>
                   )}
                   {showIncorrect && (
-                    <div className="bg-white rounded-full p-1 sm:p-2">
-                      <XCircle className="w-4 h-4 sm:w-8 sm:h-8 text-[#FF1493]" />
+                    <div className="bg-white rounded-full p-0.5 sm:p-2">
+                      <XCircle className="w-3 h-3 sm:w-8 sm:h-8 text-[#FF1493]" />
                     </div>
                   )}
                 </button>
@@ -555,13 +555,13 @@ export function LessonScreen({
       </div>
 
       {/* Bottom Button Area */}
-      <div className="bg-white/95 backdrop-blur-md game-border border-t-0 p-2 sm:p-8 max-w-5xl mx-auto w-full">
+      <div className="bg-white/95 backdrop-blur-md game-border border-t-0 p-1 sm:p-8 max-w-5xl mx-auto w-full">
         {!showFeedback ? (
           <button
             onClick={handleSubmit}
             disabled={!userAnswer}
             className={`
-              w-full py-3 sm:py-6 rounded-xl sm:rounded-2xl game-border transition-all text-lg sm:text-3xl uppercase tracking-wider retro-shadow-lg
+              w-full py-2 sm:py-6 rounded-lg sm:rounded-2xl game-border transition-all text-sm sm:text-3xl uppercase tracking-wider retro-shadow-lg touch-manipulation
               ${userAnswer
                 ? 'bg-gradient-to-r from-[#00FF94] to-[#7FFF00] text-white hover:scale-105 hover:retro-shadow-lg animate-pulse'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -573,7 +573,7 @@ export function LessonScreen({
         ) : (
           <button
             onClick={handleNext}
-            className="w-full py-3 sm:py-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FFD700] to-[#FF6B35] text-white game-border retro-shadow-lg hover:scale-105 transition-all text-lg sm:text-3xl uppercase tracking-wider"
+            className="w-full py-2 sm:py-6 rounded-lg sm:rounded-2xl bg-gradient-to-r from-[#FFD700] to-[#FF6B35] text-white game-border retro-shadow-lg hover:scale-105 transition-all text-sm sm:text-3xl uppercase tracking-wider touch-manipulation"
           >
             {exerciseQueue.length > 1
               ? (isEnglish ? 'NEXT →' : 'SUIVANT →')

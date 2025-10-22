@@ -32,31 +32,31 @@ export const HeartsTimer: React.FC<HeartsTimerProps> = ({ heartsData, isSubscrib
 
   if (isSubscribed) {
     return (
-      <div className="flex items-center gap-2 text-white">
-        <Heart className="w-5 h-5 fill-white" />
-        <span className="text-lg font-bold">∞</span>
-        <span className="text-sm">Unlimited</span>
+      <div className="flex items-center gap-1 sm:gap-2 text-white">
+        <Heart className="w-3 h-3 sm:w-5 sm:h-5 fill-white" />
+        <span className="text-sm sm:text-lg font-bold">∞</span>
+        <span className="text-xs sm:text-sm hidden sm:block">Unlimited</span>
       </div>
     );
   }
 
   if (heartsData.currentHearts >= heartsData.maxHearts) {
     return (
-      <div className="flex items-center gap-2 text-white">
-        <Heart className="w-5 h-5 fill-white" />
-        <span className="text-lg font-bold">{heartsData.currentHearts}</span>
-        <span className="text-sm">Full Hearts</span>
+      <div className="flex items-center gap-1 sm:gap-2 text-white">
+        <Heart className="w-3 h-3 sm:w-5 sm:h-5 fill-white" />
+        <span className="text-sm sm:text-lg font-bold">{heartsData.currentHearts}</span>
+        <span className="text-xs sm:text-sm hidden sm:block">Full Hearts</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center gap-2 text-white">
-      <Heart className="w-5 h-5 fill-white" />
-      <span className="text-lg font-bold">{heartsData.currentHearts}</span>
-      <div className="flex items-center gap-1">
-        <Clock className="w-4 h-4" />
-        <span className="text-sm">
+    <div className="flex items-center gap-1 sm:gap-2 text-white">
+      <Heart className="w-3 h-3 sm:w-5 sm:h-5 fill-white" />
+      <span className="text-sm sm:text-lg font-bold">{heartsData.currentHearts}</span>
+      <div className="flex items-center gap-0.5 sm:gap-1">
+        <Clock className="w-2 h-2 sm:w-4 sm:h-4" />
+        <span className="text-xs sm:text-sm">
           {formatTimeRemaining(timeRemaining)}
         </span>
       </div>
