@@ -230,19 +230,3 @@ export const updateGuestHearts = (heartsLost: number): HeartsData => {
   }
 };
 
-/**
- * Get time until next heart reset (when all hearts will be restored)
- */
-export const getTimeUntilNextReset = (lastResetTime: number): number => {
-  const currentTime = Date.now();
-  const timeSinceLastReset = currentTime - lastResetTime;
-  const timePerHeart = HEARTS_RESET_HOURS * 60 * 60 * 1000 / MAX_HEARTS; // Time to gain one heart
-  
-  // Calculate how many hearts should have been restored since last reset
-  const heartsRestoredSinceLastReset = Math.floor(timeSinceLastReset / timePerHeart);
-  
-  // Calculate the time when the next heart is due
-  const nextHeartTime = lastResetTime + (heartsRestoredSinceLastReset + 1) * timePerHeart;
-  
-  return Math.max(0, nextHeartTime - currentTime);
-};
