@@ -58,19 +58,28 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Profile Icon Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/30"
-      >
-        {user || isGuest ? (
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-purple-600 font-bold text-sm shadow-md">
-            {userData?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'G'}
-          </div>
-        ) : (
-          <User className="w-5 h-5 text-white" />
+      {/* Profile Icon Button with Username */}
+      <div className="flex items-center gap-1 sm:gap-2">
+        {/* Username (hidden on very small screens) */}
+        {(user || isGuest) && (
+          <span className="hidden xs:block text-white text-xs sm:text-sm font-medium truncate max-w-16 sm:max-w-24">
+            {userData?.username || user?.email?.split('@')[0] || 'Guest'}
+          </span>
         )}
-      </button>
+        
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center justify-center w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/30"
+        >
+          {user || isGuest ? (
+            <div className="flex items-center justify-center w-4 h-4 sm:w-8 sm:h-8 rounded-full bg-white text-purple-600 font-bold text-xs sm:text-sm shadow-md">
+              {userData?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'G'}
+            </div>
+          ) : (
+            <User className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
+          )}
+        </button>
+      </div>
 
       {/* Dropdown Menu */}
       {isOpen && (

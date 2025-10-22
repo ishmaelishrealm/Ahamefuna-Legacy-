@@ -9,13 +9,18 @@ interface SubscriptionPageProps {
 }
 
 export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) => {
-  const { user, userData } = useAuth();
+  const { user, userData, isGuest } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
 
   const handleSubscribe = async (planType: 'monthly' | 'yearly') => {
-    if (!user) {
-      alert('Please sign in to subscribe');
+    if (isGuest || !user) {
+      alert('Please create an account or sign in to subscribe to Afroslang Premium. This ensures your subscription is properly linked to your account.');
+      return;
+    }
+
+    if (!userData?.username) {
+      alert('Please complete your profile by setting a username before subscribing. This helps us personalize your experience.');
       return;
     }
 
@@ -33,15 +38,16 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
       }
       
       // Redirect to Stripe payment link with user info
-      const paymentUrl = `${plan.paymentLink}?client_reference_id=${user.uid}&prefilled_email=${user.email}`;
+      const paymentUrl = `${plan.paymentLink}?client_reference_id=${user.uid}&prefilled_email=${user.email}&prefilled_name=${userData.username}`;
       
       console.log('Full payment URL:', paymentUrl);
+      console.log('User info:', { uid: user.uid, email: user.email, username: userData.username });
       
       // Open Stripe payment in new tab
       window.open(paymentUrl, '_blank');
       
       // Show success message
-      alert(`Redirecting to Stripe payment for ${plan.name} with 7-day free trial!`);
+      alert(`Redirecting to Stripe payment for ${plan.name} with 7-day free trial! Your subscription will be linked to ${userData.username} (${user.email}).`);
       
     } catch (error) {
       console.error('Subscription error:', error);
@@ -52,6 +58,51 @@ export const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ onBack }) =>
   };
 
   const isSubscribed = userData?.subscription?.active;
+
+  // Show message for guest users
+  if (isGuest) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94] p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center gap-4 mb-8">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl px-6 py-3 transition-all"
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+              <span className="text-white font-medium">Back</span>
+            </button>
+          </div>
+
+          {/* Guest Message */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Crown className="w-12 h-12 text-yellow-400" />
+              <h1 className="text-4xl font-bold text-white">Create Account to Subscribe</h1>
+            </div>
+            
+            <p className="text-white/80 text-xl mb-8">
+              To subscribe to Afroslang Premium, please create an account first. This ensures your subscription is properly linked and you can access all premium features.
+            </p>
+
+            <div className="space-y-4">
+              <button
+                onClick={() => {
+                  // This would trigger sign up modal
+                  alert('Please use the profile menu to sign up for an account first.');
+                }}
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold py-4 px-8 rounded-2xl transition-all hover:scale-105 flex items-center justify-center gap-3"
+              >
+                <Crown className="w-5 h-5" />
+                Create Account to Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isSubscribed) {
     return (

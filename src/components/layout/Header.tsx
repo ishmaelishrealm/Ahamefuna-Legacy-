@@ -41,25 +41,25 @@ export const Header: React.FC<HeaderProps> = ({
   };
   return (
     <header className="bg-gradient-to-r from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94] shadow-lg">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="flex justify-between items-center h-12 sm:h-16">
+      <div className="max-w-7xl mx-auto px-1 sm:px-4 lg:px-8">
+        <div className="flex justify-between items-center h-10 sm:h-16">
           {/* Left side - Back button and title */}
-          <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
+          <div className="flex items-center space-x-1 sm:space-x-4 min-w-0 flex-1">
             {showBackButton && onBack && (
               <button
                 onClick={onBack}
-                className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm flex-shrink-0"
+                className="flex items-center justify-center w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm flex-shrink-0"
               >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
             )}
-            <h1 className="text-lg sm:text-xl font-bold text-white drop-shadow-lg truncate">{title}</h1>
+            <h1 className="text-sm sm:text-xl font-bold text-white drop-shadow-lg truncate">{title}</h1>
           </div>
 
           {/* Right side - Premium buttons, Leaderboard and Profile */}
-          <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+          <div className="flex items-center gap-0.5 sm:gap-3 flex-shrink-0">
             {onFeedback && isSubscribed && (
               <button
                 onClick={onFeedback}
@@ -73,10 +73,10 @@ export const Header: React.FC<HeaderProps> = ({
             {onSubscription && !isSubscribed && (
               <button
                 onClick={onSubscription}
-                className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="flex items-center justify-center w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 transition-all duration-200 shadow-lg hover:shadow-xl"
                 aria-label="Subscribe to Premium"
               >
-                <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+                <Crown className="w-3 h-3 sm:w-5 sm:h-5 text-black" />
               </button>
             )}
             
