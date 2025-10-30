@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { InterfaceLanguage } from '../../types';
 import { Moon, Sun } from 'lucide-react';
+import { languages } from '../../data/languages';
+import { FlagIcon } from './FlagIcon';
 
 interface InterfaceLanguageSelectorProps {
   onSelect: (language: InterfaceLanguage) => void;
@@ -97,6 +99,52 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
           >
             Get Started
           </button>
+
+          {/* 15 Languages Section */}
+          <div 
+            className="w-full max-w-4xl mx-auto mt-12 p-6 sm:p-8 rounded-lg"
+            style={{
+              borderWidth: 2,
+              borderColor: isDark ? 'white' : 'black',
+              boxShadow: isDark 
+                ? '0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06)' 
+                : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            }}
+          >
+            {/* Top line */}
+            <div 
+              className="w-full h-0.5 mb-6"
+              style={{ backgroundColor: isDark ? 'white' : 'black' }}
+            />
+            
+            {/* Languages Grid */}
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-6">
+              {languages.map((language) => (
+                <div 
+                  key={language.id} 
+                  className="flex flex-col items-center gap-2"
+                >
+                  {/* Flag - use first flag for each language */}
+                  <div className="flex-shrink-0">
+                    <FlagIcon country={language.flags[0]} size="md" />
+                  </div>
+                  {/* Language name - small text */}
+                  <span 
+                    className="text-xs sm:text-sm font-bold text-center leading-tight"
+                    style={{ color: green }}
+                  >
+                    {language.name.split('(')[0].trim()}
+                  </span>
+                </div>
+              ))}
+            </div>
+            
+            {/* Bottom line */}
+            <div 
+              className="w-full h-0.5 mt-6"
+              style={{ backgroundColor: isDark ? 'white' : 'black' }}
+            />
+          </div>
 
           {/* English/French quick links (optional, subtle) */}
           <div className="flex items-center justify-center gap-6 pt-2">
