@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { InterfaceLanguage } from '../../types';
-import { Moon, Sun, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { languages } from '../../data/languages';
 import { FlagIcon } from './FlagIcon';
 
@@ -35,10 +35,6 @@ function FrenchFlag() {
 export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelectorProps) {
   const [isDark, setIsDark] = useState(false);
   const [logoError, setLogoError] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const brown = '#6B4F3A'; // dark brown
   const lightBrown = '#A67B5B';
@@ -46,61 +42,6 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
   const pink = '#EC4899'; // subtle accent
 
   const handleGetStarted = () => onSelect('en'); // default English
-
-  // Check scroll position and update chevron states
-  const updateScrollButtons = () => {
-    if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-      setScrollPosition(scrollLeft);
-    }
-  };
-
-  // Scroll handlers
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const scrollAmount = container.clientWidth * 0.6; // Scroll by ~60% of visible width
-      container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const scrollAmount = container.clientWidth * 0.6; // Scroll by ~60% of visible width
-      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (scrollContainerRef.current && document.activeElement?.closest('[role="listbox"]')) {
-        if (e.key === 'ArrowLeft') {
-          e.preventDefault();
-          scrollLeft();
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          scrollRight();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  // Initialize and watch scroll position
-  useEffect(() => {
-    updateScrollButtons();
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener('scroll', updateScrollButtons);
-      return () => container.removeEventListener('scroll', updateScrollButtons);
-    }
-  }, []);
 
   return (
     <div className={`${isDark ? 'bg-black' : 'bg-white'} min-h-screen flex flex-col items-center px-4 py-8 sm:py-12`}>
@@ -159,143 +100,48 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
             Get Started
           </button>
 
-          {/* 15 Languages Carousel Section */}
+          {/* 15 Languages Section */}
           <div 
-            className="w-full max-w-5xl mx-auto mt-12"
+            className="w-full max-w-4xl mx-auto mt-12 p-6 sm:p-8 rounded-lg"
             style={{
               borderWidth: 2,
               borderColor: isDark ? 'white' : 'black',
               boxShadow: isDark 
                 ? '0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06)' 
                 : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-              borderRadius: '8px',
             }}
           >
             {/* Top line */}
             <div 
-              className="w-full h-0.5"
+              className="w-full h-0.5 mb-6"
               style={{ backgroundColor: isDark ? 'white' : 'black' }}
             />
             
-            {/* Carousel Container */}
-            <div className="relative flex items-center h-20 sm:h-24 px-12 sm:px-16">
-              {/* Left Chevron */}
-              <button
-                onClick={scrollLeft}
-                disabled={!canScrollLeft}
-                aria-label="Previous languages"
-                className={`absolute left-2 sm:left-4 z-10 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  canScrollLeft
-                    ? isDark
-                      ? 'bg-white/10 hover:bg-white/20 text-white'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                    : 'opacity-30 cursor-not-allowed'
-                }`}
-                style={{
-                  ...(canScrollLeft && {
-                    boxShadow: isDark 
-                      ? '0 2px 4px rgba(255, 255, 255, 0.1)'
-                      : '0 2px 4px rgba(0, 0, 0, 0.1)'
-                  })
-                }}
-              >
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-
-              {/* Scrollable Languages List */}
-              <div
-                ref={scrollContainerRef}
-                role="listbox"
-                aria-label="Available languages"
-                className="flex-1 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
-                style={{
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch',
-                }}
-                onScroll={updateScrollButtons}
-              >
-                <div className="flex items-center gap-3 sm:gap-4 px-2 h-full">
-                  {languages.map((language, index) => {
-                    const displayName = language.name.split('(')[0].trim();
-                    return (
-                      <button
-                        key={language.id}
-                        role="option"
-                        tabIndex={0}
-                        aria-label={`${displayName}, not selected`}
-                        className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 snap-start min-w-fit"
-                        style={{
-                          color: green,
-                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = isDark 
-                            ? 'rgba(255, 255, 255, 0.1)' 
-                            : 'rgba(0, 0, 0, 0.06)';
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = isDark
-                            ? '0 4px 8px rgba(255, 255, 255, 0.15)'
-                            : '0 4px 8px rgba(0, 0, 0, 0.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = isDark 
-                            ? 'rgba(255, 255, 255, 0.05)' 
-                            : 'rgba(0, 0, 0, 0.03)';
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            // Could add selection logic here if needed
-                          }
-                        }}
-                      >
-                        {/* Flag Icon */}
-                        <div className="flex-shrink-0">
-                          <FlagIcon country={language.flags[0]} size="sm" />
-                        </div>
-                        {/* Language Label */}
-                        <span 
-                          className="text-xs sm:text-sm font-bold uppercase tracking-wide whitespace-nowrap"
-                          style={{ color: green }}
-                        >
-                          {displayName}
-                        </span>
-                      </button>
-                    );
-                  })}
+            {/* Languages Grid */}
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-6">
+              {languages.map((language) => (
+                <div 
+                  key={language.id} 
+                  className="flex flex-col items-center gap-2"
+                >
+                  {/* Flag - use first flag for each language */}
+                  <div className="flex-shrink-0">
+                    <FlagIcon country={language.flags[0]} size="md" />
+                  </div>
+                  {/* Language name - small text */}
+                  <span 
+                    className="text-xs sm:text-sm font-bold text-center leading-tight"
+                    style={{ color: green }}
+                  >
+                    {language.name.split('(')[0].trim()}
+                  </span>
                 </div>
-              </div>
-
-              {/* Right Chevron */}
-              <button
-                onClick={scrollRight}
-                disabled={!canScrollRight}
-                aria-label="Next languages"
-                className={`absolute right-2 sm:right-4 z-10 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  canScrollRight
-                    ? isDark
-                      ? 'bg-white/10 hover:bg-white/20 text-white'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                    : 'opacity-30 cursor-not-allowed'
-                }`}
-                style={{
-                  ...(canScrollRight && {
-                    boxShadow: isDark 
-                      ? '0 2px 4px rgba(255, 255, 255, 0.1)'
-                      : '0 2px 4px rgba(0, 0, 0, 0.1)'
-                  })
-                }}
-              >
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
+              ))}
             </div>
-
+            
             {/* Bottom line */}
             <div 
-              className="w-full h-0.5"
+              className="w-full h-0.5 mt-6"
               style={{ backgroundColor: isDark ? 'white' : 'black' }}
             />
           </div>
