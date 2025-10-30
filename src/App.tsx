@@ -278,6 +278,13 @@ function App() {
     };
   };
 
+  // Handle authentication state changes
+  useEffect(() => {
+    if (!loading && (user || isGuest) && currentScreen === 'auth') {
+      setCurrentScreen('interface-select');
+    }
+  }, [user, isGuest, loading, currentScreen]);
+
   // Show loading screen while checking authentication
   if (loading) {
     return (
@@ -290,11 +297,6 @@ function App() {
   // Show authentication screen if not logged in and not in guest mode
   if (!user && !isGuest && currentScreen === 'auth') {
     return <AuthScreen />;
-  }
-
-  // Redirect to interface select if authenticated
-  if ((user || isGuest) && currentScreen === 'auth') {
-    setCurrentScreen('interface-select');
   }
 
   return (

@@ -66,17 +66,17 @@ export const SignUp: React.FC<SignUpProps> = ({ onSuccess, onSwitchToLogin }) =>
   };
 
   return (
-    <div className="w-full space-y-8">
+    <div className="w-full space-y-6">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="text-center text-2xl font-bold text-gray-900">
             Join Afroslang
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-1 text-center text-sm text-gray-600">
             Start your African language learning journey
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSignup}>
+        <form className="mt-6 space-y-4" onSubmit={handleSignup}>
           <div className="space-y-4">
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700">
