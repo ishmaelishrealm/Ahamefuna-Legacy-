@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { InterfaceLanguage } from '../../types';
-import { Sparkles, Zap, Gamepad2 } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 
 interface InterfaceLanguageSelectorProps {
   onSelect: (language: InterfaceLanguage) => void;
@@ -30,101 +31,95 @@ function FrenchFlag() {
 }
 
 export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelectorProps) {
+  const [isDark, setIsDark] = useState(false);
+  const [logoError, setLogoError] = useState(false);
+
+  const brown = '#6B4F3A'; // dark brown
+  const lightBrown = '#A67B5B';
+  const green = '#10B981'; // text color
+  const pink = '#EC4899'; // subtle accent
+
+  const handleGetStarted = () => onSelect('en'); // default English
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-2 sm:px-8 py-4 sm:py-16 relative overflow-hidden bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94]">
-      
-      <div className="max-w-3xl w-full text-center space-y-4 sm:space-y-12 relative z-10">
-        {/* Logo & Branding */}
-        <div className="space-y-3 sm:space-y-8 animate-fadeIn">
-          
-          <div className="space-y-2 sm:space-y-6">
-            <h1 className="text-2xl sm:text-7xl uppercase tracking-wider text-white drop-shadow-lg">
+    <div className={`${isDark ? 'bg-black' : 'bg-white'} min-h-screen flex flex-col items-center px-4 py-8 sm:py-12`}>
+      {/* Top bar: centered logo + name, right-aligned theme toggle */}
+      <div className="w-full max-w-5xl flex items-center justify-between mb-10">
+        <div className="flex-1" />
+        <div className="flex items-center gap-3">
+          {/* Logo centered with text */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
+            {/* Logo image (place file at public/afroslang-logo.png) */}
+            {logoError ? (
+              <div className="w-10 h-10 rounded-full" style={{ backgroundColor: isDark ? lightBrown : brown }} />
+            ) : (
+              <img
+                src="/afroslang-logo.png"
+                alt="Afroslang logo"
+                className="w-10 h-10 rounded-full object-contain"
+                onError={() => setLogoError(true)}
+              />
+            )}
+            <span className="text-2xl sm:text-3xl font-extrabold" style={{ color: green }}>
               Afroslang
-            </h1>
-            <div className="bg-white rounded-xl sm:rounded-3xl p-3 sm:p-8 game-border retro-shadow">
-              <p className="text-sm sm:text-3xl text-[#1A1A1A] max-w-xl mx-auto leading-tight">
-                🎮 Learn African Languages Through <span className="text-transparent bg-gradient-to-r from-[#FF1493] to-[#00FF94] bg-clip-text">EPIC</span> Game Quests! 🚀
-              </p>
-            </div>
-            
-            {/* Feature Pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-2 sm:mt-8">
-              <div className="bg-gradient-to-r from-[#FF1493] to-[#FF69B4] px-3 sm:px-8 py-2 sm:py-4 rounded-lg sm:rounded-2xl game-border retro-shadow hover:scale-110 transition-all">
-                <div className="flex items-center gap-1 sm:gap-3 text-white">
-                  <span className="text-sm sm:text-3xl">🎯</span>
-                  <span className="text-xs sm:text-xl uppercase tracking-wider">15 Languages</span>
-                </div>
-              </div>
-              <div className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] px-3 sm:px-8 py-2 sm:py-4 rounded-lg sm:rounded-2xl game-border retro-shadow hover:scale-110 transition-all">
-                <div className="flex items-center gap-1 sm:gap-3 text-white">
-                  <Gamepad2 className="w-3 h-3 sm:w-8 sm:h-8" />
-                  <span className="text-xs sm:text-xl uppercase tracking-wider">Gamified</span>
-                </div>
-              </div>
-              <div className="bg-gradient-to-r from-[#00FF94] to-[#7FFF00] px-3 sm:px-8 py-2 sm:py-4 rounded-lg sm:rounded-2xl game-border retro-shadow hover:scale-110 transition-all">
-                <div className="flex items-center gap-1 sm:gap-3 text-white">
-                  <Zap className="w-3 h-3 sm:w-8 sm:h-8" />
-                  <span className="text-xs sm:text-xl uppercase tracking-wider">100+ Quests</span>
-                </div>
-              </div>
-            </div>
+            </span>
           </div>
-        </div>
 
-        {/* Language Selection */}
-        <div className="space-y-3 sm:space-y-8 animate-slideIn">
-          <div className="bg-white rounded-xl sm:rounded-3xl px-3 sm:px-10 py-2 sm:py-4 game-border retro-shadow inline-block">
-            <div className="flex items-center gap-1 sm:gap-3">
-              <Sparkles className="w-3 h-3 sm:w-7 sm:h-7 text-[#FFD700]" />
-              <span className="text-sm sm:text-2xl text-[#1A1A1A] uppercase tracking-wide">Choose Your Language</span>
-              <Sparkles className="w-3 h-3 sm:w-7 sm:h-7 text-[#FFD700]" />
-            </div>
-          </div>
-          
-          <div className="space-y-2 sm:space-y-6">
-            <button
-              onClick={() => onSelect('en')}
-              className="w-full bg-white rounded-xl sm:rounded-3xl p-3 sm:p-10 game-border retro-shadow-lg hover:retro-shadow hover:scale-105 transition-all duration-300 flex items-center gap-2 sm:gap-8 group"
-            >
-              <div className="flex-shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
-                <UKFlag />
-              </div>
-              <div className="flex-1 text-left space-y-1 sm:space-y-2">
-                <h3 className="text-sm sm:text-4xl text-[#1A1A1A] uppercase tracking-wide">English</h3>
-                <p className="text-xs sm:text-2xl text-[#4A4A4A]">Learn in English</p>
-              </div>
-              <div className="text-lg sm:text-6xl text-[#FF1493] opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-4 group-hover:scale-125 animate-pulse">
-                ▶
-              </div>
-            </button>
-
-            <button
-              onClick={() => onSelect('fr')}
-              className="w-full bg-white rounded-xl sm:rounded-3xl p-3 sm:p-10 game-border retro-shadow-lg hover:retro-shadow hover:scale-105 transition-all duration-300 flex items-center gap-2 sm:gap-8 group"
-            >
-              <div className="flex-shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
-                <FrenchFlag />
-              </div>
-              <div className="flex-1 text-left space-y-1 sm:space-y-2">
-                <h3 className="text-sm sm:text-4xl text-[#1A1A1A] uppercase tracking-wide">Français</h3>
-                <p className="text-xs sm:text-2xl text-[#4A4A4A]">Apprendre en français</p>
-              </div>
-              <div className="text-lg sm:text-6xl text-[#FF1493] opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-4 group-hover:scale-125 animate-pulse">
-                ▶
-              </div>
-            </button>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="bg-white rounded-xl sm:rounded-3xl p-3 sm:p-8 game-border retro-shadow animate-fadeIn" style={{ animationDelay: '0.5s' }}>
-          <p className="text-xs sm:text-2xl text-[#1A1A1A] flex items-center justify-center gap-1 sm:gap-3">
-            <span className="text-lg sm:text-4xl">✨</span>
-            <span>Master vocabulary, grammar & culture!</span>
-            <span className="text-lg sm:text-4xl">✨</span>
-          </p>
+          {/* Theme toggle */}
+          <button
+            onClick={() => setIsDark((v) => !v)}
+            className={`inline-flex items-center gap-2 px-3 py-2 rounded-full border transition-colors ${
+              isDark ? 'border-white text-white' : 'border-black text-black'
+            }`}
+            aria-label="Toggle theme"
+          >
+            {isDark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            <span className="text-xs font-semibold">{isDark ? 'Dark' : 'Light'}</span>
+          </button>
         </div>
       </div>
+
+      {/* Main content: minimal hero with Get Started */}
+      <div className="flex-1 w-full flex flex-col items-center justify-center">
+        <div className="text-center space-y-8">
+          {/* Minimal accent underline under title area (optional subtle pink accent) */}
+          <div className="mx-auto w-16 h-1 rounded-full" style={{ backgroundColor: pink }} />
+
+          <button
+            onClick={handleGetStarted}
+            className="px-10 py-4 rounded-full font-extrabold text-lg tracking-wide shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+            style={{
+              backgroundColor: isDark ? brown : brown,
+              color: green,
+              borderWidth: 2,
+              borderColor: isDark ? 'white' : 'black',
+            }}
+          >
+            Get Started
+          </button>
+
+          {/* English/French quick links (optional, subtle) */}
+          <div className="flex items-center justify-center gap-6 pt-2">
+            <button
+              onClick={() => onSelect('en')}
+              className={`text-sm font-bold underline-offset-4 hover:underline ${isDark ? 'text-white' : 'text-black'}`}
+              style={{ color: green }}
+            >
+              English
+            </button>
+            <button
+              onClick={() => onSelect('fr')}
+              className={`text-sm font-bold underline-offset-4 hover:underline ${isDark ? 'text-white' : 'text-black'}`}
+              style={{ color: green }}
+            >
+              Français
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom padding spacer */}
+      <div className="h-6" />
     </div>
   );
 }
