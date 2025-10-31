@@ -110,29 +110,57 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
         </div>
       </div>
 
-      {/* Middle Section - Main Illustration/Visual */}
+      {/* Middle Section - Logo and Country Facts */}
       <div className="flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
-        <div className="text-center space-y-6 sm:space-y-8 max-w-2xl">
-          {/* Large Illustration Placeholder - Fun African-themed visual */}
-          <div className="w-full h-64 sm:h-96 flex items-center justify-center relative">
-            <div className="text-8xl sm:text-9xl">🌍</div>
-            <div className="absolute top-4 left-1/4 text-4xl sm:text-5xl animate-bounce" style={{ animationDelay: '0s' }}>📚</div>
-            <div className="absolute top-8 right-1/4 text-4xl sm:text-5xl animate-bounce" style={{ animationDelay: '0.2s' }}>🎯</div>
-            <div className="absolute bottom-4 left-1/3 text-4xl sm:text-5xl animate-bounce" style={{ animationDelay: '0.4s' }}>🚀</div>
-            <div className="absolute bottom-8 right-1/3 text-4xl sm:text-5xl animate-bounce" style={{ animationDelay: '0.6s' }}>⭐</div>
-            <div className="absolute top-1/2 left-1/5 text-3xl sm:text-4xl animate-bounce" style={{ animationDelay: '0.8s' }}>✨</div>
-            <div className="absolute top-1/2 right-1/5 text-3xl sm:text-4xl animate-bounce" style={{ animationDelay: '1s' }}>💫</div>
+        <div className="w-full max-w-5xl flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+          {/* Left: Logo */}
+          <div className="flex-shrink-0 flex items-center justify-center">
+            {logoError ? (
+              <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-full" style={{ backgroundColor: isDark ? lightBrown : brown }} />
+            ) : (
+              <img
+                src="/afroslang-logo.png"
+                alt="Afroslang logo"
+                className="w-48 h-48 sm:w-64 sm:h-64 rounded-full object-contain"
+                onError={() => setLogoError(true)}
+              />
+            )}
           </div>
 
-          {/* Headline Text */}
+          {/* Right: Country Facts Oval Box */}
+          <div className={`flex-1 w-full lg:max-w-md ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-full px-8 py-6 sm:px-10 sm:py-8 shadow-lg border-2 ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Did You Know?
+            </h2>
+            <div className="space-y-3">
+              <p className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <span className="font-semibold">🌍 Africa</span> is home to over <span className="font-bold">2,000 languages</span>, making it the most linguistically diverse continent on Earth.
+              </p>
+              <p className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <span className="font-semibold">Nigeria</span> alone has over <span className="font-bold">500 languages</span>, with Hausa, Yoruba, and Igbo among the most widely spoken.
+              </p>
+              <p className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <span className="font-semibold">Swahili</span> is spoken by over <span className="font-bold">200 million</span> people across East Africa and is one of the official languages of the African Union.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Headline Text Section */}
+      <div className="px-4 pb-4">
+        <div className="text-center max-w-2xl mx-auto">
           <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
             The free, fun, and effective way to
             <br />
             <span className="font-extrabold">learn African languages!</span>
           </h1>
+        </div>
+      </div>
 
-          {/* Call-to-Action Buttons */}
-          <div className="flex flex-col items-center gap-4 pt-4">
+      {/* Call-to-Action Buttons Section */}
+      <div className="px-4 pb-8">
+        <div className="flex flex-col items-center gap-4 pt-4">
             {/* Primary Button - GET STARTED (bright green like Duolingo) */}
             <button
               onClick={handleGetStarted}
@@ -161,7 +189,6 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
             >
               I ALREADY HAVE AN ACCOUNT
             </button>
-          </div>
         </div>
       </div>
 

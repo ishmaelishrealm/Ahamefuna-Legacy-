@@ -43,10 +43,12 @@ export function LessonScreen({
   
   // Initialize exercise queue with all exercises
   const [exerciseQueue, setExerciseQueue] = useState<ExerciseWithState[]>(() => 
-    [...lesson.exercises].map(ex => ({ ...ex }))
+    (lesson.exercises && lesson.exercises.length > 0) 
+      ? [...lesson.exercises].map(ex => ({ ...ex }))
+      : []
   );
   const [currentExercise, setCurrentExercise] = useState<ExerciseWithState | null>(
-    exerciseQueue[0] || null
+    exerciseQueue.length > 0 ? exerciseQueue[0] : null
   );
   const [correctAnswers, setCorrectAnswers] = useState(0);
   

@@ -118,6 +118,11 @@ function App() {
   };
 
   const handleStartLesson = (lesson: Lesson) => {
+    // Check if lesson has exercises before starting
+    if (!lesson || !lesson.exercises || lesson.exercises.length === 0) {
+      console.error('Lesson has no exercises:', lesson);
+      return;
+    }
     setActiveLesson(lesson);
     setCurrentScreen('lesson');
   };
@@ -167,8 +172,11 @@ function App() {
         currentStage: 1
       };
 
-      const newXp = current.xp + xpEarned;
-      const newLevel = Math.floor(newXp / 100) + 1;
+      // Only count XP and streaks for authenticated users (not guests or users without accounts)
+      const shouldCountXP = user && !isGuest;
+      
+      const newXp = shouldCountXP ? current.xp + xpEarned : current.xp;
+      const newLevel = shouldCountXP ? Math.floor(newXp / 100) + 1 : current.level;
       
       // Calculate new hearts: subtract lost, add gained, max at 5
       let newHearts = Math.min(5, current.hearts - heartsLost + heartsGained);
@@ -182,7 +190,7 @@ function App() {
         newResetTime = null;
       }
 
-      // Update streak - properly track consecutive days
+      // Update streak - only for authenticated users (not guests)
       const today = new Date();
       const todayDateString = today.toDateString();
       const todayDay = today.getDate();
@@ -190,10 +198,10 @@ function App() {
       const todayYear = today.getFullYear();
       
       const lastDate = current.lastPracticeDate;
-      let newStreak = current.streak;
-      let streakDays = current.streakDays || [];
+      let newStreak = shouldCountXP ? current.streak : 0;
+      let streakDays = shouldCountXP ? (current.streakDays || []) : [];
 
-      if (!lastDate || lastDate !== todayDateString) {
+      if (shouldCountXP && (!lastDate || lastDate !== todayDateString)) {
         // Check if last practice was yesterday
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
@@ -222,6 +230,9 @@ function App() {
           streakDays = [...streakDays, todayDay].sort((a, b) => a - b);
         }
       }
+      
+      // Update lastPracticeDate only for authenticated users
+      const newLastPracticeDate = shouldCountXP ? todayDateString : current.lastPracticeDate;
 
       // Add lesson to completed list if not already there
       const currentCompletedLessons = current.completedLessons || [];
@@ -238,7 +249,7 @@ function App() {
           hearts: newHearts,
           heartsResetTime: newResetTime,
           streak: newStreak,
-          lastPracticeDate: todayDateString,
+          lastPracticeDate: newLastPracticeDate,
           streakDays: streakDays,
           lessonsCompleted: current.lessonsCompleted + 1,
           wordsLearned: current.wordsLearned + 3,
