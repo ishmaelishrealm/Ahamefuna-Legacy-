@@ -35,6 +35,7 @@ export interface UserProgress {
   heartsResetTime: number | null;
   streak: number;
   lastPracticeDate: string | null;
+  streakDays?: number[]; // Array of day numbers in current month that have streaks (1-31)
   lessonsCompleted: number;
   wordsLearned: number;
   mistakeCount: number;

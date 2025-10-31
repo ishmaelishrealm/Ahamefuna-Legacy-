@@ -8,6 +8,8 @@ export interface UserData {
   hearts: number;
   heartsData?: HeartsData;
   xp: number;
+  gems?: number;
+  sandbits?: number;
   subscription: {
     active: boolean;
     plan: string | null;

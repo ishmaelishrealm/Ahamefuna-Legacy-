@@ -3,7 +3,9 @@ import { InterfaceLanguage, Stage, Lesson, UserProgress } from '../../types';
 import { Lock, Star, CheckCircle2, Trophy, Sparkles, Flame, Zap, Heart, Clock, Home, Trophy as TrophyIcon, BookOpen, Store, User, Settings, Shield, Gem } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getLanguageById } from '../../data/languages';
+import { SandbitsIcon } from '../../components/ui/SandbitsIcon';
 import { FlagIcon } from '../language-select/FlagIcon';
+import { StreakPopup } from '../../components/streak/StreakPopup';
 
 interface LearningPathProps {
   interfaceLanguage: InterfaceLanguage;
@@ -27,6 +29,7 @@ export function LearningPath({
   const isEnglish = interfaceLanguage === 'en';
   const [timeRemaining, setTimeRemaining] = useState('');
   const [logoError, setLogoError] = useState(false);
+  const [showStreakPopup, setShowStreakPopup] = useState(false);
   const [activeSidebarItem, setActiveSidebarItem] = useState<'learn' | 'leaderboard' | 'quests' | 'shop' | 'profile' | 'settings'>('learn');
   const { user, userData, isGuest } = useAuth();
   
@@ -411,14 +414,21 @@ export function LearningPath({
           {currentLanguage && currentLanguage.flags && currentLanguage.flags.length > 0 && (
             <FlagIcon country={currentLanguage.flags[0]} size="md" />
           )}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-3 flex-wrap">
+            <button 
+              onClick={() => setShowStreakPopup(true)}
+              className="flex items-center gap-1 hover:opacity-80 transition-opacity cursor-pointer"
+            >
               <Flame className="w-5 h-5 text-orange-500" />
               <span className="text-sm font-semibold">{progress.streak || 0}</span>
-            </div>
+            </button>
             <div className="flex items-center gap-1">
               <Gem className="w-5 h-5 text-blue-500" />
               <span className="text-sm font-semibold">{userData?.gems || 500}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <SandbitsIcon size={20} className="text-amber-700" />
+              <span className="text-sm font-semibold">{userData?.sandbits || 0}</span>
             </div>
             <div className="flex items-center gap-1">
               <Heart className="w-5 h-5 text-red-500 fill-red-500" />
@@ -496,6 +506,23 @@ export function LearningPath({
           </div>
         </div>
       </div>
+
+      {/* Streak Popup */}
+      {showStreakPopup && (
+        <StreakPopup
+          interfaceLanguage={interfaceLanguage}
+          streak={progress.streak || 0}
+          streakDays={progress.streakDays || []}
+          onClose={() => setShowStreakPopup(false)}
+          onStartLesson={() => {
+            setShowStreakPopup(false);
+            // Start first available lesson or show message
+            if (stages.length > 0 && stages[0].lessons.length > 0) {
+              onStartLesson(stages[0].lessons[0]);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

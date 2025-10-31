@@ -35,75 +35,68 @@ export function LanguageSelectionScreen({
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Top Header Bar */}
-      <div 
-        className="w-full px-6 py-4 flex items-center justify-between"
-        style={{ 
-          background: `linear-gradient(135deg, ${brown} 0%, ${lightBrown} 100%)`,
-          borderBottom: '2px solid ' + brown
-        }}
-      >
-        {/* Left: Logo */}
-        <button onClick={onBack} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          {logoError ? (
-            <div className="w-10 h-10 rounded-full" style={{ backgroundColor: white }} />
-          ) : (
-            <img
-              src="/afroslang-logo.png"
-              alt="Afroslang logo"
-              className="w-10 h-10 rounded-full object-contain bg-white p-1"
-              onError={() => setLogoError(true)}
-            />
-          )}
-          <span className="text-2xl font-bold text-white">
-            afroslang
-          </span>
-        </button>
-
-        {/* Right: Site Language Selector */}
-        <div className="relative">
-          <button
-            onClick={() => setShowSiteLanguageDropdown(!showSiteLanguageDropdown)}
-            className="flex items-center gap-2 text-white hover:text-gray-100 transition-colors"
-          >
-            <span className="text-sm font-medium">
-              {isEnglish ? 'SITE LANGUAGE: ENGLISH' : 'LANGUE DU SITE: FRANÇAIS'}
-            </span>
-            <ChevronDown className="w-4 h-4" />
-          </button>
-
-          {/* Dropdown Menu */}
-          {showSiteLanguageDropdown && (
-            <>
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setShowSiteLanguageDropdown(false)}
-              />
-              <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20 min-w-[200px]">
-                <button
-                  onClick={() => handleSiteLanguageChange('en')}
-                  className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
-                    isEnglish ? 'bg-gray-50 font-semibold' : ''
-                  }`}
-                >
-                  English
-                </button>
-                <button
-                  onClick={() => handleSiteLanguageChange('fr')}
-                  className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
-                    !isEnglish ? 'bg-gray-50 font-semibold' : ''
-                  }`}
-                >
-                  Français
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-6 py-8 sm:py-12">
+        {/* Logo and Site Language Selector - moved from header */}
+        <div className="flex items-center justify-between mb-8">
+          {/* Left: Logo */}
+          <div className="flex items-center gap-3">
+            {logoError ? (
+              <div className="w-10 h-10 rounded-full" style={{ backgroundColor: brown }} />
+            ) : (
+              <img
+                src="/afroslang-logo.png"
+                alt="Afroslang logo"
+                className="w-10 h-10 rounded-full object-contain"
+                onError={() => setLogoError(true)}
+              />
+            )}
+            <span className="text-2xl font-bold text-gray-900">
+              afroslang
+            </span>
+          </div>
+
+          {/* Right: Site Language Selector */}
+          <div className="relative">
+            <button
+              onClick={() => setShowSiteLanguageDropdown(!showSiteLanguageDropdown)}
+              className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100"
+            >
+              <span className="text-sm font-medium">
+                {isEnglish ? 'SITE LANGUAGE: ENGLISH' : 'LANGUE DU SITE: FRANÇAIS'}
+              </span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {showSiteLanguageDropdown && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowSiteLanguageDropdown(false)}
+                />
+                <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20 min-w-[200px]">
+                  <button
+                    onClick={() => handleSiteLanguageChange('en')}
+                    className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
+                      isEnglish ? 'bg-gray-50 font-semibold' : ''
+                    }`}
+                  >
+                    English
+                  </button>
+                  <button
+                    onClick={() => handleSiteLanguageChange('fr')}
+                    className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
+                      !isEnglish ? 'bg-gray-50 font-semibold' : ''
+                    }`}
+                  >
+                    Français
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-8 text-center">
           {isEnglish ? 'Choose an African language to begin' : 'Choisissez une langue africaine pour commencer'}

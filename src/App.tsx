@@ -10,6 +10,7 @@ import { Header } from './components/layout/Header';
 import { LeaderboardScreen } from './components/leaderboard/LeaderboardScreen';
 import { SubscriptionPage } from './components/subscription/SubscriptionPage';
 import { FeedbackPage } from './components/feedback/FeedbackPage';
+import { ShopScreen } from './features/store/ShopScreen';
 import { FirebaseQuickSetup } from './components/debug/FirebaseQuickSetup';
 import { useAuth } from './contexts/AuthContext';
 import { getLanguageById } from './data/languages';
@@ -17,7 +18,7 @@ import { getStagesForLanguage, getLessonById } from './data/lessons';
 import { saveUserProgress } from './utils/userData';
 import { addWeeklyXP, getCurrentWeekIdFromDB, getUserLeague } from './utils/leaderboardUtils';
 
-type Screen = 'auth' | 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete' | 'leaderboard' | 'subscription' | 'feedback';
+type Screen = 'auth' | 'interface-select' | 'language-select' | 'path' | 'lesson' | 'complete' | 'leaderboard' | 'subscription' | 'feedback' | 'shop';
 
 function App() {
   const { user, userData, isGuest, loading } = useAuth();
@@ -103,6 +104,7 @@ function App() {
         heartsResetTime: null,
         streak: 0,
         lastPracticeDate: null,
+        streakDays: [],
         lessonsCompleted: 0,
         wordsLearned: 0,
         mistakeCount: 0,
@@ -157,6 +159,7 @@ function App() {
         heartsResetTime: null,
         streak: 0,
         lastPracticeDate: null,
+        streakDays: [],
         lessonsCompleted: 0,
         wordsLearned: 0,
         mistakeCount: 0,
@@ -179,18 +182,44 @@ function App() {
         newResetTime = null;
       }
 
-      // Update streak
-      const today = new Date().toDateString();
+      // Update streak - properly track consecutive days
+      const today = new Date();
+      const todayDateString = today.toDateString();
+      const todayDay = today.getDate();
+      const todayMonth = today.getMonth();
+      const todayYear = today.getFullYear();
+      
       const lastDate = current.lastPracticeDate;
       let newStreak = current.streak;
+      let streakDays = current.streakDays || [];
 
-      if (!lastDate || lastDate !== today) {
-        const yesterday = new Date();
+      if (!lastDate || lastDate !== todayDateString) {
+        // Check if last practice was yesterday
+        const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
-        if (lastDate === yesterday.toDateString()) {
+        const yesterdayDateString = yesterday.toDateString();
+        
+        if (lastDate === yesterdayDateString) {
+          // Consecutive day - increment streak
           newStreak += 1;
-        } else {
+        } else if (!lastDate) {
+          // First time practicing - start streak at 1
           newStreak = 1;
+        } else {
+          // Streak broken (last practice was more than 1 day ago) - reset to 1
+          newStreak = 1;
+          // Only clear streakDays if switching to a new month
+          const lastDateObj = new Date(lastDate);
+          const isDifferentMonth = lastDateObj.getMonth() !== todayMonth || lastDateObj.getFullYear() !== todayYear;
+          if (isDifferentMonth) {
+            streakDays = [];
+          }
+        }
+        
+        // Add today to streak days if it's the current month
+        const isCurrentMonth = todayMonth === new Date().getMonth() && todayYear === new Date().getFullYear();
+        if (isCurrentMonth && !streakDays.includes(todayDay)) {
+          streakDays = [...streakDays, todayDay].sort((a, b) => a - b);
         }
       }
 
@@ -209,7 +238,8 @@ function App() {
           hearts: newHearts,
           heartsResetTime: newResetTime,
           streak: newStreak,
-          lastPracticeDate: today,
+          lastPracticeDate: todayDateString,
+          streakDays: streakDays,
           lessonsCompleted: current.lessonsCompleted + 1,
           wordsLearned: current.wordsLearned + 3,
           mistakeCount: heartsLost > 0 ? current.mistakeCount + heartsLost : current.mistakeCount,
@@ -245,6 +275,7 @@ function App() {
         heartsResetTime: null,
         streak: 0,
         lastPracticeDate: null,
+        streakDays: [],
         lessonsCompleted: 0,
         wordsLearned: 0,
         mistakeCount: 0,
@@ -263,6 +294,7 @@ function App() {
         heartsResetTime: null,
         streak: 0,
         lastPracticeDate: null,
+        streakDays: [],
         lessonsCompleted: 0,
         wordsLearned: 0,
         mistakeCount: 0,
@@ -354,7 +386,7 @@ function App() {
             if (screen === 'leaderboard') {
               setCurrentScreen('leaderboard');
             } else if (screen === 'shop') {
-              // Add shop screen if needed
+              setCurrentScreen('shop');
             } else if (screen === 'profile') {
               // Add profile screen if needed
             } else if (screen === 'settings') {
@@ -407,6 +439,13 @@ function App() {
       {currentScreen === 'feedback' && (
         <FeedbackPage
           onBack={() => setCurrentScreen('interface-select')}
+        />
+      )}
+
+      {currentScreen === 'shop' && (
+        <ShopScreen
+          interfaceLanguage={interfaceLanguage}
+          onBack={() => setCurrentScreen('path')}
         />
       )}
     </>
