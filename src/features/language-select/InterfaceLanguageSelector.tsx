@@ -128,18 +128,18 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
           </div>
 
           {/* Right: Country Facts Oval Box */}
-          <div className={`flex-1 w-full lg:max-w-md ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-full px-8 py-6 sm:px-10 sm:py-8 shadow-lg border-2 ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-            <h2 className={`text-xl sm:text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <div className={`flex-1 w-full lg:max-w-md ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-full px-6 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-8 shadow-lg border-2 ${isDark ? 'border-gray-700' : 'border-gray-200'} flex flex-col`}>
+            <h2 className={`text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 ${isDark ? 'text-white' : 'text-gray-900'} text-center`}>
               Did You Know?
             </h2>
-            <div className="space-y-3">
-              <p className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+            <div className="space-y-2 sm:space-y-2.5 lg:space-y-3 flex-1 flex flex-col justify-center">
+              <p className={`text-xs sm:text-sm lg:text-base leading-tight ${isDark ? 'text-gray-300' : 'text-gray-700'} text-center`}>
                 <span className="font-semibold">🌍 Africa</span> is home to over <span className="font-bold">2,000 languages</span>, making it the most linguistically diverse continent on Earth.
               </p>
-              <p className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              <p className={`text-xs sm:text-sm lg:text-base leading-tight ${isDark ? 'text-gray-300' : 'text-gray-700'} text-center`}>
                 <span className="font-semibold">Nigeria</span> alone has over <span className="font-bold">500 languages</span>, with Hausa, Yoruba, and Igbo among the most widely spoken.
               </p>
-              <p className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              <p className={`text-xs sm:text-sm lg:text-base leading-tight ${isDark ? 'text-gray-300' : 'text-gray-700'} text-center`}>
                 <span className="font-semibold">Swahili</span> is spoken by over <span className="font-bold">200 million</span> people across East Africa and is one of the official languages of the African Union.
               </p>
             </div>
