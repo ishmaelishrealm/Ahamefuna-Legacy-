@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { InterfaceLanguage, Stage, Lesson, UserProgress } from '../../types';
-import { Lock, Star, CheckCircle2, Trophy, Sparkles, Flame, Zap, Heart, Clock, Home } from 'lucide-react';
+import { Lock, Star, CheckCircle2, Trophy, Sparkles, Flame, Zap, Heart, Clock, Home, Trophy as TrophyIcon, BookOpen, Store, User, Settings, Shield, Gem } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface LearningPathProps {
   interfaceLanguage: InterfaceLanguage;
@@ -8,11 +9,24 @@ interface LearningPathProps {
   progress: UserProgress;
   onStartLesson: (lesson: Lesson) => void;
   onBackToLanguageSelect: () => void;
+  onNavigate?: (screen: 'leaderboard' | 'shop' | 'profile' | 'settings' | 'quests') => void;
+  currentLanguageId?: string;
 }
 
-export function LearningPath({ interfaceLanguage, stages, progress, onStartLesson, onBackToLanguageSelect }: LearningPathProps) {
+export function LearningPath({ 
+  interfaceLanguage, 
+  stages, 
+  progress, 
+  onStartLesson, 
+  onBackToLanguageSelect,
+  onNavigate,
+  currentLanguageId
+}: LearningPathProps) {
   const isEnglish = interfaceLanguage === 'en';
   const [timeRemaining, setTimeRemaining] = useState('');
+  const [logoError, setLogoError] = useState(false);
+  const [activeSidebarItem, setActiveSidebarItem] = useState<'learn' | 'leaderboard' | 'quests' | 'shop' | 'profile' | 'settings'>('learn');
+  const { user, userData, isGuest } = useAuth();
 
   // Update countdown timer
   useEffect(() => {
@@ -41,10 +55,8 @@ export function LearningPath({ interfaceLanguage, stages, progress, onStartLesso
   }, [progress.heartsResetTime]);
 
   const isLessonUnlocked = (lesson: Lesson, lessonIndex: number): boolean => {
-    // First lesson is always unlocked
     if (lessonIndex === 0) return true;
     
-    // Check if all previous lessons in all stages are completed
     let totalPreviousLessons = 0;
     for (const stage of stages) {
       for (const l of stage.lessons) {
@@ -61,16 +73,6 @@ export function LearningPath({ interfaceLanguage, stages, progress, onStartLesso
     return (progress.completedLessons || []).includes(lessonId);
   };
 
-  const getLessonIcon = (type: Lesson['type']) => {
-    const icons = {
-      vocabulary: '📚',
-      grammar: '📝',
-      writing: '✍️',
-      culture: '🎭'
-    };
-    return icons[type];
-  };
-
   const calculateGlobalLessonIndex = (stageNumber: number, lessonNumber: number): number => {
     let index = 0;
     for (let i = 0; i < stageNumber - 1; i++) {
@@ -81,298 +83,381 @@ export function LearningPath({ interfaceLanguage, stages, progress, onStartLesso
     return index + lessonNumber - 1;
   };
 
+  const handleSidebarClick = (item: 'learn' | 'leaderboard' | 'quests' | 'shop' | 'profile' | 'settings') => {
+    setActiveSidebarItem(item);
+    if (item !== 'learn' && onNavigate) {
+      onNavigate(item);
+    }
+  };
+
+  // Get first lesson that's not completed or current lesson
+  const getCurrentLesson = () => {
+    for (const stage of stages) {
+      for (const lesson of stage.lessons) {
+        const globalIndex = calculateGlobalLessonIndex(stage.stageNumber, lesson.lessonNumber);
+        if (isLessonUnlocked(lesson, globalIndex) && !isLessonCompleted(lesson.id)) {
+          return { lesson, stage };
+        }
+      }
+    }
+    return null;
+  };
+
+  const currentLessonInfo = getCurrentLesson();
+  const firstStage = stages[0];
+  const firstLesson = firstStage?.lessons[0];
+
   // Safety check
   if (!stages || stages.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94] p-6">
-        <div className="text-center space-y-8 bg-white rounded-[3rem] p-16 retro-shadow-lg game-border max-w-2xl">
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center space-y-8">
           <div className="text-8xl animate-bounce">📚</div>
-          <div>
-            <h2 className="text-5xl text-[#1A1A1A] mb-4">
-              {isEnglish ? 'Lessons Coming Soon!' : 'Leçons à venir!'}
-            </h2>
-            <p className="text-2xl text-[#4A4A4A]">
-              {isEnglish 
-                ? 'We\'re cooking up something awesome!'
-                : 'Nous préparons quelque chose d\'extraordinaire!'}
-            </p>
-          </div>
+          <h2 className="text-5xl text-gray-900 mb-4">
+            {isEnglish ? 'Lessons Coming Soon!' : 'Leçons à venir!'}
+          </h2>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94] py-12 px-6">
-      {/* Floating game elements */}
-      <div className="absolute top-10 left-10 text-6xl animate-float">🌟</div>
-      <div className="absolute top-40 right-20 text-6xl animate-float" style={{ animationDelay: '1s' }}>⚡</div>
-      <div className="absolute bottom-20 left-1/4 text-6xl animate-float" style={{ animationDelay: '2s' }}>🎮</div>
-      <div className="absolute bottom-40 right-1/3 text-6xl animate-float" style={{ animationDelay: '1.5s' }}>🔥</div>
-      
-      <div className="max-w-4xl mx-auto relative z-10">
-        {/* Home Button - Top Right */}
-        <div className="flex justify-end mb-6 animate-fadeIn">
+    <div className="min-h-screen flex bg-white">
+      {/* Left Sidebar */}
+      <div className="w-20 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col items-center py-6">
+        {/* Logo/Mascot at top */}
+        <button
+          onClick={() => handleSidebarClick('learn')}
+          className="mb-6 w-14 h-14 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+        >
+          {logoError ? (
+            <div className="w-12 h-12 rounded-full bg-green-500" />
+          ) : (
+            <img
+              src="/afroslang-logo.png"
+              alt="Afroslang mascot"
+              className="w-12 h-12 rounded-full object-contain animate-bounce hover:scale-110 transition-transform"
+              onError={() => setLogoError(true)}
+            />
+          )}
+        </button>
+
+        {/* Navigation Icons */}
+        <div className="flex flex-col gap-4 flex-1">
+          {/* Learn (active when on this page) */}
           <button
-            onClick={onBackToLanguageSelect}
-            className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#9D4EDD] to-[#FFB6D9] game-border retro-shadow flex items-center justify-center hover:scale-110 hover:retro-shadow-lg transition-all group"
-            aria-label="Back to language selection"
+            onClick={() => handleSidebarClick('learn')}
+            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+              activeSidebarItem === 'learn'
+                ? 'bg-green-500 text-white shadow-lg'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            aria-label="Learn"
           >
-            <Home className="w-8 h-8 text-white" strokeWidth={3} />
+            <Home className="w-6 h-6" />
+          </button>
+
+          {/* Leaderboards */}
+          <button
+            onClick={() => handleSidebarClick('leaderboard')}
+            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+              activeSidebarItem === 'leaderboard'
+                ? 'bg-yellow-400 text-white shadow-lg'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            aria-label="Leaderboards"
+          >
+            <TrophyIcon className="w-6 h-6" />
+          </button>
+
+          {/* Quests */}
+          <button
+            onClick={() => handleSidebarClick('quests')}
+            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+              activeSidebarItem === 'quests'
+                ? 'bg-blue-500 text-white shadow-lg'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            aria-label="Quests"
+          >
+            <Shield className="w-6 h-6" />
+          </button>
+
+          {/* Shop */}
+          <button
+            onClick={() => handleSidebarClick('shop')}
+            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+              activeSidebarItem === 'shop'
+                ? 'bg-purple-500 text-white shadow-lg'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            aria-label="Shop"
+          >
+            <Store className="w-6 h-6" />
+          </button>
+
+          {/* Profile */}
+          <button
+            onClick={() => handleSidebarClick('profile')}
+            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+              activeSidebarItem === 'profile'
+                ? 'bg-red-500 text-white shadow-lg'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            aria-label="Profile"
+          >
+            <User className="w-6 h-6" />
+          </button>
+
+          {/* Settings */}
+          <button
+            onClick={() => handleSidebarClick('settings')}
+            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+              activeSidebarItem === 'settings'
+                ? 'bg-gray-700 text-white shadow-lg'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            aria-label="Settings"
+          >
+            <Settings className="w-6 h-6" />
           </button>
         </div>
+      </div>
 
-        {/* Header - Game Style */}
-        <div className="text-center mb-12 space-y-6 animate-fadeIn">
-          <div className="inline-block relative">
-            <div className="bg-white rounded-3xl p-8 game-border retro-shadow-lg">
-              <div className="flex items-center gap-6">
-                <div className="w-28 h-28 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-2xl flex items-center justify-center retro-shadow game-border animate-pulse">
-                  <Trophy className="w-16 h-16 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Zap className="w-8 h-8 text-[#FFD700]" />
-                    <span className="text-4xl text-[#1A1A1A]">{progress.xp} XP</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Flame className="w-6 h-6 text-[#FF1493]" />
-                    <span className="text-2xl text-[#4A4A4A]">Level {progress.level}</span>
-                  </div>
-                </div>
-              </div>
+      {/* Central Content Area */}
+      <div className="flex-1 flex flex-col overflow-y-auto">
+        {/* Top Banner */}
+        {firstStage && (
+          <div className="bg-green-500 text-white px-8 py-6 flex items-center justify-between">
+            <div>
+              <button className="flex items-center gap-2 text-white/90 hover:text-white mb-2">
+                <span className="text-sm font-semibold uppercase">SECTION 1, UNIT 1</span>
+              </button>
+              <h1 className="text-2xl font-bold">
+                {isEnglish ? firstStage.title : firstStage.titleFr}
+              </h1>
             </div>
-          </div>
-          
-          <div className="bg-white rounded-3xl p-8 game-border retro-shadow">
-            <h1 className="text-5xl text-transparent bg-gradient-to-r from-[#FF1493] via-[#9D4EDD] to-[#00FF94] bg-clip-text uppercase tracking-wide mb-3">
-              {isEnglish ? '🎮 Your Quest' : '🎮 Votre Quête'}
-            </h1>
-            <p className="text-2xl text-[#4A4A4A]">
-              {(progress.completedLessons || []).length} {isEnglish ? 'missions completed!' : 'missions terminées!'}
-            </p>
-          </div>
-        </div>
-
-        {/* No Hearts Warning */}
-        {progress.hearts === 0 && progress.heartsResetTime && (
-          <div className="mb-12 animate-fadeIn">
-            <div className="bg-white rounded-3xl p-10 game-border retro-shadow-lg">
-              <div className="flex items-center gap-6">
-                <div className="w-24 h-24 bg-gradient-to-br from-[#FF1493] to-[#FF69B4] rounded-2xl flex items-center justify-center game-border retro-shadow animate-pulse">
-                  <Heart className="w-14 h-14 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-4xl text-transparent bg-gradient-to-r from-[#FF1493] to-[#9D4EDD] bg-clip-text mb-3 uppercase tracking-wide">
-                    {isEnglish ? '💔 Out of Hearts!' : '💔 Plus de Cœurs!'}
-                  </h3>
-                  <div className="flex items-center gap-3 mb-3">
-                    <Clock className="w-7 h-7 text-[#FF1493]" />
-                    <p className="text-3xl text-[#1A1A1A]">
-                      {timeRemaining} {isEnglish ? 'till refill' : 'avant rechargement'}
-                    </p>
-                  </div>
-                  <p className="text-2xl text-[#4A4A4A]">
-                    {isEnglish 
-                      ? '🌍 Try other languages while you wait!'
-                      : '🌍 Essayez d\'autres langues en attendant!'}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <button className="text-white hover:bg-white/20 rounded-lg p-2">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         )}
 
-        {/* Stages - Game Levels */}
-        <div className="space-y-16">
-          {stages.map((stage, stageIndex) => {
-            const stageCompleted = stage.lessons.every(l => isLessonCompleted(l.id));
-            const stageStarted = stage.lessons.some(l => isLessonCompleted(l.id));
-            
-            return (
-              <div key={stage.id} className="space-y-8 animate-slideIn" style={{ animationDelay: `${stageIndex * 0.1}s` }}>
-                {/* Stage Header - Game Level Style */}
-                <div className="relative">
-                  <div className={`bg-white rounded-3xl p-10 game-border retro-shadow-lg ${stageCompleted ? 'animate-neonGlow' : ''}`}>
-                    <div className="flex items-center justify-between gap-6">
-                      <div className="flex items-center gap-6 flex-1">
-                        <div className={`w-24 h-24 rounded-2xl flex items-center justify-center text-5xl game-border retro-shadow ${
-                          stageCompleted 
-                            ? 'bg-gradient-to-br from-[#00FF94] to-[#7FFF00] animate-pulse' 
-                            : stageStarted
-                            ? 'bg-gradient-to-br from-[#FFD700] to-[#FF6B35]'
-                            : 'bg-gray-300'
-                        }`}>
-                          {stageCompleted ? '🏆' : stageStarted ? '⭐' : '🔒'}
-                        </div>
-                        
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <span className="bg-gradient-to-r from-[#FF1493] to-[#9D4EDD] text-white px-6 py-2 rounded-xl text-xl uppercase tracking-wider game-border retro-shadow-sm">
-                              {isEnglish ? 'LEVEL' : 'NIVEAU'} {stage.stageNumber}
-                            </span>
-                            {stageCompleted && (
-                              <div className="flex items-center gap-2 bg-gradient-to-r from-[#00FF94] to-[#7FFF00] text-white px-4 py-2 rounded-xl game-border retro-shadow-sm">
-                                <CheckCircle2 className="w-6 h-6" />
-                                <span className="uppercase tracking-wider">{isEnglish ? 'COMPLETE!' : 'TERMINÉ!'}</span>
-                              </div>
-                            )}
-                          </div>
-                          <h2 className="text-4xl text-[#1A1A1A]">
-                            {isEnglish ? stage.title : stage.titleFr}
-                          </h2>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Lessons - Mission Cards */}
-                <div className="grid grid-cols-1 gap-6 pl-0 md:pl-8">
-                  {stage.lessons.map((lesson, lessonIndex) => {
-                    const globalIndex = calculateGlobalLessonIndex(stage.stageNumber, lesson.lessonNumber);
-                    const isUnlocked = isLessonUnlocked(lesson, globalIndex);
-                    const isCompleted = isLessonCompleted(lesson.id);
-
-                    return (
-                      <div
-                        key={lesson.id}
-                        className="relative"
-                        style={{ animationDelay: `${(stageIndex * 5 + lessonIndex) * 0.05}s` }}
-                      >
-                        <button
-                          onClick={() => {
-                            if (isUnlocked && lesson.exercises.length > 0 && !isCompleted && progress.hearts > 0) {
-                              onStartLesson(lesson);
-                            } else if (isCompleted) {
-                              onStartLesson(lesson); // Allow replaying completed lessons
-                            }
-                          }}
-                          disabled={!isUnlocked || lesson.exercises.length === 0 || (!isCompleted && progress.hearts === 0)}
-                          className={`
-                            relative w-full group
-                            ${isUnlocked && lesson.exercises.length > 0 && (isCompleted || progress.hearts > 0) ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}
-                          `}
-                        >
-                          <div
-                            className={`
-                              bg-white rounded-2xl p-8 game-border transition-all duration-300
-                              ${isCompleted
-                                ? 'retro-shadow-lg bg-gradient-to-r from-[#00FF94]/20 to-[#7FFF00]/20'
-                                : isUnlocked
-                                ? 'retro-shadow hover:retro-shadow-lg hover:scale-105 hover:-translate-y-2'
-                                : 'retro-shadow-sm'
-                              }
-                            `}
-                          >
-                            <div className="flex items-center gap-6">
-                              {/* Icon */}
-                              <div
-                                className={`
-                                  w-20 h-20 rounded-xl flex items-center justify-center text-4xl game-border retro-shadow-sm transition-transform duration-300
-                                  ${isCompleted
-                                    ? 'bg-gradient-to-br from-[#00FF94] to-[#7FFF00] group-hover:scale-110 group-hover:rotate-12'
-                                    : isUnlocked
-                                    ? 'bg-gradient-to-br from-[#FF1493] to-[#FF69B4] group-hover:scale-110 group-hover:-rotate-6'
-                                    : 'bg-gray-300'
-                                  }
-                                `}
-                              >
-                                {isCompleted ? (
-                                  <CheckCircle2 className="w-12 h-12 text-white" />
-                                ) : isUnlocked ? (
-                                  <span>{getLessonIcon(lesson.type)}</span>
-                                ) : (
-                                  <Lock className="w-10 h-10 text-gray-500" />
-                                )}
-                              </div>
-
-                              {/* Content */}
-                              <div className="flex-1 text-left">
-                                <div className="flex items-center gap-3 mb-2">
-                                  <span className="bg-[#1A1A1A] text-white px-4 py-1 rounded-lg text-sm uppercase tracking-wider">
-                                    {isEnglish ? 'MISSION' : 'MISSION'} {lesson.lessonNumber}
-                                  </span>
-                                  {isCompleted && (
-                                    <div className="flex items-center gap-2 text-[#00FF94]">
-                                      <Star className="w-5 h-5 fill-current" />
-                                      <span className="text-lg">+{lesson.xpReward} XP</span>
-                                    </div>
-                                  )}
-                                </div>
-                                <h3 className="text-2xl text-[#1A1A1A] mb-2">
-                                  {isEnglish ? lesson.title : lesson.titleFr}
-                                </h3>
-                                <div className="flex items-center gap-3">
-                                  <span className="bg-gray-100 px-4 py-2 rounded-lg text-[#4A4A4A] game-border">
-                                    {lesson.exercises.length} {isEnglish ? 'questions' : 'questions'}
-                                  </span>
-                                  {isUnlocked && !isCompleted && progress.hearts > 0 && (
-                                    <span className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] text-white px-6 py-2 rounded-lg flex items-center gap-2 game-border retro-shadow-sm animate-pulse">
-                                      <Sparkles className="w-4 h-4" />
-                                      {isEnglish ? 'START!' : 'COMMENCER!'}
-                                    </span>
-                                  )}
-                                  {isUnlocked && !isCompleted && progress.hearts === 0 && (
-                                    <span className="bg-gradient-to-r from-[#FF1493] to-[#FF69B4] text-white px-6 py-2 rounded-lg flex items-center gap-2 game-border retro-shadow-sm">
-                                      <Heart className="w-4 h-4" />
-                                      {isEnglish ? 'NO HEARTS' : 'PLUS DE CŒURS'}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Play Arrow */}
-                              {isUnlocked && !isCompleted && progress.hearts > 0 && (
-                                <div className="text-6xl text-[#FF1493] opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-4 transition-all duration-300 animate-pulse">
-                                  ▶
-                                </div>
-                              )}
-                              {isUnlocked && !isCompleted && progress.hearts === 0 && (
-                                <div className="text-6xl text-gray-400">
-                                  🔒
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Stage Completion Badge */}
-                {stageCompleted && (
-                  <div className="bg-white rounded-3xl p-8 game-border retro-shadow-lg animate-fadeIn">
-                    <div className="flex items-center justify-center gap-6">
-                      <Trophy className="w-16 h-16 text-[#FFD700] animate-bounce" />
-                      <div className="text-center">
-                        <p className="text-4xl text-transparent bg-gradient-to-r from-[#00FF94] to-[#7FFF00] bg-clip-text uppercase tracking-wide">
-                          🎊 {isEnglish ? 'LEVEL COMPLETE!' : 'NIVEAU TERMINÉ!'} 🎊
-                        </p>
-                        <p className="text-xl text-[#4A4A4A] mt-2">
-                          {isEnglish ? 'You\'re on FIRE!' : 'Vous êtes EN FEU!'}
-                        </p>
-                      </div>
-                      <Trophy className="w-16 h-16 text-[#FFD700] animate-bounce" style={{ animationDelay: '0.5s' }} />
-                    </div>
-                  </div>
-                )}
+        {/* Lesson Path */}
+        <div className="flex-1 px-8 py-8 relative">
+          <div className="max-w-3xl mx-auto relative">
+            {/* START Button */}
+            {firstLesson && !isLessonCompleted(firstLesson.id) && (
+              <div className="mb-8 flex justify-center">
+                <button
+                  onClick={() => {
+                    if (progress.hearts > 0 || isGuest || userData?.subscription?.active) {
+                      onStartLesson(firstLesson);
+                    }
+                  }}
+                  disabled={progress.hearts === 0 && !isGuest && !userData?.subscription?.active}
+                  className="bg-gray-500 hover:bg-gray-600 text-white font-bold px-8 py-3 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {isEnglish ? 'START' : 'COMMENCER'}
+                </button>
               </div>
-            );
-          })}
+            )}
+
+            {/* Lesson Nodes - Vertical Path */}
+            <div className="relative flex flex-col items-center gap-6 py-8">
+              {stages.flatMap((stage, stageIndex) =>
+                stage.lessons.map((lesson, lessonIndex) => {
+                  const globalIndex = calculateGlobalLessonIndex(stage.stageNumber, lesson.lessonNumber);
+                  const isUnlocked = isLessonUnlocked(lesson, globalIndex);
+                  const isCompleted = isLessonCompleted(lesson.id);
+                  const isCurrent = !isCompleted && isUnlocked && lesson === currentLessonInfo?.lesson;
+                  const isLast = stageIndex === stages.length - 1 && lessonIndex === stage.lessons.length - 1;
+
+                  return (
+                    <div key={lesson.id} className="relative flex flex-col items-center">
+                      {/* Connecting line above (except first lesson) */}
+                      {!(stageIndex === 0 && lessonIndex === 0) && (
+                        <div className="w-1 h-12 bg-gray-300 mb-0" />
+                      )}
+
+                      {/* Lesson Node */}
+                      <button
+                        onClick={() => {
+                          if (isUnlocked && (progress.hearts > 0 || isGuest || userData?.subscription?.active || isCompleted)) {
+                            onStartLesson(lesson);
+                          }
+                        }}
+                        disabled={!isUnlocked || (progress.hearts === 0 && !isGuest && !userData?.subscription?.active && !isCompleted)}
+                        className={`
+                          relative w-16 h-16 rounded-full flex items-center justify-center transition-all
+                          ${isCurrent
+                            ? 'bg-green-500 ring-4 ring-green-300 scale-110 shadow-lg z-10'
+                            : isCompleted
+                            ? 'bg-green-400 ring-2 ring-green-300 z-10'
+                            : isUnlocked
+                            ? 'bg-gray-400 hover:bg-gray-500 z-10'
+                            : 'bg-gray-300 opacity-50 z-10'
+                          }
+                        `}
+                      >
+                        {isCompleted ? (
+                          <Star className="w-8 h-8 text-white fill-white" />
+                        ) : isCurrent ? (
+                          <Star className="w-8 h-8 text-white fill-white" />
+                        ) : isUnlocked ? (
+                          <Star className="w-8 h-8 text-white" />
+                        ) : (
+                          <Lock className="w-8 h-8 text-gray-500" />
+                        )}
+                      </button>
+
+                      {/* Connecting line below (except last lesson) */}
+                      {!isLast && (
+                        <div className="w-1 h-12 bg-gray-300 mt-0" />
+                      )}
+
+                      {/* Treasure Chest or Trophy between some lessons */}
+                      {lessonIndex < stage.lessons.length - 1 && (
+                        <div className="absolute top-full mt-8 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center shadow-sm">
+                          <Trophy className="w-6 h-6 text-yellow-500" />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Mascot - Positioned to right of path */}
+            <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
+              {logoError ? (
+                <div className="w-32 h-32 rounded-full bg-green-500 flex items-center justify-center text-6xl animate-bounce cursor-pointer hover:scale-110 transition-transform">
+                  🌍
+                </div>
+              ) : (
+                <img
+                  src="/afroslang-logo.png"
+                  alt="Afroslang mascot"
+                  className="w-32 h-32 rounded-full object-contain animate-bounce hover:scale-110 transition-transform cursor-pointer"
+                  onError={() => setLogoError(true)}
+                  onClick={() => {
+                    // Could add mascot interaction - animate, speak, etc.
+                  }}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Bottom Section - Next Unit Preview */}
+          {stages.length > 1 && (
+            <div className="mt-16 pt-8 border-t border-gray-200 text-center">
+              <p className="text-gray-600 mb-4">
+                {isEnglish ? 'Ask how someone is' : 'Demander comment quelqu\'un va'}
+              </p>
+              <div className="flex gap-4 justify-center">
+                <button className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-6 py-2 rounded-lg">
+                  {isEnglish ? 'JUMP HERE?' : 'SAUTER ICI?'}
+                </button>
+                <button className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-6 py-2 rounded-full w-12 h-12 flex items-center justify-center">
+                  →
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right Sidebar */}
+      <div className="w-80 flex-shrink-0 bg-white border-l border-gray-200 overflow-y-auto relative">
+        {/* Top Stats Bar */}
+        <div className="border-b border-gray-200 px-4 py-4 flex items-center justify-between">
+          {currentLanguageId && (
+            <span className="text-2xl">🇹🇿</span>
+          )}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <Flame className="w-5 h-5 text-orange-500" />
+              <span className="text-sm font-semibold">{progress.streak || 0}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Gem className="w-5 h-5 text-blue-500" />
+              <span className="text-sm font-semibold">{userData?.gems || 500}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Heart className="w-5 h-5 text-red-500 fill-red-500" />
+              <span className="text-sm font-semibold">{progress.hearts}</span>
+            </div>
+          </div>
         </div>
 
-        {/* Bottom Motivation */}
-        <div className="mt-16 text-center animate-fadeIn">
-          <div className="bg-white rounded-3xl p-10 game-border retro-shadow-lg inline-block">
-            <div className="flex items-center gap-4">
-              <Flame className="w-12 h-12 text-[#FF1493] animate-pulse" />
-              <span className="text-3xl text-[#1A1A1A]">
-                {isEnglish ? '⚡ Keep crushing it! ⚡' : '⚡ Continuez comme ça! ⚡'}
-              </span>
-              <Flame className="w-12 h-12 text-[#FF1493] animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="p-4 space-y-4">
+          {/* Unlock Leaderboards Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="flex items-start justify-between mb-2">
+              <h3 className="font-bold text-gray-900">Unlock Leaderboards!</h3>
+              <Shield className="w-6 h-6 text-gray-400" />
             </div>
+            <p className="text-sm text-gray-600">
+              {isEnglish 
+                ? 'Complete 10 more lessons to start competing'
+                : 'Terminez 10 leçons de plus pour commencer à rivaliser'}
+            </p>
+          </div>
+
+          {/* Daily Quests Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="flex items-start justify-between mb-2">
+              <h3 className="font-bold text-gray-900">Daily Quests</h3>
+              <a href="#" className="text-sm text-blue-600 font-semibold">VIEW ALL</a>
+            </div>
+            <div className="flex items-center gap-2 mb-2">
+              <Zap className="w-5 h-5 text-yellow-500" />
+              <span className="text-sm text-gray-600">
+                {isEnglish ? 'Earn 10 XP' : 'Gagnez 10 XP'}
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+              <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '0%' }} />
+            </div>
+            <div className="flex items-center justify-between text-xs text-gray-500">
+              <span>0 / 10</span>
+              <Trophy className="w-4 h-4" />
+            </div>
+          </div>
+
+          {/* Create Profile Card */}
+          {!user && !isGuest && (
+            <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <h3 className="font-bold text-gray-900 mb-3">
+                {isEnglish 
+                  ? 'Create a profile to save your progress!'
+                  : 'Créez un profil pour sauvegarder votre progression!'}
+              </h3>
+              <div className="space-y-2">
+                <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors uppercase">
+                  {isEnglish ? 'CREATE A PROFILE' : 'CRÉER UN PROFIL'}
+                </button>
+                <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors uppercase">
+                  {isEnglish ? 'SIGN IN' : 'SE CONNECTER'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer Links */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-4 py-4 mt-auto">
+          <div className="flex flex-wrap gap-3 text-xs text-gray-500">
+            <a href="#" className="hover:text-gray-700">ABOUT</a>
+            <a href="#" className="hover:text-gray-700">BLOG</a>
+            <a href="#" className="hover:text-gray-700">STORE</a>
+            <a href="#" className="hover:text-gray-700">EFFICACY</a>
+            <a href="#" className="hover:text-gray-700">CAREERS</a>
+            <a href="#" className="hover:text-gray-700">INVESTORS</a>
+            <a href="#" className="hover:text-gray-700">TERMS</a>
+            <a href="#" className="hover:text-gray-700">PRIVACY</a>
           </div>
         </div>
       </div>

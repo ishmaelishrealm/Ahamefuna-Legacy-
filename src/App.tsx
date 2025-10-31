@@ -349,6 +349,20 @@ function App() {
           progress={getCurrentProgress()}
           onStartLesson={handleStartLesson}
           onBackToLanguageSelect={() => setCurrentScreen('language-select')}
+          onNavigate={(screen) => {
+            if (screen === 'leaderboard') {
+              setCurrentScreen('leaderboard');
+            } else if (screen === 'shop') {
+              // Add shop screen if needed
+            } else if (screen === 'profile') {
+              // Add profile screen if needed
+            } else if (screen === 'settings') {
+              // Add settings screen if needed
+            } else if (screen === 'quests') {
+              // Add quests screen if needed
+            }
+          }}
+          currentLanguageId={currentLanguage}
         />
       )}
 
