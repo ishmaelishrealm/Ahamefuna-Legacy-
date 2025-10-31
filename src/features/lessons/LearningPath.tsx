@@ -150,82 +150,112 @@ export function LearningPath({
         {/* Navigation Icons */}
         <div className="flex flex-col gap-4 flex-1">
           {/* Learn (active when on this page) */}
-          <button
-            onClick={() => handleSidebarClick('learn')}
-            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
-              activeSidebarItem === 'learn'
-                ? 'bg-green-500 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-            aria-label="Learn"
-          >
-            <Home className="w-6 h-6" />
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => handleSidebarClick('learn')}
+              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+                activeSidebarItem === 'learn'
+                  ? 'bg-green-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              aria-label="Learn"
+            >
+              <Home className="w-6 h-6" />
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+              {isEnglish ? 'Learn' : 'Apprendre'}
+            </div>
+          </div>
 
           {/* Leaderboards */}
-          <button
-            onClick={() => handleSidebarClick('leaderboard')}
-            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
-              activeSidebarItem === 'leaderboard'
-                ? 'bg-yellow-400 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-            aria-label="Leaderboards"
-          >
-            <TrophyIcon className="w-6 h-6" />
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => handleSidebarClick('leaderboard')}
+              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+                activeSidebarItem === 'leaderboard'
+                  ? 'bg-yellow-400 text-white shadow-lg'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              aria-label="Leaderboards"
+            >
+              <TrophyIcon className="w-6 h-6" />
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+              {isEnglish ? 'Leaderboards' : 'Classements'}
+            </div>
+          </div>
 
           {/* Quests */}
-          <button
-            onClick={() => handleSidebarClick('quests')}
-            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
-              activeSidebarItem === 'quests'
-                ? 'bg-blue-500 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-            aria-label="Quests"
-          >
-            <Shield className="w-6 h-6" />
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => handleSidebarClick('quests')}
+              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+                activeSidebarItem === 'quests'
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              aria-label="Quests"
+            >
+              <Shield className="w-6 h-6" />
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+              {isEnglish ? 'Quests' : 'Quêtes'}
+            </div>
+          </div>
 
           {/* Shop */}
-          <button
-            onClick={() => handleSidebarClick('shop')}
-            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
-              activeSidebarItem === 'shop'
-                ? 'bg-purple-500 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-            aria-label="Shop"
-          >
-            <Store className="w-6 h-6" />
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => handleSidebarClick('shop')}
+              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+                activeSidebarItem === 'shop'
+                  ? 'bg-purple-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              aria-label="Shop"
+            >
+              <Store className="w-6 h-6" />
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+              {isEnglish ? 'Shop' : 'Boutique'}
+            </div>
+          </div>
 
           {/* Profile */}
-          <button
-            onClick={() => handleSidebarClick('profile')}
-            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
-              activeSidebarItem === 'profile'
-                ? 'bg-red-500 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-            aria-label="Profile"
-          >
-            <User className="w-6 h-6" />
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => handleSidebarClick('profile')}
+              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+                activeSidebarItem === 'profile'
+                  ? 'bg-red-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              aria-label="Profile"
+            >
+              <User className="w-6 h-6" />
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+              {isEnglish ? 'Profile' : 'Profil'}
+            </div>
+          </div>
 
           {/* Settings */}
-          <button
-            onClick={() => handleSidebarClick('settings')}
-            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
-              activeSidebarItem === 'settings'
-                ? 'bg-gray-700 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-            aria-label="Settings"
-          >
-            <Settings className="w-6 h-6" />
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => handleSidebarClick('settings')}
+              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
+                activeSidebarItem === 'settings'
+                  ? 'bg-gray-700 text-white shadow-lg'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              aria-label="Settings"
+            >
+              <Settings className="w-6 h-6" />
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+              {isEnglish ? 'Settings' : 'Paramètres'}
+            </div>
+          </div>
         </div>
       </div>
 

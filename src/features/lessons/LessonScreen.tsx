@@ -58,6 +58,17 @@ export function LessonScreen({
   const [currentHearts, setCurrentHearts] = useState(hearts);
   const [showHeartsOutModal, setShowHeartsOutModal] = useState(false);
   const [showGuestLimitModal, setShowGuestLimitModal] = useState(false);
+  const [showLessonIntro, setShowLessonIntro] = useState(true);
+
+  // Extract stage number from stageId (e.g., "swahili-stage-1" -> 1)
+  const getStageNumber = () => {
+    const match = lesson.stageId.match(/stage-(\d+)/);
+    return match ? parseInt(match[1], 10) : 1;
+  };
+
+  const stageNumber = getStageNumber();
+  const currentStep = 1; // Intro is step 1
+  const totalSteps = 3; // Intro, questions, completion
 
   const totalQuestions = lesson.exercises.length;
   const progress = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
@@ -283,6 +294,116 @@ export function LessonScreen({
   };
 
   const isRedemption = currentExercise.wasWrong && !currentExercise.hasRetried;
+
+  const brown = '#6B4F3A'; // dark brown
+  const lightBrown = '#A67B5B';
+  const green = '#10B981';
+
+  // Lesson Intro Modal
+  if (showLessonIntro) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div 
+          className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden"
+          style={{
+            background: `linear-gradient(135deg, ${brown} 0%, ${lightBrown} 100%)`,
+          }}
+        >
+          {/* Pattern overlay */}
+          <div 
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z'/%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          />
+
+          <div className="relative z-10 p-8 sm:p-12">
+            {/* Top: Unit and Lesson */}
+            <div className="text-white/90 text-sm sm:text-base mb-4">
+              {isEnglish 
+                ? `Unit ${stageNumber} • Lesson ${lesson.lessonNumber}`
+                : `Unité ${stageNumber} • Leçon ${lesson.lessonNumber}`}
+            </div>
+
+            {/* Title */}
+            <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6 sm:mb-8 uppercase tracking-wide">
+              {isEnglish ? lesson.title : lesson.titleFr}
+            </h1>
+
+            {/* Progress Indicator */}
+            <div className="flex items-center gap-2 mb-8 sm:mb-12">
+              {[...Array(totalSteps)].map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`h-2 flex-1 rounded-full transition-all ${
+                    idx < currentStep 
+                      ? 'bg-white' 
+                      : 'bg-white/30'
+                  }`}
+                />
+              ))}
+            </div>
+            <div className="text-white/80 text-xs sm:text-sm mb-6 sm:mb-8">
+              {currentStep} / {totalSteps}
+            </div>
+
+            {/* Main Content - Illustration/Text */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 sm:p-10 mb-8 sm:mb-12 border border-white/20">
+              <div className="text-center space-y-4 sm:space-y-6">
+                {/* Illustration */}
+                <div className="text-6xl sm:text-8xl mb-4">
+                  {lesson.type === 'vocabulary' ? '📚' : 
+                   lesson.type === 'grammar' ? '📝' : 
+                   lesson.type === 'writing' ? '✍️' : '🎭'}
+                </div>
+                
+                {/* Lesson description */}
+                <p className="text-white text-lg sm:text-2xl font-medium">
+                  {isEnglish 
+                    ? `Learn essential ${lesson.type === 'vocabulary' ? 'vocabulary' : lesson.type === 'grammar' ? 'grammar' : lesson.type === 'writing' ? 'writing' : 'culture'} in ${languageName}`
+                    : `Apprenez ${lesson.type === 'vocabulary' ? 'le vocabulaire essentiel' : lesson.type === 'grammar' ? 'la grammaire' : lesson.type === 'writing' ? 'l\'écriture' : 'la culture'} en ${languageName}`}
+                </p>
+                
+                {/* Exercise count */}
+                <p className="text-white/80 text-sm sm:text-lg">
+                  {lesson.exercises.length} {isEnglish ? 'exercises' : 'exercices'}
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setShowLessonIntro(false)}
+                className="px-6 sm:px-10 py-3 sm:py-4 bg-white text-gray-900 font-bold rounded-lg sm:rounded-xl hover:bg-gray-100 transition-all text-sm sm:text-lg uppercase shadow-lg"
+                style={{
+                  backgroundColor: green,
+                  color: 'white'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#059669';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = green;
+                }}
+              >
+                {isEnglish ? 'Continue' : 'Continuer'}
+              </button>
+              <button
+                onClick={() => {
+                  setShowLessonIntro(false);
+                  // Could add skip functionality
+                }}
+                className="text-white/80 hover:text-white text-sm sm:text-base underline transition-colors"
+              >
+                {isEnglish ? 'Skip' : 'Passer'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94]">

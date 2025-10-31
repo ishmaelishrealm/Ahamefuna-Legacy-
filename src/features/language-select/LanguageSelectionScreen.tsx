@@ -21,7 +21,7 @@ export function LanguageSelectionScreen({
   const [logoError, setLogoError] = useState(false);
   const [showSiteLanguageDropdown, setShowSiteLanguageDropdown] = useState(false);
 
-  const brown = '#6B4F3A';
+  const brown = '#6B4F3A'; // dark brown
   const lightBrown = '#A67B5B';
   const green = '#10B981';
   const white = '#FFFFFF';
@@ -36,20 +36,26 @@ export function LanguageSelectionScreen({
   return (
     <div className="min-h-screen bg-white">
       {/* Top Header Bar */}
-      <div className="w-full px-6 py-4 flex items-center justify-between border-b border-gray-200">
+      <div 
+        className="w-full px-6 py-4 flex items-center justify-between"
+        style={{ 
+          background: `linear-gradient(135deg, ${brown} 0%, ${lightBrown} 100%)`,
+          borderBottom: '2px solid ' + brown
+        }}
+      >
         {/* Left: Logo */}
         <button onClick={onBack} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           {logoError ? (
-            <div className="w-10 h-10 rounded-full" style={{ backgroundColor: brown }} />
+            <div className="w-10 h-10 rounded-full" style={{ backgroundColor: white }} />
           ) : (
             <img
               src="/afroslang-logo.png"
               alt="Afroslang logo"
-              className="w-10 h-10 rounded-full object-contain"
+              className="w-10 h-10 rounded-full object-contain bg-white p-1"
               onError={() => setLogoError(true)}
             />
           )}
-          <span className="text-2xl font-bold" style={{ color: green }}>
+          <span className="text-2xl font-bold text-white">
             afroslang
           </span>
         </button>
@@ -58,7 +64,7 @@ export function LanguageSelectionScreen({
         <div className="relative">
           <button
             onClick={() => setShowSiteLanguageDropdown(!showSiteLanguageDropdown)}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-2 text-white hover:text-gray-100 transition-colors"
           >
             <span className="text-sm font-medium">
               {isEnglish ? 'SITE LANGUAGE: ENGLISH' : 'LANGUE DU SITE: FRANÇAIS'}
