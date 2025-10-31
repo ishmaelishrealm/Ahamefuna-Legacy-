@@ -339,6 +339,7 @@ function App() {
           interfaceLanguage={interfaceLanguage}
           onSelectLanguage={handleLanguageToLearnSelect}
           onBack={() => setCurrentScreen('interface-select')}
+          onInterfaceLanguageChange={(lang) => setInterfaceLanguage(lang)}
         />
       )}
 

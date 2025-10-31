@@ -1,123 +1,157 @@
 import { Language, InterfaceLanguage } from '../../types';
 import { languages } from '../../data/languages';
 import { FlagIcon } from './FlagIcon';
-import { ChevronLeft, Globe, Sparkles, Star, Home } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 interface LanguageSelectionScreenProps {
   interfaceLanguage: InterfaceLanguage;
   onSelectLanguage: (languageId: string) => void;
   onBack: () => void;
+  onInterfaceLanguageChange?: (lang: InterfaceLanguage) => void;
 }
 
 export function LanguageSelectionScreen({ 
   interfaceLanguage, 
   onSelectLanguage,
-  onBack 
+  onBack,
+  onInterfaceLanguageChange
 }: LanguageSelectionScreenProps) {
   const isEnglish = interfaceLanguage === 'en';
-  
-  const regionNames = {
-    west: isEnglish ? 'West Africa' : 'Afrique de l\'Ouest',
-    east: isEnglish ? 'East Africa' : 'Afrique de l\'Est',
-    central: isEnglish ? 'Central Africa' : 'Afrique Centrale',
-    north: isEnglish ? 'North Africa' : 'Afrique du Nord',
-    southern: isEnglish ? 'Southern Africa' : 'Afrique Australe'
-  };
+  const [logoError, setLogoError] = useState(false);
+  const [showSiteLanguageDropdown, setShowSiteLanguageDropdown] = useState(false);
 
-  const regionEmojis = {
-    west: '🌴',
-    east: '🗻',
-    central: '🌿',
-    north: '🏜️',
-    southern: '🦁'
-  };
+  const brown = '#6B4F3A';
+  const lightBrown = '#A67B5B';
+  const green = '#10B981';
+  const white = '#FFFFFF';
 
-  const regionColors = {
-    west: 'from-[#FF1493] to-[#FF69B4]',
-    east: 'from-[#00FF94] to-[#7FFF00]',
-    central: 'from-[#9D4EDD] to-[#FFB6D9]',
-    north: 'from-[#FFD700] to-[#FF6B35]',
-    southern: 'from-[#FF6B35] to-[#FFD700]'
-  };
-
-  const groupedLanguages = {
-    west: languages.filter(l => l.region === 'west'),
-    east: languages.filter(l => l.region === 'east'),
-    central: languages.filter(l => l.region === 'central'),
-    north: languages.filter(l => l.region === 'north'),
-    southern: languages.filter(l => l.region === 'southern')
+  const handleSiteLanguageChange = (lang: InterfaceLanguage) => {
+    if (onInterfaceLanguageChange) {
+      onInterfaceLanguageChange(lang);
+    }
+    setShowSiteLanguageDropdown(false);
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94]">
-      {/* Floating Elements */}
-      <div className="absolute bottom-5 sm:bottom-20 left-5 sm:left-20 text-2xl sm:text-6xl animate-float" style={{ animationDelay: '1s' }}>⭐</div>
-      
-      <div className="relative z-10 p-2 sm:p-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-4 sm:mb-12 flex items-center gap-2 sm:gap-6">
-            <button
-              onClick={onBack}
-              className="w-8 h-8 sm:w-16 sm:h-16 rounded-lg sm:rounded-2xl bg-gradient-to-r from-[#9D4EDD] to-[#FFB6D9] game-border retro-shadow flex items-center justify-center hover:scale-110 hover:retro-shadow-lg transition-all group"
-              aria-label="Back to interface select"
-            >
-              <Home className="w-4 h-4 sm:w-8 sm:h-8 text-white" strokeWidth={3} />
-            </button>
-            <div className="flex-1 bg-white rounded-xl sm:rounded-3xl p-3 sm:p-8 game-border retro-shadow">
-              <div className="flex items-center gap-2 sm:gap-4">
-                <Globe className="w-6 h-6 sm:w-12 sm:h-12 text-[#FF1493]" />
-                <div>
-                  <h1 className="text-lg sm:text-5xl text-transparent bg-gradient-to-r from-[#FF1493] to-[#00FF94] bg-clip-text uppercase tracking-wide">
-                    {isEnglish ? 'Pick Your Quest!' : 'Choisissez Votre Quête!'}
-                  </h1>
-                  <p className="text-xs sm:text-2xl text-[#4A4A4A] mt-1 sm:mt-2">
-                    {isEnglish ? 'Choose an African language to begin' : 'Choisissez une langue africaine'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen bg-white">
+      {/* Top Header Bar */}
+      <div className="w-full px-6 py-4 flex items-center justify-between border-b border-gray-200">
+        {/* Left: Logo */}
+        <button onClick={onBack} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          {logoError ? (
+            <div className="w-10 h-10 rounded-full" style={{ backgroundColor: brown }} />
+          ) : (
+            <img
+              src="/afroslang-logo.png"
+              alt="Afroslang logo"
+              className="w-10 h-10 rounded-full object-contain"
+              onError={() => setLogoError(true)}
+            />
+          )}
+          <span className="text-2xl font-bold" style={{ color: green }}>
+            afroslang
+          </span>
+        </button>
 
-          {/* Language Grid by Region */}
-          <div className="space-y-4 sm:space-y-12">
-            {Object.entries(groupedLanguages).map(([region, langs]) => (
-              <div key={region} className="animate-[fadeIn_0.6s_ease-in]">
-                <div className="mb-2 sm:mb-8">
-                  <div className={`inline-flex items-center gap-2 sm:gap-4 px-3 sm:px-8 py-2 sm:py-5 bg-gradient-to-r ${regionColors[region as keyof typeof regionColors]} rounded-xl sm:rounded-3xl game-border retro-shadow-lg`}>
-                    <span className="text-lg sm:text-5xl">{regionEmojis[region as keyof typeof regionEmojis]}</span>
-                    <h2 className="text-white text-sm sm:text-4xl uppercase tracking-wider">
+        {/* Right: Site Language Selector */}
+        <div className="relative">
+          <button
+            onClick={() => setShowSiteLanguageDropdown(!showSiteLanguageDropdown)}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <span className="text-sm font-medium">
+              {isEnglish ? 'SITE LANGUAGE: ENGLISH' : 'LANGUE DU SITE: FRANÇAIS'}
+            </span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+
+          {/* Dropdown Menu */}
+          {showSiteLanguageDropdown && (
+            <>
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setShowSiteLanguageDropdown(false)}
+              />
+              <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20 min-w-[200px]">
+                <button
+                  onClick={() => handleSiteLanguageChange('en')}
+                  className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
+                    isEnglish ? 'bg-gray-50 font-semibold' : ''
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => handleSiteLanguageChange('fr')}
+                  className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
+                    !isEnglish ? 'bg-gray-50 font-semibold' : ''
+                  }`}
+                >
+                  Français
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        {/* Heading */}
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-8 text-center">
+          {isEnglish ? 'Choose an African language to begin' : 'Choisissez une langue africaine pour commencer'}
+        </h1>
+
+        {/* Language Grid by Region */}
+        <div className="space-y-12">
+          {(() => {
+            const groupedLanguages = {
+              west: languages.filter(l => l.region === 'west'),
+              east: languages.filter(l => l.region === 'east'),
+              central: languages.filter(l => l.region === 'central'),
+              north: languages.filter(l => l.region === 'north'),
+              southern: languages.filter(l => l.region === 'southern')
+            };
+
+            const regionNames = {
+              west: isEnglish ? 'West Africa' : 'Afrique de l\'Ouest',
+              east: isEnglish ? 'East Africa' : 'Afrique de l\'Est',
+              central: isEnglish ? 'Central Africa' : 'Afrique Centrale',
+              north: isEnglish ? 'North Africa' : 'Afrique du Nord',
+              southern: isEnglish ? 'Southern Africa' : 'Afrique Australe'
+            };
+
+            return Object.entries(groupedLanguages).map(([region, langs]) => {
+              if (langs.length === 0) return null;
+              
+              return (
+                <div key={region} className="space-y-4">
+                  {/* Region Header */}
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold text-gray-900">
                       {regionNames[region as keyof typeof regionNames]}
                     </h2>
-                    <span className="bg-white text-[#1A1A1A] px-2 sm:px-5 py-1 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-xl game-border retro-shadow-sm">
+                    <span className="text-sm text-gray-600">
                       {langs.length} {isEnglish ? 'languages' : 'langues'}
                     </span>
                   </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-6">
-                  {langs.map((language) => (
-                    <LanguageCard
-                      key={language.id}
-                      language={language}
-                      onClick={() => onSelectLanguage(language.id)}
-                      interfaceLanguage={interfaceLanguage}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
 
-          {/* Footer */}
-          <div className="mt-4 sm:mt-16 text-center">
-            <div className="bg-white rounded-xl sm:rounded-3xl p-3 sm:p-8 game-border retro-shadow inline-block">
-              <p className="text-sm sm:text-3xl text-[#1A1A1A] flex items-center gap-2 sm:gap-4">
-                <Sparkles className="w-4 h-4 sm:w-8 sm:h-8 text-[#FFD700]" />
-                {isEnglish ? 'More epic languages coming soon!' : 'Plus de langues épiques bientôt!'}
-                <Sparkles className="w-4 h-4 sm:w-8 sm:h-8 text-[#FFD700]" />
-              </p>
-            </div>
-          </div>
+                  {/* Language Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                    {langs.map((language) => (
+                      <LanguageCard
+                        key={language.id}
+                        language={language}
+                        onClick={() => onSelectLanguage(language.id)}
+                        interfaceLanguage={interfaceLanguage}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            });
+          })()}
         </div>
       </div>
     </div>
@@ -136,40 +170,26 @@ function LanguageCard({ language, onClick, interfaceLanguage }: LanguageCardProp
   return (
     <button
       onClick={onClick}
-      className="group bg-white rounded-xl sm:rounded-3xl p-3 sm:p-8 game-border retro-shadow hover:retro-shadow-lg hover:scale-105 transition-all duration-300 text-left transform"
+      className="group bg-white rounded-xl border-2 border-gray-200 hover:border-green-500 hover:shadow-lg transition-all duration-200 p-6 text-center"
     >
-      <div className="flex flex-col gap-2 sm:gap-5">
-        {/* Flags Row */}
-        <div className="flex gap-1 sm:gap-3 flex-wrap justify-center">
+      <div className="flex flex-col items-center gap-3">
+        {/* Flag */}
+        <div className="flex gap-2 justify-center">
           {language.flags.map((flag, idx) => (
-            <div key={idx} className="transform transition-transform group-hover:scale-125 group-hover:rotate-6">
-              <FlagIcon country={flag} size="sm" className="sm:hidden" />
-              <FlagIcon country={flag} size="lg" className="hidden sm:block" />
+            <div key={idx} className="transform transition-transform group-hover:scale-110">
+              <FlagIcon country={flag} size="lg" />
             </div>
           ))}
         </div>
         
-        {/* Language Info */}
-        <div className="space-y-1 sm:space-y-3 text-center">
-          <h3 className="text-sm sm:text-3xl text-[#1A1A1A] group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-[#FF1493] group-hover:to-[#00FF94] group-hover:bg-clip-text transition-all uppercase tracking-wide">
+        {/* Language Name */}
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">
             {displayName}
           </h3>
-          <p className="text-xs sm:text-xl text-[#4A4A4A]">
+          <p className="text-sm text-gray-600">
             {language.speakers}
           </p>
-          
-          {/* Start Button */}
-          <div className="pt-1 sm:pt-3">
-            <div className="bg-gradient-to-r from-[#FF1493] to-[#00FF94] px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-2xl game-border retro-shadow-sm opacity-0 group-hover:opacity-100 transition-all transform scale-90 group-hover:scale-100">
-              <div className="flex items-center justify-center gap-1 sm:gap-2 text-white">
-                <Star className="w-3 h-3 sm:w-5 sm:h-5 fill-white animate-pulse" />
-                <span className="text-xs sm:text-xl uppercase tracking-wider">
-                  {interfaceLanguage === 'en' ? 'START!' : 'COMMENCER!'}
-                </span>
-                <Star className="w-3 h-3 sm:w-5 sm:h-5 fill-white animate-pulse" style={{ animationDelay: '0.5s' }} />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </button>
