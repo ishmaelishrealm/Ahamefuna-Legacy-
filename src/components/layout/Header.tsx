@@ -39,8 +39,19 @@ export const Header: React.FC<HeaderProps> = ({
   const handleCloseAuth = () => {
     setAuthModalOpen(false);
   };
+
+  // Brown/sandy color scheme matching language selection screen
+  const brown = '#6B4F3A'; // dark brown
+  const lightBrown = '#A67B5B';
+
   return (
-    <header className="bg-gradient-to-r from-[#FFB6D9] via-[#9D4EDD] to-[#00FF94] shadow-lg">
+    <header 
+      className="shadow-lg"
+      style={{
+        background: `linear-gradient(135deg, ${brown} 0%, ${lightBrown} 100%)`,
+        borderBottom: `2px solid ${brown}`
+      }}
+    >
       <div className="max-w-7xl mx-auto px-1 sm:px-4 lg:px-8">
         <div className="flex justify-between items-center h-10 sm:h-16">
           {/* Left side - Back button and title */}

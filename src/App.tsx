@@ -301,13 +301,15 @@ function App() {
 
   return (
     <>
-      {/* Header for all screens except auth and language-select (which has its own header) */}
-      {currentScreen !== 'auth' && currentScreen !== 'language-select' && (
+      {/* Header for all screens except auth */}
+      {currentScreen !== 'auth' && (
         <Header 
           title="Afroslang"
           showBackButton={currentScreen !== 'interface-select'}
           onBack={() => {
-            if (currentScreen === 'path') {
+            if (currentScreen === 'language-select') {
+              setCurrentScreen('interface-select');
+            } else if (currentScreen === 'path') {
               setCurrentScreen('language-select');
             } else if (currentScreen === 'lesson') {
               setCurrentScreen('path');
