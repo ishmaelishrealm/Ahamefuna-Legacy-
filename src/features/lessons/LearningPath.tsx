@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { InterfaceLanguage, Stage, Lesson, UserProgress } from '../../types';
 import { Lock, Star, CheckCircle2, Trophy, Sparkles, Flame, Zap, Heart, Clock, Home, Trophy as TrophyIcon, BookOpen, Store, User, Settings, Shield, Gem } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { getLanguageById } from '../../data/languages';
+import { FlagIcon } from '../language-select/FlagIcon';
 
 interface LearningPathProps {
   interfaceLanguage: InterfaceLanguage;
@@ -27,6 +29,9 @@ export function LearningPath({
   const [logoError, setLogoError] = useState(false);
   const [activeSidebarItem, setActiveSidebarItem] = useState<'learn' | 'leaderboard' | 'quests' | 'shop' | 'profile' | 'settings'>('learn');
   const { user, userData, isGuest } = useAuth();
+  
+  // Get current language data for flag display
+  const currentLanguage = currentLanguageId ? getLanguageById(currentLanguageId) : null;
 
   // Update countdown timer
   useEffect(() => {
@@ -373,8 +378,8 @@ export function LearningPath({
       <div className="w-80 flex-shrink-0 bg-white border-l border-gray-200 overflow-y-auto relative">
         {/* Top Stats Bar */}
         <div className="border-b border-gray-200 px-4 py-4 flex items-center justify-between">
-          {currentLanguageId && (
-            <span className="text-2xl">🇹🇿</span>
+          {currentLanguage && currentLanguage.flags && currentLanguage.flags.length > 0 && (
+            <FlagIcon country={currentLanguage.flags[0]} size="md" />
           )}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
