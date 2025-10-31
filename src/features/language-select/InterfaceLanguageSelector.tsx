@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { InterfaceLanguage } from '../../types';
 import { Moon, Sun, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AfroslangMascot } from '../../components/mascot/AfroslangMascot';
 import { languages } from '../../data/languages';
 import { FlagIcon } from './FlagIcon';
 
@@ -34,7 +35,6 @@ function FrenchFlag() {
 
 export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelectorProps) {
   const [isDark, setIsDark] = useState(false);
-  const [logoError, setLogoError] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -84,16 +84,13 @@ export function InterfaceLanguageSelector({ onSelect }: InterfaceLanguageSelecto
       {/* Top Section - Logo centered */}
       <div className="w-full flex justify-center pt-6 sm:pt-8 pb-4">
         <div className="flex items-center gap-3">
-          {logoError ? (
-            <div className="w-12 h-12 rounded-full" style={{ backgroundColor: isDark ? lightBrown : brown }} />
-          ) : (
-            <img
-              src="/afroslang-logo.png"
-              alt="Afroslang logo"
-              className="w-12 h-12 rounded-full object-contain"
-              onError={() => setLogoError(true)}
-            />
-          )}
+          <AfroslangMascot 
+            size={48} 
+            variant="logo" 
+            animated={false} 
+            interactive={false}
+            className="rounded-full"
+          />
           <span className="text-3xl sm:text-4xl font-extrabold" style={{ color: green }}>
             Afroslang
           </span>

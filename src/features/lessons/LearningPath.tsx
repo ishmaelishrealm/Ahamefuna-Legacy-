@@ -6,6 +6,7 @@ import { getLanguageById } from '../../data/languages';
 import { SandbitsIcon } from '../../components/ui/SandbitsIcon';
 import { FlagIcon } from '../language-select/FlagIcon';
 import { StreakPopup } from '../../components/streak/StreakPopup';
+import { AfroslangMascot } from '../../components/mascot/AfroslangMascot';
 
 interface LearningPathProps {
   interfaceLanguage: InterfaceLanguage;
@@ -28,7 +29,6 @@ export function LearningPath({
 }: LearningPathProps) {
   const isEnglish = interfaceLanguage === 'en';
   const [timeRemaining, setTimeRemaining] = useState('');
-  const [logoError, setLogoError] = useState(false);
   const [showStreakPopup, setShowStreakPopup] = useState(false);
   const [activeSidebarItem, setActiveSidebarItem] = useState<'learn' | 'leaderboard' | 'quests' | 'shop' | 'profile' | 'settings'>('learn');
   const { user, userData, isGuest } = useAuth();
@@ -136,18 +136,15 @@ export function LearningPath({
         {/* Logo/Mascot at top */}
         <button
           onClick={() => handleSidebarClick('learn')}
-          className="mb-6 w-14 h-14 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+          className="mb-6 w-14 h-14 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-full"
         >
-          {logoError ? (
-            <div className="w-12 h-12 rounded-full bg-green-500" />
-          ) : (
-            <img
-              src="/afroslang-logo.png"
-              alt="Afroslang mascot"
-              className="w-12 h-12 rounded-full object-contain animate-bounce hover:scale-110 transition-transform"
-              onError={() => setLogoError(true)}
-            />
-          )}
+          <AfroslangMascot 
+            size={48} 
+            variant="head" 
+            animated={true} 
+            interactive={true}
+            className="hover:scale-110"
+          />
         </button>
 
         {/* Navigation Icons */}
@@ -369,22 +366,18 @@ export function LearningPath({
             </div>
 
             {/* Mascot - Positioned to right of path */}
-            <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
-              {logoError ? (
-                <div className="w-32 h-32 rounded-full bg-green-500 flex items-center justify-center text-6xl animate-bounce cursor-pointer hover:scale-110 transition-transform">
-                  🌍
-                </div>
-              ) : (
-                <img
-                  src="/afroslang-logo.png"
-                  alt="Afroslang mascot"
-                  className="w-32 h-32 rounded-full object-contain animate-bounce hover:scale-110 transition-transform cursor-pointer"
-                  onError={() => setLogoError(true)}
-                  onClick={() => {
-                    // Could add mascot interaction - animate, speak, etc.
-                  }}
-                />
-              )}
+            <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-10">
+              <AfroslangMascot 
+                size={128} 
+                variant="full" 
+                animated={true} 
+                interactive={true}
+                onClick={() => {
+                  // Mascot interaction - could add animation or greeting
+                  console.log('Mascot clicked!');
+                }}
+                className="drop-shadow-lg"
+              />
             </div>
           </div>
 

@@ -3,6 +3,7 @@ import { languages } from '../../data/languages';
 import { FlagIcon } from './FlagIcon';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { AfroslangMascot } from '../../components/mascot/AfroslangMascot';
 
 interface LanguageSelectionScreenProps {
   interfaceLanguage: InterfaceLanguage;
@@ -18,7 +19,6 @@ export function LanguageSelectionScreen({
   onInterfaceLanguageChange
 }: LanguageSelectionScreenProps) {
   const isEnglish = interfaceLanguage === 'en';
-  const [logoError, setLogoError] = useState(false);
   const [showSiteLanguageDropdown, setShowSiteLanguageDropdown] = useState(false);
 
   const brown = '#6B4F3A'; // dark brown
@@ -41,16 +41,13 @@ export function LanguageSelectionScreen({
         <div className="flex items-center justify-between mb-8">
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
-            {logoError ? (
-              <div className="w-10 h-10 rounded-full" style={{ backgroundColor: brown }} />
-            ) : (
-              <img
-                src="/afroslang-logo.png"
-                alt="Afroslang logo"
-                className="w-10 h-10 rounded-full object-contain"
-                onError={() => setLogoError(true)}
-              />
-            )}
+            <AfroslangMascot 
+              size={40} 
+              variant="logo" 
+              animated={false} 
+              interactive={false}
+              className="rounded-full"
+            />
             <span className="text-2xl font-bold text-gray-900">
               afroslang
             </span>
