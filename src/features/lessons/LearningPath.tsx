@@ -131,8 +131,8 @@ export function LearningPath({
 
   return (
     <div className="min-h-screen flex bg-white">
-      {/* Left Sidebar */}
-      <div className="w-20 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col items-center py-6">
+      {/* Left Sidebar - Hidden on mobile */}
+      <div className="hidden md:flex w-20 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col items-center py-6">
         {/* Logo at top */}
         <button
           onClick={() => handleSidebarClick('learn')}
@@ -263,19 +263,38 @@ export function LearningPath({
       </div>
 
       {/* Central Content Area */}
-      <div className="flex-1 flex flex-col overflow-y-auto">
+      <div className="flex-1 flex flex-col overflow-y-auto min-w-0">
+        {/* Mobile Header - Only visible on mobile */}
+        <div className="md:hidden bg-green-500 text-white px-4 py-4 flex items-center justify-between sticky top-0 z-40">
+          <button
+            onClick={onBackToLanguageSelect}
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          {currentLanguage && currentLanguage.flags && currentLanguage.flags.length > 0 && (
+            <FlagIcon country={currentLanguage.flags[0]} size="md" />
+          )}
+          <div className="flex items-center gap-2">
+            <Heart className="w-5 h-5 fill-white" />
+            <span className="font-semibold">{progress.hearts}</span>
+          </div>
+        </div>
+
         {/* Top Banner */}
         {firstStage && (
-          <div className="bg-green-500 text-white px-8 py-6 flex items-center justify-between">
+          <div className="bg-green-500 text-white px-4 sm:px-8 py-4 sm:py-6 flex items-center justify-between">
             <div>
-              <button className="flex items-center gap-2 text-white/90 hover:text-white mb-2">
-                <span className="text-sm font-semibold uppercase">SECTION 1, UNIT 1</span>
+              <button className="flex items-center gap-2 text-white/90 hover:text-white mb-1 sm:mb-2">
+                <span className="text-xs sm:text-sm font-semibold uppercase">SECTION 1, UNIT 1</span>
               </button>
-              <h1 className="text-2xl font-bold">
+              <h1 className="text-lg sm:text-2xl font-bold">
                 {isEnglish ? firstStage.title : firstStage.titleFr}
               </h1>
             </div>
-            <button className="text-white hover:bg-white/20 rounded-lg p-2">
+            <button className="hidden sm:block text-white hover:bg-white/20 rounded-lg p-2">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
@@ -284,11 +303,11 @@ export function LearningPath({
         )}
 
         {/* Lesson Path */}
-        <div className="flex-1 px-8 py-8 relative">
+        <div className="flex-1 px-4 sm:px-8 py-4 sm:py-8 relative">
           <div className="max-w-3xl mx-auto relative">
             {/* START Button */}
             {firstLesson && !isLessonCompleted(firstLesson.id) && (
-              <div className="mb-8 flex justify-center">
+              <div className="mb-4 sm:mb-8 flex justify-center">
                 <button
                   onClick={() => {
                     if (progress.hearts > 0 || isGuest || userData?.subscription?.active) {
@@ -296,7 +315,7 @@ export function LearningPath({
                     }
                   }}
                   disabled={progress.hearts === 0 && !isGuest && !userData?.subscription?.active}
-                  className="bg-gray-500 hover:bg-gray-600 text-white font-bold px-8 py-3 rounded-lg transition-colors disabled:opacity-50"
+                  className="bg-gray-500 hover:bg-gray-600 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-lg transition-colors disabled:opacity-50 text-base sm:text-lg min-h-[48px] touch-manipulation"
                 >
                   {isEnglish ? 'START' : 'COMMENCER'}
                 </button>
@@ -304,7 +323,7 @@ export function LearningPath({
             )}
 
             {/* Lesson Nodes - Vertical Path */}
-            <div className="relative flex flex-col items-center gap-6 py-8">
+            <div className="relative flex flex-col items-center gap-4 sm:gap-6 py-4 sm:py-8">
               {stages.flatMap((stage, stageIndex) =>
                 stage.lessons.map((lesson, lessonIndex) => {
                   const globalIndex = calculateGlobalLessonIndex(stage.stageNumber, lesson.lessonNumber);
@@ -314,13 +333,13 @@ export function LearningPath({
                   const isLast = stageIndex === stages.length - 1 && lessonIndex === stage.lessons.length - 1;
 
                   return (
-                    <div key={lesson.id} className="relative flex flex-col items-center">
+                    <div key={lesson.id} className="relative flex flex-col items-center w-full">
                       {/* Connecting line above (except first lesson) */}
                       {!(stageIndex === 0 && lessonIndex === 0) && (
-                        <div className="w-1 h-12 bg-gray-300 mb-0" />
+                        <div className="w-1 h-8 sm:h-12 bg-gray-300 mb-0" />
                       )}
 
-                      {/* Lesson Node */}
+                      {/* Lesson Node - Larger on mobile for better touch targets */}
                       <button
                         onClick={() => {
                           if (isUnlocked && (progress.hearts > 0 || isGuest || userData?.subscription?.active || isCompleted)) {
@@ -329,37 +348,45 @@ export function LearningPath({
                         }}
                         disabled={!isUnlocked || (progress.hearts === 0 && !isGuest && !userData?.subscription?.active && !isCompleted)}
                         className={`
-                          relative w-16 h-16 rounded-full flex items-center justify-center transition-all
+                          relative w-20 h-20 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all touch-manipulation min-h-[80px] min-w-[80px] sm:min-h-[64px] sm:min-w-[64px]
                           ${isCurrent
                             ? 'bg-green-500 ring-4 ring-green-300 scale-110 shadow-lg z-10'
                             : isCompleted
                             ? 'bg-green-400 ring-2 ring-green-300 z-10'
                             : isUnlocked
-                            ? 'bg-gray-400 hover:bg-gray-500 z-10'
+                            ? 'bg-gray-400 active:bg-gray-500 sm:hover:bg-gray-500 z-10'
                             : 'bg-gray-300 opacity-50 z-10'
                           }
                         `}
+                        aria-label={`Lesson ${lesson.lessonNumber}: ${isEnglish ? lesson.title : lesson.titleFr}`}
                       >
                         {isCompleted ? (
-                          <Star className="w-8 h-8 text-white fill-white" />
+                          <Star className="w-10 h-10 sm:w-8 sm:h-8 text-white fill-white" />
                         ) : isCurrent ? (
-                          <Star className="w-8 h-8 text-white fill-white" />
+                          <Star className="w-10 h-10 sm:w-8 sm:h-8 text-white fill-white" />
                         ) : isUnlocked ? (
-                          <Star className="w-8 h-8 text-white" />
+                          <Star className="w-10 h-10 sm:w-8 sm:h-8 text-white" />
                         ) : (
-                          <Lock className="w-8 h-8 text-gray-500" />
+                          <Lock className="w-10 h-10 sm:w-8 sm:h-8 text-gray-500" />
                         )}
                       </button>
 
+                      {/* Lesson Title - Visible on mobile */}
+                      <div className="mt-2 sm:hidden text-center px-2">
+                        <p className={`text-xs font-semibold ${isUnlocked ? 'text-gray-900' : 'text-gray-400'}`}>
+                          {isEnglish ? lesson.title : lesson.titleFr}
+                        </p>
+                      </div>
+
                       {/* Connecting line below (except last lesson) */}
                       {!isLast && (
-                        <div className="w-1 h-12 bg-gray-300 mt-0" />
+                        <div className="w-1 h-8 sm:h-12 bg-gray-300 mt-0" />
                       )}
 
                       {/* Treasure Chest or Trophy between some lessons */}
                       {lessonIndex < stage.lessons.length - 1 && (
-                        <div className="absolute top-full mt-8 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center shadow-sm">
-                          <Trophy className="w-6 h-6 text-yellow-500" />
+                        <div className="absolute top-full mt-4 sm:mt-8 left-1/2 transform -translate-x-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-lg flex items-center justify-center shadow-sm">
+                          <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" />
                         </div>
                       )}
                     </div>
@@ -372,15 +399,15 @@ export function LearningPath({
 
           {/* Bottom Section - Next Unit Preview */}
           {stages.length > 1 && (
-            <div className="mt-16 pt-8 border-t border-gray-200 text-center">
-              <p className="text-gray-600 mb-4">
+            <div className="mt-8 sm:mt-16 pt-4 sm:pt-8 border-t border-gray-200 text-center px-4">
+              <p className="text-gray-600 mb-4 text-sm sm:text-base">
                 {isEnglish ? 'Ask how someone is' : 'Demander comment quelqu\'un va'}
               </p>
-              <div className="flex gap-4 justify-center">
-                <button className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-6 py-2 rounded-lg">
+              <div className="flex gap-2 sm:gap-4 justify-center">
+                <button className="bg-purple-500 active:bg-purple-600 sm:hover:bg-purple-600 text-white font-bold px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base touch-manipulation min-h-[44px]">
                   {isEnglish ? 'JUMP HERE?' : 'SAUTER ICI?'}
                 </button>
-                <button className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-6 py-2 rounded-full w-12 h-12 flex items-center justify-center">
+                <button className="bg-purple-500 active:bg-purple-600 sm:hover:bg-purple-600 text-white font-bold px-4 sm:px-6 py-2 rounded-full w-12 h-12 flex items-center justify-center touch-manipulation">
                   →
                 </button>
               </div>
@@ -389,8 +416,8 @@ export function LearningPath({
         </div>
       </div>
 
-      {/* Right Sidebar */}
-      <div className="w-80 flex-shrink-0 bg-white border-l border-gray-200 overflow-y-auto relative">
+      {/* Right Sidebar - Hidden on mobile */}
+      <div className="hidden lg:flex w-80 flex-shrink-0 bg-white border-l border-gray-200 overflow-y-auto relative">
         {/* Top Stats Bar */}
         <div className="border-b border-gray-200 px-4 py-4 flex items-center justify-between">
           {currentLanguage && currentLanguage.flags && currentLanguage.flags.length > 0 && (
